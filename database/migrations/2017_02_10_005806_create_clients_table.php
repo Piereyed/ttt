@@ -18,7 +18,7 @@ class CreateClientsTable extends Migration
             $table->string('name');
             $table->string('lastname1');
             $table->string('lastname2');
-            $table->string('address');
+            $table->string('address',500);
             $table->softDeletes();
             $table->timestamps();
         });
