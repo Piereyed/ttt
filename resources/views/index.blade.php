@@ -26,7 +26,7 @@
                         <li><a href="#">Sedes</a></li>
                         <li><a href="#">Clientes</a></li>
                         <li><a href="#">Ejercicios</a></li>
-                        
+
                     </ul>
 
                     <ul id="nav-mobile" class="side-nav">
@@ -54,7 +54,7 @@
                 <li><a class="subheader">Subheader</a></li>
                 <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
             </ul>
-<!--                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>-->
+            <!--                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>-->
 
 
 
@@ -77,6 +77,8 @@
 
         <script src="{{ URL::asset('js/jquery.min.js')}}"></script>
         <script src="{{ URL::asset('js/materialize.min.js')}}"></script>        
+        <script src="{{ URL::asset('js/validate/jquery.validate.min.js')}}"></script>
+        <script src="{{ URL::asset('js/validate/additional-methods.min.js')}}"></script>
         <script src="{{ URL::asset('js/init.js')}}"></script>        
     </body>
 </html>

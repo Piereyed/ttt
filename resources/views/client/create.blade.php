@@ -7,11 +7,11 @@
         <div class="col m12">
             <h1>Nuevo cliente</h1>
             <div class="row">
-                <form action="" class="col s12">
+                <form id="crear_cliente" action="" novalidate="true" class="col s12">
                     <div class="row">
                         <div class="input-field col m4 s12">
                             <i class="material-icons prefix">account_circle</i>
-                            <input id="name" type="text" class="validate" data-length="100">
+                            <input required id="name" type="text" class="validate" data-length="100">
                             <label for="name">Nombre</label>
                         </div>
                         <div class="input-field col m4 s12">                           
@@ -26,7 +26,7 @@
                     <div class="row">
                         <div class="input-field col s6 m6">
                             <i class="fa fa-envelope prefix" aria-hidden="true"></i>
-                            <input id="email" type="email" class="validate" data-length="100">
+                            <input id="email" type="email" data-error="Mal" class="validate" data-length="100">
                             <label for="email">Correo electrónico</label>
                         </div>
                         <div class="col s6 m6">
@@ -56,6 +56,18 @@
                             <label for="birthdate" class="">Fecha de nacimiento</label>
                         </div>
 
+                    </div>
+                    <div class="row">
+                        <div class="col m9 s12">
+                            <button  title="Guardar" type="submit" class="btn-large waves-effect waves-light btn ">
+                                <i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar
+                            </button >
+                            <a title="Cancelar" class="waves-effect waves-teal btn-flat ">
+                                <i class="left fa fa-step-backward" aria-hidden="true"></i>Regresar
+                            </a>
+
+
+                        </div>
                     </div>
                 </form>
             </div>
