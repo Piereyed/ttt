@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ClientRequest;
 use App\Client;
+use App\Local;
 
 class ClientController extends Controller
 {
@@ -14,11 +16,11 @@ class ClientController extends Controller
      */
     public function index()
     {
-        
-        
+
+
         $clients = Client::get();
         $clients_pag = Client::paginate(10);
-//        dd(count($clients));
+        //        dd(count($clients));
         $data = [
             'clients'    =>  $clients_pag,
             'size'       => count($clients),
@@ -33,7 +35,11 @@ class ClientController extends Controller
      */
     public function create()
     {
-        return view('client.create');
+        $locals = Local::get();
+        $data = [
+            'locals'   =>  $locals
+        ];
+        return view('client.create',$data);
     }
 
     /**
@@ -42,15 +48,30 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClientRequest $request)
     {
+
+            dd($request);
+        if($request['type_document']==0 and strlen($request['document'])!=8  )
+            return redirect()->back()->with('warning', 'Número de DNI inválido');
+        
         try {
-            $competencia = new Competence;
-            $competencia->nombre       = $request['nombre'];            
-            $competencia->descripcion  = $request['descripcion'];
-            $competencia->id_especialidad= Session::get('faculty-code');
-            $competencia->save();
-            return redirect()->route('competencia.index')->with('success', 'La competencia se ha registrado exitosamente');
+            $client = new Client;
+            
+            $client->sex       = isset($request['sex']) ? 'M' : 'H' ;            
+            $client->num_doc       = $request['document'];            
+            $client->type_doc       = $request['type_document'];            
+            $client->name       = $request['name'];            
+            $client->lastname1  = $request['lastname1'];
+            $client->lastname2  = $request['lastname2'];
+            $client->address  = $request['address'];
+            $client->email  = $request['email'];
+            $client->phone  = $request['phone'];
+            $client->birthday  = $request['birthday'];
+            //            $client->address  = $request['local'];
+
+            $client->save();
+            return redirect()->route('client.index')->with('success', 'El cliente se ha registrado con éxito.');
         } catch (Exception $e) {
             return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
         }
@@ -75,7 +96,13 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        //
+         $client = Client::find($id);
+        $data = [
+            'client'       => $client,
+            'title'        => "Editar cliente",
+        ];
+        
+        return view('client.edit',$data);
     }
 
     /**
@@ -87,7 +114,25 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $client = Client::find($id);
+            $client->sex       = $request['sex'];            
+            $client->num_doc       = $request['document'];            
+            $client->type_doc       = $request['type_document'];            
+            $client->name       = $request['name'];            
+            $client->lastname1  = $request['lastname1'];
+            $client->lastname2  = $request['lastname2'];
+            $client->address  = $request['address'];
+            $client->email  = $request['email'];
+            $client->phone  = $request['phone'];
+            $client->birthday  = $request['birthday'];
+            //            $client->address  = $request['local'];
+
+            $client->save();
+            return redirect()->route('client.index')->with('success', 'El cliente se ha actualizado con éxito.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+        }
     }
 
     /**
@@ -98,6 +143,14 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $client   = Client::find($id);
+            $client->delete();
+            return redirect()->route('client.index')->with('success', 'El cliente se ha eliminado con éxito');
+
+
+        } catch (Exception $e) {
+            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+        }
     }
 }

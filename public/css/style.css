@@ -18,9 +18,42 @@ main {
 }
 /*fin*/
 
-.opciones span {
-    display: inline-table;
-}
-.fila{
+.opcion{
     cursor: pointer;
+}
+
+.toast-message{
+    font-size: 15px !important;
+}
+
+.toast-top-right{    
+    top: 70px !important;
+}
+
+.center{
+    text-align: center;
+}
+
+
+
+
+
+/*media query*/
+
+@media only screen and  (min-width: 993px) { 
+    #logo-container{
+        color: green;
+    }
+}
+
+@media only screen and  (max-width: 992px) {
+  #logo-container{
+        color: yellow;
+    }
+}
+
+@media only screen and  (max-width: 600px) {
+  #logo-container{
+        color: red;
+    }
 }

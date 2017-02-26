@@ -9,11 +9,20 @@
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="{{ asset('css/materialize.min.css')}}"  media="screen,projection"/>
+        <!-- toastr-->
+        <link href="{{ asset('css/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
+
+
         <!--Importar archivos-->
         <link href="{{ asset('css/style.css')}}" type="text/css" rel="stylesheet" media="screen,projection"/>
         <!--        Fontawesome-->
         <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css')}}">
-        <title>Clientes</title>        
+        <!--        nprogress-->
+        <link rel="stylesheet" href="{{ asset('css/nprogress.css')}}">
+
+
+
+        <title>PowerGym</title>        
     </head>
     <body>
         <header></header>
@@ -23,8 +32,8 @@
                     <a id="logo-container" href="#" class="brand-logo">Inicio</a>
 
                     <ul class="right hide-on-med-and-down">
-                        <li><a href="#">Sedes</a></li>
-                        <li><a href="#">Clientes</a></li>
+                        <li><a href="{{ route('local.index') }}">Sedes</a></li>
+                        <li><a href="{{ route('client.index') }}">Clientes</a></li>
                         <li><a href="#">Ejercicios</a></li>
 
                     </ul>
@@ -76,9 +85,64 @@
 
 
         <script src="{{ URL::asset('js/jquery.min.js')}}"></script>
-        <script src="{{ URL::asset('js/materialize.min.js')}}"></script>        
+        <script src="{{ URL::asset('js/materialize.js')}}"></script>        
         <script src="{{ URL::asset('js/validate/jquery.validate.min.js')}}"></script>
         <script src="{{ URL::asset('js/validate/additional-methods.min.js')}}"></script>
-        <script src="{{ URL::asset('js/init.js')}}"></script>        
+        <!--        toastr-->
+        <script src="{{ asset('js/toastr/toastr.min.js')}}"></script>
+        <!--        nprogress-->
+        <script src="{{ URL::asset('js/nprogress.js')}}"></script>
+        <!--       custom-->
+        <script src="{{ URL::asset('js/init.js')}}"></script>  
+        
+         @yield('scripts')
+
+        
+
+        <script type="text/javascript">
+            //Code for show success  messages            
+            @if( @Session::has('success') )
+                toastr.success('{{ @Session::get('success') }}');
+            @endif
+        </script>
+
+        <script type="text/javascript">
+            //Code for show warning  messages
+            @if( @Session::has('warning') )
+                toastr.error('{{ @Session::get('warning') }}');
+            @endif
+        </script>
+
+        <script type="text/javascript">
+            //Code for show back error messages
+            @if (@Session::has('errors'))
+                @foreach ($errors->all() as $error)
+                toastr.error('{{ @$error }}');
+            @endforeach
+            @endif
+        </script>
+
+<!--
+        <script>
+
+            // Show the progress bar 
+            NProgress.start();
+
+            // Increase randomly
+            var interval = setInterval(function() { NProgress.inc(); }, 1000);        
+
+            // Trigger finish when page fully loaded
+            jQuery(window).load(function () {
+                clearInterval(interval);
+                NProgress.done();
+            });
+
+            // Trigger bar when exiting the page
+            jQuery(window).unload(function () {
+                NProgress.start();
+            });
+
+        </script>      
+-->
     </body>
 </html>
