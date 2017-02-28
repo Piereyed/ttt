@@ -5,6 +5,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
@@ -19,7 +22,13 @@
         <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css')}}">
         <!--        nprogress-->
         <link rel="stylesheet" href="{{ asset('css/nprogress.css')}}">
-
+        
+        @yield('styles')
+        <script>
+            window.Laravel = {!! json_encode([
+                              'csrfToken' => csrf_token(),
+                              ]) !!};
+        </script>
 
 
         <title>PowerGym</title>        
@@ -27,6 +36,17 @@
     <body>
         <header></header>
         <main>
+            <ul id="dropdown1" class="dropdown-content">
+
+                <li class="divider"></li>
+                <li>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                             document.getElementById('logout-form').submit();" ><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> Salir</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                </li>
+            </ul>
             <nav class="green lighten-1" role="navigation">
                 <div class="nav-wrapper container">
                     <a id="logo-container" href="#" class="brand-logo">Inicio</a>
@@ -35,6 +55,9 @@
                         <li><a href="{{ route('local.index') }}">Sedes</a></li>
                         <li><a href="{{ route('client.index') }}">Clientes</a></li>
                         <li><a href="#">Ejercicios</a></li>
+                        @if (!Auth::guest())
+                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons left">perm_identity</i> {{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                        @endif
 
                     </ul>
 
@@ -94,10 +117,10 @@
         <script src="{{ URL::asset('js/nprogress.js')}}"></script>
         <!--       custom-->
         <script src="{{ URL::asset('js/init.js')}}"></script>  
-        
-         @yield('scripts')
 
-        
+        @yield('scripts')
+
+
 
         <script type="text/javascript">
             //Code for show success  messages            
@@ -122,27 +145,27 @@
             @endif
         </script>
 
-<!--
-        <script>
+        <!--
+<script>
 
-            // Show the progress bar 
-            NProgress.start();
+// Show the progress bar 
+NProgress.start();
 
-            // Increase randomly
-            var interval = setInterval(function() { NProgress.inc(); }, 1000);        
+// Increase randomly
+var interval = setInterval(function() { NProgress.inc(); }, 1000);        
 
-            // Trigger finish when page fully loaded
-            jQuery(window).load(function () {
-                clearInterval(interval);
-                NProgress.done();
-            });
+// Trigger finish when page fully loaded
+jQuery(window).load(function () {
+clearInterval(interval);
+NProgress.done();
+});
 
-            // Trigger bar when exiting the page
-            jQuery(window).unload(function () {
-                NProgress.start();
-            });
+// Trigger bar when exiting the page
+jQuery(window).unload(function () {
+NProgress.start();
+});
 
-        </script>      
+</script>      
 -->
     </body>
 </html>

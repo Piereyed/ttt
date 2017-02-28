@@ -17,6 +17,9 @@ $( document ).ready(function(){
     $(".pagination li").addClass( "waves-effect" );
     var n = $(".pagination li.active span").html();
     $(".pagination li.active").html("<a>"+n+"</a>") ;
+    
+    //dropdown
+    $(".dropdown-button").dropdown();
 });
 
 
