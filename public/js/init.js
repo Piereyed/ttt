@@ -1,5 +1,15 @@
 $( document ).ready(function(){
-    $(".button-collapse").sideNav();
+
+
+    //barra lateral
+    $(".button-collapse").sideNav({
+        menuWidth: 240,
+        edge: 'left', // Choose the horizontal origin
+        closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+        draggable: true 
+    });
+
+    //modales
     $('.modal').modal();
 
     //    datepickers
@@ -17,9 +27,19 @@ $( document ).ready(function(){
     $(".pagination li").addClass( "waves-effect" );
     var n = $(".pagination li.active span").html();
     $(".pagination li.active").html("<a>"+n+"</a>") ;
-    
-    //dropdown
-    $(".dropdown-button").dropdown();
+
+    // dropdowns
+    $(".dropdown-button").dropdown({
+        hover: true, // Activate on hover        
+        belowOrigin: true, // Displays dropdown below the button
+    });
+
+    //datatables
+    $('.datatable').DataTable();
+
+
+
+
 });
 
 

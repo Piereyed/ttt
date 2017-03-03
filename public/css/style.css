@@ -11,6 +11,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    
 }
 
 main {
@@ -30,9 +31,22 @@ main {
     top: 70px !important;
 }
 
-.center{
-    text-align: center;
+.h1{
+    font-size: 50px;
+    line-height: 36px;
+    letter-spacing: 1.5px;
 }
+
+/*para datatables*/
+/*
+.dataTables_wrapper .select-wrapper{
+    display: inline-block !important;
+}
+.dataTables_wrapper .select-wrapper input.select-dropdown{
+    text-align: center !important;
+}
+*/
+
 
 
 

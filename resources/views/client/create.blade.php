@@ -103,7 +103,7 @@
                         <div class="input-field col m12 s6">
                             <i class="fa fa-building prefix" aria-hidden="true"></i>
                             <select id="local" name="local">
-                                <option value="">Seleccione</option>
+                                <option value="" disabled selected>Seleccione</option>
                                 @foreach($locals as $local)
                                 <option value="{{$local->id}}">{{$local->name}}</option>
                                 @endforeach

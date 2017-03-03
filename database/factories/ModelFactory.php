@@ -28,9 +28,16 @@ $factory->define(App\Client::class, function (Faker\Generator $faker) {
     
 
     return [
+        
+        'sex' => 'H',
+        'num_doc' => ''.$faker->randomNumber($nbDigits = 8),
+        'type_doc' => 0,
         'name' => $faker->name,
         'lastname1' => $faker->lastname,
         'lastname2' => $faker->lastname,                
+        'email' => $faker->email,                
         'address' => $faker->address,
+        'birthday' => $faker->date($format = 'Y-m-d', $max = 'now'),                
+        'phone' => '9'.$faker->randomNumber($nbDigits = 8),
     ];
 });

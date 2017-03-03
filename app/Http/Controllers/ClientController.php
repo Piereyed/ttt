@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ClientRequest;
 use App\Client;
 use App\Local;
+use App\Http\Controllers\Auth\RegisterController;
 
 class ClientController extends Controller
 {
@@ -19,11 +20,10 @@ class ClientController extends Controller
 
 
         $clients = Client::get();
-        $clients_pag = Client::paginate(10);
-        //        dd(count($clients));
+        //        $clients_pag = Client::paginate(10);
         $data = [
-            'clients'    =>  $clients_pag,
-            'size'       => count($clients),
+            'clients'    =>  $clients,
+            //            'size'       => count($clients),
         ];
         return view('client.index', $data);
     }
@@ -48,16 +48,32 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ClientRequest $request)
+    public function store(Request $request)
     {
 
-            dd($request);
+        //        dd($request);
+
+        $this->validate($request, [
+            'name'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
+            'lastname1'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
+            'lastname1'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',
+            'email'        => 'email|required|max:100',
+            'phone'        => 'max:15',
+            'birthday'     => 'date|required|before:today',
+            'document'     => 'digits_between:6,15|required|max:15',            
+            'address'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',            
+            'local'        => 'required',
+            
+        ]);
+
+
+
         if($request['type_document']==0 and strlen($request['document'])!=8  )
             return redirect()->back()->with('warning', 'Número de DNI inválido');
-        
+
         try {
             $client = new Client;
-            
+
             $client->sex       = isset($request['sex']) ? 'M' : 'H' ;            
             $client->num_doc       = $request['document'];            
             $client->type_doc       = $request['type_document'];            
@@ -71,6 +87,17 @@ class ClientController extends Controller
             //            $client->address  = $request['local'];
 
             $client->save();
+
+
+            //registrara usuario
+            $reg = new RegisterController;            
+            $reg->create([
+                'name'=>$client->name.' '.$client->lastname1,
+                'email'=>$client->email,
+                'password'=>'123123'
+            ]);
+
+
             return redirect()->route('client.index')->with('success', 'El cliente se ha registrado con éxito.');
         } catch (Exception $e) {
             return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
@@ -96,12 +123,12 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-         $client = Client::find($id);
+        $client = Client::find($id);
         $data = [
             'client'       => $client,
             'title'        => "Editar cliente",
         ];
-        
+
         return view('client.edit',$data);
     }
 

@@ -22,69 +22,143 @@
         <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css')}}">
         <!--        nprogress-->
         <link rel="stylesheet" href="{{ asset('css/nprogress.css')}}">
-        
+        <!--        datatables-->
+        <link rel="stylesheet" href="{{ asset('css/jquery.dataTables.min.css')}}">
+        <link rel="stylesheet" href="{{ asset('css/extra.css')}}">
+
         @yield('styles')
+
+        <style>
+            .xxx{
+                display: none;
+            }
+            /* Add animation to "page content" */
+            .animate-bottom {
+                position: relative;
+                -webkit-animation-name: animatebottom;
+                -webkit-animation-duration: 1s;
+                animation-name: animatebottom;
+                animation-duration: 1s
+            }
+
+            @-webkit-keyframes animatebottom {
+                from { bottom:-100px; opacity:0 } 
+                to { bottom:0px; opacity:1 }
+            }
+
+            @keyframes animatebottom { 
+                from{ bottom:-100px; opacity:0 } 
+                to{ bottom:0; opacity:1 }
+            }
+
+
+
+        </style>
+
+
         <script>
             window.Laravel = {!! json_encode([
                               'csrfToken' => csrf_token(),
                               ]) !!};
         </script>
-
-
-        <title>PowerGym</title>        
+        <title>{{ config('app.name', 'DD') }}</title>        
     </head>
-    <body>
-        <header></header>
-        <main>
-            <ul id="dropdown1" class="dropdown-content">
+    <body class="loaded" onload="myFunction()" >
 
-                <li class="divider"></li>
-                <li>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                             document.getElementById('logout-form').submit();" ><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> Salir</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                </li>
-            </ul>
-            <nav class="green lighten-1" role="navigation">
-                <div class="nav-wrapper container">
-                    <a id="logo-container" href="#" class="brand-logo">Inicio</a>
-
-                    <ul class="right hide-on-med-and-down">
-                        <li><a href="{{ route('local.index') }}">Sedes</a></li>
-                        <li><a href="{{ route('client.index') }}">Clientes</a></li>
-                        <li><a href="#">Ejercicios</a></li>
-                        @if (!Auth::guest())
-                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons left">perm_identity</i> {{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i></a></li>
-                        @endif
-
-                    </ul>
-
-                    <ul id="nav-mobile" class="side-nav">
-                        <li><a href="#">Clientes</a></li>
-                        <li><a href="#">Navbar Link</a></li>
-                        <li><a href="#">Navbar Link</a></li>
-                        <li><a href="#">Navbar Link</a></li>
-                    </ul>
-                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+        <div id="loader" class="preloader-wrapper big active" style="left: 45%; top: 40%; position: absolute; background: #fff;">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                <div class="circle"></div>
                 </div>
-            </nav>
+            </div>
+        </div>
 
-            <ul id="slide-out" class="side-nav">
-                <li><div class="userView">
-                    <div class="background">
-                        <img src="{{ asset('images/logo.png')}}">
+        <header class="xxx">
+            <div class="navbar-fixed">
+                <nav class="indigo lighten-2" role="navigation">
+                    <div class="nav-wrapper ">
+                        <ul class="left">
+                            <li>
+                                <h1 class="logo-wraper" style="margin:0;font-size:1rem">
+                                    <a style="margin:1px 0;padding:14px 20px" id="logo-container" href="{{ route('inicio') }}" class="brand-logo">
+                                        <img style="width:172px" src="{{ asset('images/inicio.png')}}" alt="Inicio">
+                                    </a>
+                                </h1>
+
+                            </li>
+                        </ul>
+
+
+
+                        <ul class="right hide-on-med-and-down">
+                            <li><a href="{{ route('local.index') }}">Sedes</a></li>
+                            <li><a href="{{ route('client.index') }}">Clientes</a></li>
+                            <li><a href="#">Ejercicios</a></li>
+                            @if (!Auth::guest())
+                            <li><a class="dropdown-button" href="#!" data-activates="salir">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+
+                            <ul id="salir" class="xxx dropdown-content">
+                                <li><a href=""><i class="fa fa-user fa-lg" aria-hidden="true"></i> Mi cuenta</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                                             document.getElementById('logout-form').submit();" ><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> Salir</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </li>
+                            </ul>
+
+                            @endif
+
+                        </ul>
+
+                        <!--                        boton de menu-->
+                        <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
                     </div>
-                    <a href="#!user"><img class="circle" src="{{ asset('images/perfil.jpg')}}"></a>
-                    <a href="#!name"><span class="white-text name">Pier Rojas</span></a>
-                    <a href="#!email"><span class="white-text email">piereyedk@gmail.com</span></a>
-                    </div></li>
-                <li><a href="#!"><i class="material-icons">cloud</i>Bienvenido</a></li>
-                <li><a href="#!">Second Link</a></li>
-                <li><div class="divider"></div></li>
-                <li><a class="subheader">Subheader</a></li>
-                <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+                </nav>
+            </div>
+        </header>
+
+
+
+
+
+
+
+
+        <main id="main" class="xxx animate-bottom">
+            <ul id="slide-out" class="side-nav">
+                <li>
+                    <div class="userView">
+                        <div class="background">
+                            <img src="{{ asset('images/logo.png')}}">
+                        </div>
+                        <a href="#!user"><img class="circle" src="{{ asset('images/perfil.jpg')}}"></a>
+                        <a href="#!name"><span class="white-text name">Pier Rojas</span></a>
+                        <a href="#!email"><span class="white-text email">piereyedk@gmail.com</span></a>
+                    </div>
+                </li>
+                <li><a href="{{ route('client.index') }}"><i class="material-icons">group</i> Clientes</a></li>
+                <li class="active"><a href="{{ route('local.index') }}"><i class="material-icons">location_city</i> Sedes</a></li>
+
+                <li class="dropdown">
+                    <a class="ripple-effect dropdown-toggle" data-toggle="dropdown" href="#"><i class="material-icons">settings</i> Configuración <b class="caret"></b></a>
+                    <ul class="dropdown-menu"> 
+
+                        <li class=""><a href="{{ route('local.index') }}"><i class="material-icons">location_city</i> Sedes</a></li>
+
+                    </ul>
+
+                </li>
+
+                <li><a class="waves-effect" href="{{ route('logout') }}" onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();" ><i class="material-icons">exit_to_app</i> Cerrar sesión</a></li>
+
             </ul>
             <!--                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>-->
 
@@ -96,11 +170,13 @@
 
         </main>
 
-        <footer class="page-footer">
-
+        <footer class="xxx page-footer indigo lighten-2" style="padding-top:0">
             <div class="footer-copyright">
                 <div class="container">
-                    Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Piereyed</a>
+                    Copyright © 2017 Todos los derechos reservados
+                    <span class="right">
+                        Made by <a class="grey-text text-lighten-3" href="http://materializecss.com">Piereyed</a>
+                    </span>
                 </div>
             </div>
         </footer>
@@ -115,10 +191,22 @@
         <script src="{{ asset('js/toastr/toastr.min.js')}}"></script>
         <!--        nprogress-->
         <script src="{{ URL::asset('js/nprogress.js')}}"></script>
+        <script src="{{ URL::asset('js/jquery.dataTables.min.js')}}"></script>
         <!--       custom-->
         <script src="{{ URL::asset('js/init.js')}}"></script>  
 
         @yield('scripts')
+
+        <script>
+            var myVar;
+            function myFunction() {
+                myVar = setTimeout(showPage, 500);
+            }
+            function showPage() {
+                $("#loader").hide();
+                $(".xxx").show();
+            }
+        </script>
 
 
 
@@ -144,6 +232,8 @@
             @endforeach
             @endif
         </script>
+
+
 
         <!--
 <script>

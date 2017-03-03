@@ -1,18 +1,24 @@
 @extends('index')
 @section('content')
 
-@if($errors->any())
-<h4>{{$errors->first()}}</h4>
-@endif
+@section('styles')
+<style>
+    select{
+        display: inline-block !important;
+        width: inherit;
+    }
+</style>
+@endsection
+
 <div class="section">
 
     <!--   Icon Section   -->
     <div class="row">
         <div class="col m12">
-            <h1>Clientes</h1>
-            <div class="row" style="min-height:36px">
+
+            <div class="row">
                 <div class="col m3 s12">
-                    <h6>Se encontraron {{ $size }} clientes</h6>
+                    <span class="h1">Clientes</span>
                 </div>
                 <div class="opc col m9 s12" style="text-align:right;display:none">
                     <a id="ver" href="" title="Ver" class=" waves-effect waves-light btn blue "><i class="material-icons left">visibility</i>Ver</a>
@@ -20,14 +26,14 @@
                     <a id="eliminar" href="" data-target="" title="Eliminar" class=" waves-effect waves-light btn red "><i class="material-icons left">delete</i>Eliminar</a>
                 </div>
             </div>
-            
+
             <div class="fixed-action-btn horizontal">
                 <a href="{{ route('client.create') }}" title="Nuevo cliente" class="btn-floating btn-large green">
                     <i class="large material-icons">add</i>
                 </a>                
             </div>
 
-            <table class="responsive-table bordered highlight">
+            <table class="datatable responsive-table bordered highlight">
                 <thead>
                     <tr>
                         <th class="center" data-field="id">Código</th>
@@ -48,12 +54,12 @@
                                 <input type="checkbox" class="check filled-in" id="{{ $client->id }}" />
                                 <label for="{{ $client->id }}"></label>
                             </p>
-                            
+
 
                         </td>
 
                     </tr>   
-                    
+
                     <!--     modal-->
                     <div id="{{'modal_'.$client->id }}" class="modal bottom-sheet">
                         <div class="modal-content">
@@ -68,7 +74,7 @@
                     @endforeach                 
                 </tbody>
             </table>
-            {{ $clients->links() }}
+
         </div>                    
     </div>
 
@@ -102,6 +108,10 @@
 
 
         });
+
+        //    $("select").val('10');
+        $('select').addClass("browser-default");
+        $('select').material_select();
 
     });
 

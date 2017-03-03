@@ -78,7 +78,7 @@ Enviar enlace para reestablecer contraseña
                 </div>
                 <div class="input-field col s12 center">
                     <a href="/login" class="btn btn-flat waves-effect waves-light ">
-                        <i class="left fa fa-step-backward" aria-hidden="true"></i> Volver
+                        <i class="left large material-icons">navigate_before</i> Volver
                     </a>
                 </div>
             </div>
