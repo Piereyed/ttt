@@ -92,7 +92,7 @@ Olvidé mi contraseña
             <div class="row margin">
                 <div class="input-field col s12 {{ $errors->has('email') ? ' has-error' : '' }}">                    
                     <i class="large material-icons prefix">email</i>
-                    <input  id="email" name="email" type="email" value="{{ old('email') }}" required>
+                    <input  id="email" name="email" type="text" value="{{ old('email') }}" required>
                     <label class="active" for="email">Correo</label>
                     @if ($errors->has('email'))
                     <div style="margin-left:40px">

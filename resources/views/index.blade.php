@@ -4,17 +4,16 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        <title>{{ config('app.name', 'DD') }}</title>
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="{{ asset('css/materialize.min.css')}}"  media="screen,projection"/>
         <!-- toastr-->
         <link href="{{ asset('css/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
-
 
         <!--Importar archivos-->
         <link href="{{ asset('css/style.css')}}" type="text/css" rel="stylesheet" media="screen,projection"/>
@@ -40,19 +39,14 @@
                 animation-name: animatebottom;
                 animation-duration: 1s
             }
-
             @-webkit-keyframes animatebottom {
                 from { bottom:-100px; opacity:0 } 
                 to { bottom:0px; opacity:1 }
             }
-
             @keyframes animatebottom { 
                 from{ bottom:-100px; opacity:0 } 
                 to{ bottom:0; opacity:1 }
             }
-
-
-
         </style>
 
 
@@ -61,7 +55,7 @@
                               'csrfToken' => csrf_token(),
                               ]) !!};
         </script>
-        <title>{{ config('app.name', 'DD') }}</title>        
+
     </head>
     <body class="loaded" onload="myFunction()" >
 
@@ -79,7 +73,7 @@
 
         <header class="xxx">
             <div class="navbar-fixed">
-                <nav class="indigo lighten-2" role="navigation">
+                <nav class="black" role="navigation">
                     <div class="nav-wrapper ">
                         <ul class="left">
                             <li>
@@ -95,9 +89,26 @@
 
 
                         <ul class="right hide-on-med-and-down">
+                            <!--   roles del superusuario-->
+                            @if(in_array("Super", session('roles')))
                             <li><a href="{{ route('local.index') }}">Sedes</a></li>
+                            <li><a href="{{ route('admin.index') }}">Administradores</a></li>
+                            @endif
+
+                            <!--   roles del administrador del gimnasio-->
+                            @if(in_array("Administrador", session('roles')))
+                            <li><a href="{{ route('client.index') }}">Entrenadores</a></li>
+                            @endif
+
+                            @if(in_array("Trainer", session('roles')) || in_array("Administrador", session('roles')))
                             <li><a href="{{ route('client.index') }}">Clientes</a></li>
+                            @endif
+
+                            <!--   roles del Entrenador de gimnasio    -->
+                            @if(in_array("Trainer", session('roles')))                          
                             <li><a href="#">Ejercicios</a></li>
+                            @endif
+
                             @if (!Auth::guest())
                             <li><a class="dropdown-button" href="#!" data-activates="salir">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i></a></li>
 
@@ -123,13 +134,6 @@
                 </nav>
             </div>
         </header>
-
-
-
-
-
-
-
 
         <main id="main" class="xxx animate-bottom">
             <ul id="slide-out" class="side-nav">
@@ -166,11 +170,13 @@
 
             <div class="container">
                 @yield('content')
+
+
             </div>
 
         </main>
 
-        <footer class="xxx page-footer indigo lighten-2" style="padding-top:0">
+        <footer class="xxx page-footer black" style="padding-top:0">
             <div class="footer-copyright">
                 <div class="container">
                     Copyright © 2017 Todos los derechos reservados
@@ -181,19 +187,17 @@
             </div>
         </footer>
 
-
-
         <script src="{{ URL::asset('js/jquery.min.js')}}"></script>
         <script src="{{ URL::asset('js/materialize.js')}}"></script>        
         <script src="{{ URL::asset('js/validate/jquery.validate.min.js')}}"></script>
         <script src="{{ URL::asset('js/validate/additional-methods.min.js')}}"></script>
-        <!--        toastr-->
+        <!--  toastr-->
         <script src="{{ asset('js/toastr/toastr.min.js')}}"></script>
-        <!--        nprogress-->
+        <!-- nprogress-->
         <script src="{{ URL::asset('js/nprogress.js')}}"></script>
         <script src="{{ URL::asset('js/jquery.dataTables.min.js')}}"></script>
-        <!--       custom-->
-        <script src="{{ URL::asset('js/init.js')}}"></script>  
+        <!-- custom-->
+        <script src="{{ URL::asset('js/init.js')}}"></script>
 
         @yield('scripts')
 
@@ -208,22 +212,18 @@
             }
         </script>
 
-
-
         <script type="text/javascript">
             //Code for show success  messages            
             @if( @Session::has('success') )
                 toastr.success('{{ @Session::get('success') }}');
             @endif
         </script>
-
         <script type="text/javascript">
             //Code for show warning  messages
             @if( @Session::has('warning') )
-                toastr.error('{{ @Session::get('warning') }}');
+                toastr.warning('{{ @Session::get('warning') }}');
             @endif
         </script>
-
         <script type="text/javascript">
             //Code for show back error messages
             @if (@Session::has('errors'))
@@ -232,30 +232,5 @@
             @endforeach
             @endif
         </script>
-
-
-
-        <!--
-<script>
-
-// Show the progress bar 
-NProgress.start();
-
-// Increase randomly
-var interval = setInterval(function() { NProgress.inc(); }, 1000);        
-
-// Trigger finish when page fully loaded
-jQuery(window).load(function () {
-clearInterval(interval);
-NProgress.done();
-});
-
-// Trigger bar when exiting the page
-jQuery(window).unload(function () {
-NProgress.start();
-});
-
-</script>      
--->
     </body>
 </html>

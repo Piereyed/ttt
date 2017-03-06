@@ -12,6 +12,7 @@
 */
 
 Route::get('/',['as'=>'inicio',function () {
+
     return view('index');
 }] )->middleware('auth');
 
@@ -22,17 +23,32 @@ Route::get('/login', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/inicio_sedes', 'HomeController@locals');
+Route::post('/entrar_sede', 'HomeController@entrar');
+
+
+
 
 Route::group(['middleware' => 'auth'], function(){
+    
+    Route::group(['prefix' => 'administradores'], function(){    
+        Route::get('/', ['as' => 'admin.index', 'uses' => 'AdminController@index']);
+        Route::get('create', ['as' => 'admin.create', 'uses' => 'AdminController@create']);
+        Route::post('create', ['as' => 'admin.store', 'uses' => 'AdminController@store']);
+        Route::get('show/{id}', ['as' => 'admin.show', 'uses' => 'AdminController@show']);
+        Route::get('edit/{id}', ['as' => 'admin.edit', 'uses' => 'AdminController@edit']);
+        Route::post('edit/{id}', ['as' => 'admin.update', 'uses' => 'AdminController@update']);
+        Route::get('delete/{id}', ['as' => 'admin.delete', 'uses' => 'AdminController@destroy']);
+    });
 
     Route::group(['prefix' => 'clientes'], function(){    
-        Route::get('/', ['as' => 'client.index', 'uses' => 'ClientController@index']);
-        Route::get('create', ['as' => 'client.create', 'uses' => 'ClientController@create']);
-        Route::post('create', ['as' => 'client.store', 'uses' => 'ClientController@store']);
-        Route::get('show/{id}', ['as' => 'client.show', 'uses' => 'ClientController@show']);
-        Route::get('edit/{id}', ['as' => 'client.edit', 'uses' => 'ClientController@edit']);
-        Route::post('edit/{id}', ['as' => 'client.update', 'uses' => 'ClientController@update']);
-        Route::get('delete/{id}', ['as' => 'client.delete', 'uses' => 'ClientController@destroy']);
+        Route::get('/', ['as' => 'client.index', 'uses' => 'PersonController@index']);
+        Route::get('create', ['as' => 'client.create', 'uses' => 'PersonController@create']);
+        Route::post('create', ['as' => 'client.store', 'uses' => 'PersonController@store']);
+        Route::get('show/{id}', ['as' => 'client.show', 'uses' => 'PersonController@show']);
+        Route::get('edit/{id}', ['as' => 'client.edit', 'uses' => 'PersonController@edit']);
+        Route::post('edit/{id}', ['as' => 'client.update', 'uses' => 'PersonController@update']);
+        Route::get('delete/{id}', ['as' => 'client.delete', 'uses' => 'PersonController@destroy']);
     });
 
     Route::group(['prefix' => 'sedes'], function(){    
@@ -44,7 +60,6 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('edit/{id}', ['as' => 'local.update', 'uses' => 'LocalController@update']);
         Route::get('delete/{id}', ['as' => 'local.delete', 'uses' => 'LocalController@destroy']);
     });
-
 
 });
 

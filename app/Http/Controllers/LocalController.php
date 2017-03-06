@@ -98,27 +98,18 @@ class LocalController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function destroy($id)
     {
-//        dd($id);
         try {
             $local   = Local::find($id);
-            
-//            if(count($local->questions) ==0){//solo si la competencia no se ha usado
-            if(true){//solo si la competencia no se ha usado
+            if(count($local->people) ==0){//solo si la sede no se ha usado
                 $local->delete();
                 return redirect()->route('local.index')->with('success', 'La sede se ha eliminado con éxito');
             }
             else{
                 return redirect()->back()->with('warning', 'La sede no se puede eliminar.');
-            }            
-            
+            }
         } catch (Exception $e) {
             return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
         }

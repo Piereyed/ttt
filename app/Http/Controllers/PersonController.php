@@ -3,23 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\ClientRequest;
-use App\Client;
+use App\Person;
 use App\Local;
 use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Auth;
 
-class ClientController extends Controller
+class PersonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
-    {          
-        dd(session()->all());
-
-        $clients = Client::get();
+    {         
+       
+        $clients = Person::get();
         //        $clients_pag = Client::paginate(10);
         $data = [
             'clients'    =>  $clients,
@@ -72,7 +67,7 @@ class ClientController extends Controller
             return redirect()->back()->with('warning', 'Número de DNI inválido');
 
         try {
-            $client = new Client;
+            $client = new Person;
 
             $client->sex       = isset($request['sex']) ? 'M' : 'H' ;            
             $client->num_doc       = $request['document'];            
@@ -123,7 +118,7 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        $client = Client::find($id);
+        $client = Person::find($id);
         $data = [
             'client'       => $client,
             'title'        => "Editar cliente",
@@ -142,7 +137,7 @@ class ClientController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $client = Client::find($id);
+            $client = Person::find($id);
             $client->sex       = $request['sex'];            
             $client->num_doc       = $request['document'];            
             $client->type_doc       = $request['type_document'];            
@@ -171,7 +166,7 @@ class ClientController extends Controller
     public function destroy($id)
     {
         try {
-            $client   = Client::find($id);
+            $client   = Person::find($id);
             $client->delete();
             return redirect()->route('client.index')->with('success', 'El cliente se ha eliminado con éxito');
 
