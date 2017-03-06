@@ -15,9 +15,9 @@ class CreatePersonRoleLocalTable extends Migration
     {
         Schema::create('person_role_local', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('person_id');
-            $table->integer('role_id');
-            $table->integer('local_id');
+            $table->integer('person_id')->unsigned();
+            $table->integer('role_id')->unsigned();
+            $table->integer('local_id')->unsigned();
             $table->timestamps();
         });
         

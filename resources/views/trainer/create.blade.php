@@ -5,9 +5,9 @@
 <div class="section">
     <div class="row">
         <div class="col m12">
-            <h1>Nuevo administrador</h1>
+            <h1>Nuevo entrenador</h1>
             <div class="row">
-                <form id="crear_administrador" action="{{ route('admin.store') }}" method="post" novalidate="true" class="col s12">
+                <form id="crear_entrenador" action="{{ route('trainer.store') }}" method="post" novalidate="true" class="col s12">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="row">
 
@@ -41,7 +41,7 @@
               <div class="row">
                 <div class="input-field col m4 s12">
                     <i class="material-icons prefix">account_circle</i>
-                    <input id="nombre" name="nombre" value="{{ old('nombre fe') }}" type="text" class="validate" data-length="100">
+                    <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate" data-length="100">
                     <label class="active" for="nombre">Nombre</label>
                 </div>
                 <div class="input-field col m4 s6">                           
@@ -85,27 +85,11 @@
 
             </div>
 
-            <div class="row">                       
-                <div class="input-field col m12 s6">
-                    <i class="fa fa-building prefix" aria-hidden="true"></i>
-                    <select id="sede" name="sede[]" multiple>
-                        <option value="" disabled selected>Seleccione</option>
-                        @foreach($locals as $local)
-                        <option value="{{$local->id}}">{{$local->name}}</option>
-                        @endforeach
-                    </select>
-                    <label>Sede</label>
-                </div>
-            </div>
-
-
-
-
 
 
             <div class="row"  style="text-align:center">
                 <div class="col s12">
-                    <a href="{{ route('admin.index') }}" title="Cancelar" class="waves-effect waves-teal btn-flat btn-large">
+                    <a href="{{ route('trainer.index') }}" title="Cancelar" class="waves-effect waves-teal btn-flat btn-large">
                         <i class="left fa fa-step-backward" aria-hidden="true"></i>Regresar
                     </a>
                     <button  title="Guardar" type="submit" class="btn-large waves-effect waves-light btn ">
@@ -131,7 +115,7 @@
 <script>
     $( document ).ready(function(){
         //validate
-        $("#crear_administrador").validate({
+        $("#crear_entrenador").validate({
             rules:{
                 nombre:{
                     required:true,

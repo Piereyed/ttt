@@ -41,14 +41,24 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('delete/{id}', ['as' => 'admin.delete', 'uses' => 'AdminController@destroy']);
     });
 
+    Route::group(['prefix' => 'entrenadores'], function(){    
+        Route::get('/', ['as' => 'trainer.index', 'uses' => 'TrainerController@index']);
+        Route::get('create', ['as' => 'trainer.create', 'uses' => 'TrainerController@create']);
+        Route::post('create', ['as' => 'trainer.store', 'uses' => 'TrainerController@store']);
+        Route::get('show/{id}', ['as' => 'trainer.show', 'uses' => 'TrainerController@show']);
+        Route::get('edit/{id}', ['as' => 'trainer.edit', 'uses' => 'TrainerController@edit']);
+        Route::post('edit/{id}', ['as' => 'trainer.update', 'uses' => 'TrainerController@update']);
+        Route::get('delete/{id}', ['as' => 'trainer.delete', 'uses' => 'TrainerController@destroy']);
+    });
+
     Route::group(['prefix' => 'clientes'], function(){    
-        Route::get('/', ['as' => 'client.index', 'uses' => 'PersonController@index']);
-        Route::get('create', ['as' => 'client.create', 'uses' => 'PersonController@create']);
-        Route::post('create', ['as' => 'client.store', 'uses' => 'PersonController@store']);
-        Route::get('show/{id}', ['as' => 'client.show', 'uses' => 'PersonController@show']);
-        Route::get('edit/{id}', ['as' => 'client.edit', 'uses' => 'PersonController@edit']);
-        Route::post('edit/{id}', ['as' => 'client.update', 'uses' => 'PersonController@update']);
-        Route::get('delete/{id}', ['as' => 'client.delete', 'uses' => 'PersonController@destroy']);
+        Route::get('/', ['as' => 'client.index', 'uses' => 'ClientController@index']);
+        Route::get('create', ['as' => 'client.create', 'uses' => 'ClientController@create']);
+        Route::post('create', ['as' => 'client.store', 'uses' => 'ClientController@store']);
+        Route::get('show/{id}', ['as' => 'client.show', 'uses' => 'ClientController@show']);
+        Route::get('edit/{id}', ['as' => 'client.edit', 'uses' => 'ClientController@edit']);
+        Route::post('edit/{id}', ['as' => 'client.update', 'uses' => 'ClientController@update']);
+        Route::get('delete/{id}', ['as' => 'client.delete', 'uses' => 'ClientController@destroy']);
     });
 
     Route::group(['prefix' => 'sedes'], function(){    

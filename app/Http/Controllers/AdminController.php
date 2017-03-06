@@ -42,17 +42,13 @@ class AdminController extends Controller
             'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_paterno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_materno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',
-            'email'        => 'email|required|max:100',
+            'email'        => 'email|required|max:100|unique:users,email',
             'telefono'        => 'max:15',
             'fecha_nacimiento'     => 'date|required|before:today',
             'documento'     => 'digits_between:6,15|required|max:15',            
             'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',
             'sede'        => 'required'            
         ]);
-
-        if(count(DB::table('users')->where('email', $request['email'] )->get()) > 0  )  {
-            return redirect()->back()->with('warning', 'Correo ya existe');
-        }
 
         if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
             return redirect()->back()->with('warning', 'Número de DNI inválido');

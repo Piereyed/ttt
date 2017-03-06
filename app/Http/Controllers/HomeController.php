@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Local;
 
 class HomeController extends Controller
 {
@@ -31,17 +32,44 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $data = [
-            'locals'   =>  $user->person->locals
+        'locals'   =>  $user->person->locals
         ];
         return view('local.home', $data);
     }
     
     public function entrar(Request $request)
     {        
+        $user = Auth::user();
+        $person = $user->person;
+        
+        //guardo el nombre en el session
+        session(['name' => trim($person->name.' '.$person->lastname1) ]);        
+
+        $roles_obj = $person->belongsToMany('App\Role','person_role_local')->wherePivot('loca_id', $request['sede']);
+        
+        $roles = [];
+        $rol_nombre = '';
+        foreach($roles_obj as $role){
+            array_push($roles,$role->name);
+            if($role->name == "Administrador"){
+                $rol_nombre = 'Administrador';
+            }
+            else if ($role->name == "Entrenador"){
+                $rol_nombre = 'Entrenador';
+            }
+            else if ($role->name == "Cliente"){
+                $rol_nombre = 'Cliente';
+            }
+        }        
+        //guardo los roles en el session
+        session(['roles' => $roles]); 
+        session(['rol_nombre' => $rol_nombre]);
+
         //guardo en el session la sede a la que se entro
         session(['sede' => $request['sede'] ]); 
+        session(['sede_nombre' => Local::find($request['sede'])->name ]);         
         
-        
+        dd(session()->all()); 
         return redirect()->route('inicio');
     }
 }

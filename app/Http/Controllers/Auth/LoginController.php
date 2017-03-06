@@ -48,24 +48,7 @@ class LoginController extends Controller
     }
 
     protected function redirectTo(){         
-        $user = Auth::user();
-        $person = $user->person;
         
-        //guardo el nombre en el session
-        session(['name' => trim($person->name.' '.$person->lastname1) ]);        
-
-        $roles_obj = $person->roles;
-        
-        $roles = [];
-        foreach($roles_obj as $role){
-            array_push($roles,$role->name);
-        }        
-        //guardo los roles en el session
-        session(['roles' => $roles]); 
-        
-        $data = [
-            'locals'   =>  $person->locals
-        ];
 
         return '/inicio_sedes';
     }
