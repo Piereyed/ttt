@@ -24,6 +24,8 @@
     <!--        datatables-->
     <link rel="stylesheet" href="{{ asset('css/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{ asset('css/extra.css')}}">
+    <!--        dropify-->
+    <link rel="stylesheet" href="{{ asset('css/dropify.min.css')}}">
 
     @yield('styles')
 
@@ -209,6 +211,8 @@
     <!-- nprogress-->
     <script src="{{ URL::asset('js/nprogress.js')}}"></script>
     <script src="{{ URL::asset('js/jquery.dataTables.min.js')}}"></script>
+    <!-- dropify-->
+    <script src="{{ URL::asset('js/dropify.min.js')}}"></script>
     <!-- custom-->
     <script src="{{ URL::asset('js/init.js')}}"></script>
 

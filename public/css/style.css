@@ -68,13 +68,23 @@ main {
 /*para datatables*/
 
 .dataTables_length select{
-        display: inline-block !important;
-        width: inherit;
-    }
+    display: inline-block !important;
+    width: inherit;
+}
 
-    /*fin de datatables*/
+/*fin de datatables*/
+
+/*para dropify*/
+.dropify-wrapper p {
+    text-align: center !important;
+}
+
+.dropify-wrapper ul:not(.browser-default) li{
+    list-style-type: disc !important;
+}
 
 
+/*fin para dropify*/
 
 
 /*media query*/

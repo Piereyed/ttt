@@ -32,6 +32,8 @@ class HomeController extends Controller
     public function locals()
     {
         $user = Auth::user();
+
+        
         $data = [
         'locals'   =>  $user->person->locals
         ];
@@ -48,7 +50,7 @@ class HomeController extends Controller
 
         //se obtienen los roles para esa sede
         $roles_obj = $person->belongsToMany('App\Role','person_role_local')->wherePivot('local_id', $request['sede'])->get();
-        
+        // dd($roles_obj);
         $roles = [];
         $rol_nombre = '';
         foreach($roles_obj as $role){

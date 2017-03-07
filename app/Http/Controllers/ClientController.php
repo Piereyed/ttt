@@ -42,10 +42,13 @@ class ClientController extends Controller
             'telefono'        => 'max:15',
             'fecha_nacimiento'     => 'date|required|before:today',
             'documento'     => 'digits_between:6,15|required|max:15',            
-            'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500'  
+            'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',
+            'foto'        => 'required' 
             
             ]);
-
+        if ($request->hasFile('foto')) {
+            dd($request);
+        }
 
 
         if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            

@@ -38,6 +38,9 @@ $( document ).ready(function(){
     //datatables
     $('.datatable').DataTable();
 
+    //dropify
+    $('.dropify').dropify();
+
 
 
 

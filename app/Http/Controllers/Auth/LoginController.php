@@ -27,7 +27,7 @@ class LoginController extends Controller
      * @var string
      */
     //    protected $redirectTo = '/home';
-    protected $redirectTo = '/';
+    protected $redirectTo = '/inicio_sedes';
 
 
 
@@ -47,9 +47,7 @@ class LoginController extends Controller
         return redirect()->route('login');
     }
 
-    protected function redirectTo(){         
-        
-
-        return '/inicio_sedes';
-    }
+    // protected function redirectTo(){      
+    //     return '/inicio_sedes';
+    // }
 }

@@ -21,14 +21,16 @@ Route::get('/login', function () {
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index');
-Route::get('/inicio_sedes', 'HomeController@locals');
-Route::post('/entrar_sede', 'HomeController@entrar');
+
 
 
 
 
 Route::group(['middleware' => 'auth'], function(){
+
+    //Route::get('/home', 'HomeController@index');
+    Route::get('/inicio_sedes', 'HomeController@locals');
+    Route::post('/entrar_sede', 'HomeController@entrar');
     
     Route::group(['prefix' => 'administradores'], function(){    
         Route::get('/', ['as' => 'admin.index', 'uses' => 'AdminController@index']);

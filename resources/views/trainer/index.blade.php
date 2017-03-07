@@ -14,7 +14,7 @@
 
     <!--   Icon Section   -->
     <div class="row">
-        <div class="col m12">
+        <div class="col s12">
 
             <div class="row">
                 <div class="col m3 s12">
