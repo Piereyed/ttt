@@ -51,7 +51,7 @@
         .nav_sede{
             font-size: 13px;
             padding-right: 15px;
-            color: gray;
+            color: #dcdcdc;
         }
     </style>
 
@@ -79,8 +79,9 @@
 
 <header class="xxx">
     <div class="navbar-fixed">
-        <nav class="grey darken-3" role="navigation">
+    <nav class="grey darken-2" role="navigation">
             <div class="nav-wrapper ">
+
                 <ul class="left">
                     <li>
                         <h1 class="logo-wraper" style="margin:0;font-size:1rem">
@@ -108,13 +109,14 @@
                     <li><a href="{{ route('trainer.index') }}">Entrenadores</a></li>
                     @endif
 
-                    @if(in_array("Trainer", session('roles')) || in_array("Administrador", session('roles')))
+                    @if(in_array("Entrenador", session('roles')) || in_array("Administrador", session('roles')))
                     <li><a href="{{ route('client.index') }}">Clientes</a></li>
                     @endif
 
                     <!--   roles del Entrenador de gimnasio    -->
-                    @if(in_array("Trainer", session('roles')))                          
-                    <li><a href="#">Ejercicios</a></li>
+                    @if(in_array("Entrenador", session('roles')))                          
+                    <li><a href="{{ route('exercise.index') }}">Ejercicios</a></li>
+                    <li><a href="{{ route('muscle.index') }}">Músculos</a></li>
                     @endif
 
                     @if (!Auth::guest())
@@ -154,9 +156,8 @@
                     <img src="{{ asset('images/logo.png')}}">
                 </div>
                 <a href="#!user"><img class="circle" src="{{ asset('images/perfil.jpg')}}"></a>
-                <a href="#!name"><span class="white-text name">{{session('name')}}</span></a>
-                <a href="#!name"><span class="white-text name">{{session('sede_nombre')}}</span></a>
-                <a href="#!email"><span class="white-text email">{{session('rol_nombre')}}</span></a>
+                <a href="#!name"><span class="white-text name">{{session('name')}}</span></a>                
+                <a href="#!email"><span class="white-text email">{{session('rol_nombre')}} - {{session('sede_nombre')}}</span></a>
             </div>
         </li>
         <li><a href="{{ route('client.index') }}"><i class="material-icons">group</i> Clientes</a></li>
@@ -188,11 +189,11 @@
 
     </main>
 
-    <footer class="xxx page-footer black" style="padding-top:0">
+    <footer class="xxx page-footer grey darken-2" style="padding-top:0">
         <div class="footer-copyright">
             <div class="container">
                 Copyright © 2017 Todos los derechos reservados
-                <span class="right">
+                <span class="piereyed right">
                     Made by <a class="grey-text text-lighten-3" href="http://materializecss.com">Piereyed</a>
                 </span>
             </div>

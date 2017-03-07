@@ -21,7 +21,7 @@ class RolesTableSeeder extends Seeder
         ]);
         
         DB::table('roles')->insert([  // id = 3
-            'name' => 'Trainer'
+            'name' => 'Entrenador'
         ]);
         
         DB::table('roles')->insert([  // id = 4

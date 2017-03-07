@@ -5,7 +5,7 @@
 
     <!--   Icon Section   -->
     <div class="row">
-        <div class="col m12">
+        <div class="col s12">
             <h1>Sedes</h1>
             <div class="row" style="min-height:36px">
                 <div class="col m3 s12">
@@ -24,48 +24,52 @@
                 </a>                
             </div>
 
-            <!--  footer-->
 
-            <!-- Modal Structure -->            
-            <table class="responsive-table bordered highlight">
-                <thead>
-                    <tr>
-                        <th class="center" data-field="id">Código</th>
-                        <th class="center" data-field="name">Sede</th>
-                        <th data-field="lastname1">Dirección</th>
-                        <th class="center" data-field="options">Elegir</th>
-                    </tr>
-                </thead>
+            <!-- Modal Structure --> 
 
-                <tbody>
-                    @foreach($locals as $local)
-                    <tr class="fila" data-target="modal1">
-                        <td class="center">{{ $local->id }}</td>
-                        <td class="center">{{ $local->name }}</td>
-                        <td>{{ $local->address }}</td>
-                        <td class="opcion center">
-                            <p>
-                                <input type="checkbox" class="check filled-in" id="{{ $local->id }}" />
-                                <label for="{{ 'check_'.$local->id }}"></label>
-                            </p>
-                        </td>
+            <div class="row">
+                <div class="col s12">
+                    <table class="responsive-table bordered highlight">
+                        <thead>
+                            <tr>
+                                <th class="center" data-field="id">Código</th>
+                                <th class="center" data-field="name">Sede</th>
+                                <th data-field="lastname1">Dirección</th>
+                                <th class="center" data-field="options">Elegir</th>
+                            </tr>
+                        </thead>
 
-                    </tr>
+                        <tbody>
+                            @foreach($locals as $local)
+                            <tr class="fila" data-target="modal1">
+                                <td class="center">{{ $local->id }}</td>
+                                <td class="center">{{ $local->name }}</td>
+                                <td>{{ $local->address }}</td>
+                                <td class="opcion center">
+                                    <p>
+                                        <input type="checkbox" class="check filled-in" id="{{ $local->id }}" />
+                                        <label for="{{ 'check_'.$local->id }}"></label>
+                                    </p>
+                                </td>
 
-                    <div id="{{'modal_'.$local->id }}" class="modal bottom-sheet">
-                        <div class="modal-content">
-                            <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
-                            <p>Está a punto de eliminar este elemento.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="{{ route('local.delete', $local->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
-                            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
-                        </div>
-                    </div>  
-                    @endforeach                 
-                </tbody>
-            </table>
-            {{ $locals->links() }}
+                            </tr>
+
+                            <div id="{{'modal_'.$local->id }}" class="modal bottom-sheet">
+                                <div class="modal-content">
+                                    <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
+                                    <p>Está a punto de eliminar este elemento.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ route('local.delete', $local->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
+                                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
+                                </div>
+                            </div>  
+                            @endforeach                 
+                        </tbody>
+                    </table>
+                    {{ $locals->links() }}
+                </div>
+            </div>            
         </div>                    
     </div>
 

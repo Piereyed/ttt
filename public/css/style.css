@@ -37,6 +37,10 @@ main {
     letter-spacing: 1.5px;
 }
 
+.fixed-action-btn{
+    bottom: 78px !important;
+}
+
 /*para datatables*/
 /*
 .dataTables_wrapper .select-wrapper{
@@ -48,26 +52,78 @@ main {
 */
 
 
+.bread{
+    box-shadow: none !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    background-color: rgba(2,2,2,0) !important;
+}
+.bread .breadcrumb,.bread .breadcrumb:before{
+    color: rgba(0,0,0,0.7);    
+}
+.bread .breadcrumb:last-child{
+    color: black;
+}
+
+/*para datatables*/
+
+.dataTables_length select{
+        display: inline-block !important;
+        width: inherit;
+    }
+
+    /*fin de datatables*/
 
 
 
 
 /*media query*/
 
-@media only screen and  (min-width: 993px) { 
-    #logo-container{
+@media only screen and  (min-width: 993px) {  /* LARGE */
+    .piereyed{
         color: green;
     }
 }
 
-@media only screen and  (max-width: 992px) {
-  #logo-container{
-        color: yellow;
-    }
+@media only screen and  (max-width: 992px) {/* MEDIUM */
+    
+  .piereyed{
+    color: yellow;
+}
+/*para mejorar las data tables*/
+table.datatable tr th{
+    width: initial !important;
+}
+/*fin para mejorar las data tables*/
+
+
 }
 
-@media only screen and  (max-width: 600px) {
-  #logo-container{
-        color: red;
-    }
+@media only screen and  (max-width: 600px) { /* SMALL */
+
+  .piereyed{
+    color: red;
+}
+
+/*para mejorar las data tables*/
+.dataTables_wrapper .dataTables_filter{
+    width: initial !important;
+}
+table.datatable tr th{
+    width: initial !important;
+}
+.dataTables_info, .dataTables_paginate{
+    display: block !important;
+    float: none !important;
+}
+/* fin para mejorar las data tables*/
+
+.h1{
+    font-size: 27px;
+    line-height: 10px;
+    letter-spacing: 1.5px;
+}
+
+
+
 }

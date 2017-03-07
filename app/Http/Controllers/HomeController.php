@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Local;
+use Illuminate\Database\Eloquent\Model;
 
 class HomeController extends Controller
 {
@@ -45,13 +46,17 @@ class HomeController extends Controller
         //guardo el nombre en el session
         session(['name' => trim($person->name.' '.$person->lastname1) ]);        
 
-        $roles_obj = $person->belongsToMany('App\Role','person_role_local')->wherePivot('loca_id', $request['sede']);
+        //se obtienen los roles para esa sede
+        $roles_obj = $person->belongsToMany('App\Role','person_role_local')->wherePivot('local_id', $request['sede'])->get();
         
         $roles = [];
         $rol_nombre = '';
         foreach($roles_obj as $role){
             array_push($roles,$role->name);
-            if($role->name == "Administrador"){
+            if($role->name == "Super"){
+                $rol_nombre = 'admin';
+            }
+            else if($role->name == "Administrador"){
                 $rol_nombre = 'Administrador';
             }
             else if ($role->name == "Entrenador"){
@@ -69,7 +74,7 @@ class HomeController extends Controller
         session(['sede' => $request['sede'] ]); 
         session(['sede_nombre' => Local::find($request['sede'])->name ]);         
         
-        dd(session()->all()); 
+        
         return redirect()->route('inicio');
     }
 }

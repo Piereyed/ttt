@@ -12,7 +12,6 @@
 */
 
 Route::get('/',['as'=>'inicio',function () {
-
     return view('index');
 }] )->middleware('auth');
 
@@ -22,7 +21,7 @@ Route::get('/login', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+//Route::get('/home', 'HomeController@index');
 Route::get('/inicio_sedes', 'HomeController@locals');
 Route::post('/entrar_sede', 'HomeController@entrar');
 
@@ -69,6 +68,26 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('edit/{id}', ['as' => 'local.edit', 'uses' => 'LocalController@edit']);
         Route::post('edit/{id}', ['as' => 'local.update', 'uses' => 'LocalController@update']);
         Route::get('delete/{id}', ['as' => 'local.delete', 'uses' => 'LocalController@destroy']);
+    });
+
+    Route::group(['prefix' => 'musculos'], function(){    
+        Route::get('/', ['as' => 'muscle.index', 'uses' => 'MuscleController@index']);
+        Route::get('create', ['as' => 'muscle.create', 'uses' => 'MuscleController@create']);
+        Route::post('create', ['as' => 'muscle.store', 'uses' => 'MuscleController@store']);
+        Route::get('show/{id}', ['as' => 'muscle.show', 'uses' => 'MuscleController@show']);
+        Route::get('edit/{id}', ['as' => 'muscle.edit', 'uses' => 'MuscleController@edit']);
+        Route::post('edit/{id}', ['as' => 'muscle.update', 'uses' => 'MuscleController@update']);
+        Route::get('delete/{id}', ['as' => 'muscle.delete', 'uses' => 'MuscleController@destroy']);
+    });
+
+    Route::group(['prefix' => 'ejercicios'], function(){    
+        Route::get('/', ['as' => 'exercise.index', 'uses' => 'ExerciseController@index']);
+        Route::get('create', ['as' => 'exercise.create', 'uses' => 'ExerciseController@create']);
+        Route::post('create', ['as' => 'exercise.store', 'uses' => 'ExerciseController@store']);
+        Route::get('show/{id}', ['as' => 'exercise.show', 'uses' => 'ExerciseController@show']);
+        Route::get('edit/{id}', ['as' => 'exercise.edit', 'uses' => 'ExerciseController@edit']);
+        Route::post('edit/{id}', ['as' => 'exercise.update', 'uses' => 'ExerciseController@update']);
+        Route::get('delete/{id}', ['as' => 'exercise.delete', 'uses' => 'ExerciseController@destroy']);
     });
 
 });

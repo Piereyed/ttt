@@ -1,20 +1,28 @@
 @extends('index')
-@section('content')
 
 @section('styles')
 <style>
-    select{
-        display: inline-block !important;
-        width: inherit;
-    }
+    
 </style>
 @endsection
 
+
+@section('content')
 <div class="section">
 
     <!--   Icon Section   -->
     <div class="row">
-        <div class="col m12">
+        <div class="col s12">
+            <div class="row">
+                <nav class="bread">
+                    <div class="nav-wrapper">
+                        <div class="col s12 m12 l12">                            
+                            <a href="#" class="breadcrumb">Inicio</a>
+                            <a href="{{ route('client.index') }}" class="breadcrumb">Clientes</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
 
             <div class="row">
                 <div class="col m3 s12">
@@ -33,48 +41,51 @@
                 </a>                
             </div>
 
-            <table class="datatable responsive-table bordered highlight">
-                <thead>
-                    <tr>
-                        <th class="center" data-field="id">Código</th>
-                        <th data-field="name">Nombre</th>
-                        <th data-field="lastname1">Apellidos paterno</th>
-                        <th class="center" data-field="options">Elegir</th>
-                    </tr>
-                </thead>
+            <div class="row">
+                <div class="col s12">
+                    <table class="datatable responsive-table bordered highlight">
+                        <thead>
+                            <tr>
+                                <th class="center" data-field="id">Código</th>
+                                <th data-field="name">Nombre</th>
+                                <th data-field="lastname1">Apellidos paterno</th>
+                                <th class="center" data-field="options">Elegir</th>
+                            </tr>
+                        </thead>
 
-                <tbody>
-                    @foreach($clients as $client)
-                    <tr class="fila"  data-target="modal1">
-                        <td class="center">{{ $client->id }}</td>
-                        <td>{{ $client->name }}</td>
-                        <td>{{ $client->lastname1. " " . $client->lastname2 }}</td>
-                        <td class="opcion center">
-                            <p>
-                                <input type="checkbox" class="check filled-in" id="{{ $client->id }}" />
-                                <label for="{{ $client->id }}"></label>
-                            </p>
+                        <tbody>
+                            @foreach($clients as $client)
+                            <tr class="fila"  data-target="modal1">
+                                <td class="center">{{ $client->id }}</td>
+                                <td>{{ $client->name }}</td>
+                                <td>{{ $client->lastname1. " " . $client->lastname2 }}</td>
+                                <td class="opcion center">
+                                    <p>
+                                        <input type="checkbox" class="check filled-in" id="{{ $client->id }}" />
+                                        <label for="{{ $client->id }}"></label>
+                                    </p>
 
 
-                        </td>
+                                </td>
 
-                    </tr>   
+                            </tr>   
 
-                    <!--     modal-->
-                    <div id="{{'modal_'.$client->id }}" class="modal bottom-sheet">
-                        <div class="modal-content">
-                            <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
-                            <p>Está a punto de eliminar este elemento.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="{{ route('client.delete', $client->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
-                            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
-                        </div>
-                    </div>
-                    @endforeach                 
-                </tbody>
-            </table>
-
+                            <!--     modal-->
+                            <div id="{{'modal_'.$client->id }}" class="modal bottom-sheet">
+                                <div class="modal-content">
+                                    <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
+                                    <p>Está a punto de eliminar este elemento.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ route('client.delete', $client->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
+                                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
+                                </div>
+                            </div>
+                            @endforeach                 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>                    
     </div>
 
