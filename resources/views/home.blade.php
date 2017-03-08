@@ -31,6 +31,23 @@
             .xxx{
                 display: none;
             }
+
+             html{                
+                display: table;
+                height: 100%;
+                margin: auto; 
+                color: white;               
+            }
+            body{                
+                display: table-cell; 
+                vertical-align: middle;                
+                height: 100%;                
+                background-image: url(  {{ asset('images/wallpapaer.jpg') }} );
+                background-repeat: no-repeat;                
+                background-position: center top;                
+            }
+
+
             /* Add animation to "page content" */
             .animate-bottom {
                 position: relative;
@@ -59,7 +76,7 @@
     </head>
     <body class="loaded" onload="myFunction()" >
 
-        <div id="loader" class="preloader-wrapper big active" style="left: 45%; top: 40%; position: absolute; background: #fff;">
+        <!-- <div id="loader" class="preloader-wrapper big active" style="left: 45%; top: 40%; position: absolute; background: #fff;">
             <div class="spinner-layer spinner-blue-only">
                 <div class="circle-clipper left">
                     <div class="circle"></div>
@@ -69,15 +86,12 @@
                 <div class="circle"></div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <main id="main" class="xxx animate-bottom">
             <div class="container">
                 @yield('content')
-
-
             </div>
-
         </main>
 
        
@@ -92,7 +106,7 @@
         <script src="{{ URL::asset('js/nprogress.js')}}"></script>
         <script src="{{ URL::asset('js/jquery.dataTables.min.js')}}"></script>
         <!-- custom-->
-        <script src="{{ URL::asset('js/init.js')}}"></script>
+        <!-- <script src="{{ URL::asset('js/init.js')}}"></script> -->
 
         @yield('scripts')
 

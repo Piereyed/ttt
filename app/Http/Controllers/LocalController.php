@@ -13,37 +13,31 @@ class LocalController extends Controller
         $locals = Local::get();
         $locals_pag = Local::paginate(10);
         $data = [
-            'locals'    =>  $locals_pag,
-            'size'       => count($locals),
+        'locals'    =>  $locals_pag,
+        'size'       => count($locals),
         ];
         return view('local.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  
     public function create()
     {
         return view('local.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(LocalRequest $request)
+   
+    public function store(Request $request)
     {
 //        dd($request);
+         $this->validate($request, [
+            'nombre'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
+            'direccion' => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',
+            ]);
 
-        try {
+         try {
             $local = new Local;
-            $local->name       = $request['name'];            
-            $local->address  = $request['address'];
-
+            $local->name       = $request['nombre'];            
+            $local->address  = $request['direccion'];
             $local->save();
             return redirect()->route('local.index')->with('success', 'La sede se ha registrado con éxito.');
         } catch (Exception $e) {
@@ -72,37 +66,36 @@ class LocalController extends Controller
     {
         $local = Local::find($id);
         $data = [
-            'local'       => $local,
+        'local'       => $local,
         ];
         
         return view('local.edit',$data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(LocalRequest $request, $id)
+    
+    public function update(Request $request, $id)
     {
-         try {
-            $local = Local::find($id);
-            $local->name       = $request['name'];            
-            $local->address  = $request['address'];
-            $local->save();
-            return redirect()->route('local.index')->with('success', 'La sede se ha actualizado con éxito.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
-        }
-    }
+        $this->validate($request, [
+            'nombre'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
+            'direccion' => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',
+            ]);
 
-   
-    public function destroy($id)
-    {
-        try {
-            $local   = Local::find($id);
+       try {
+        $local = Local::find($id);
+        $local->name       = $request['nombre'];            
+        $local->address  = $request['direccion'];
+        $local->save();
+        return redirect()->route('local.index')->with('success', 'La sede se ha actualizado con éxito.');
+    } catch (Exception $e) {
+        return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+    }
+}
+
+
+public function destroy($id)
+{
+    try {
+        $local   = Local::find($id);
             if(count($local->people) ==0){//solo si la sede no se ha usado
                 $local->delete();
                 return redirect()->route('local.index')->with('success', 'La sede se ha eliminado con éxito');

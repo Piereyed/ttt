@@ -1,12 +1,21 @@
 @extends('index')
 @section('content')
 
-<div class="section">
+<div class="section">    
+    <div class="row">
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('local.index') }}" class="breadcrumb">Sedes</a>                    
+                </div>
+            </div>
+        </nav>
+    </div>
 
-    <!--   Icon Section   -->
     <div class="row">
         <div class="col s12">
-            <h1>Sedes</h1>
+            <span class="h1">Sedes</span>
             <div class="row" style="min-height:36px">
                 <div class="col m3 s12">
                     <h6>Se encontraron {{ $size }} sedes</h6>

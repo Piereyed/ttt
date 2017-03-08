@@ -8,21 +8,20 @@
 @section('content')
 <div class="section">
 
+    <div class="row">
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12 m12 l12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('muscle.index') }}" class="breadcrumb">Músculos</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
     <!--   Icon Section   -->
     <div class="row">
         <div class="col s12">
-
-            <div class="row">
-                <nav class="bread">
-                    <div class="nav-wrapper">
-                        <div class="col s12 m12 l12">                            
-                            <a href="#" class="breadcrumb">Inicio</a>
-                            <a href="{{ route('muscle.index') }}" class="breadcrumb">Músculos</a>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-
             <div class="row">
                 <div class="col m3 s12">
                     <span class="h1">Músculos</span>

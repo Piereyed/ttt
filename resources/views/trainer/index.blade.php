@@ -1,16 +1,22 @@
 @extends('index')
-@section('content')
 
 @section('styles')
-<style>
-    select{
-        display: inline-block !important;
-        width: inherit;
-    }
-</style>
+<style></style>
 @endsection
 
+@section('content')
 <div class="section">
+
+    <div class="row">
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('trainer.index') }}" class="breadcrumb">Entrenadores</a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
     <!--   Icon Section   -->
     <div class="row">
@@ -33,46 +39,49 @@
                 </a>                
             </div>
 
-            <table class="datatable responsive-table bordered highlight">
-                <thead>
-                    <tr>
-                        <th class="center" data-field="id">Código</th>
-                        <th data-field="name">Nombre</th>
-                        <th data-field="lastname1">Apellidos paterno</th>
-                        <th class="center" data-field="options">Elegir</th>
-                    </tr>
-                </thead>
+            <div class="row">
+                <div class="col s12">
+                    <table class="datatable responsive-table bordered highlight">
+                        <thead>
+                            <tr>
+                                <th class="center" data-field="id">DNI</th>
+                                <th data-field="name">Nombres</th>
+                                <th data-field="lastname1">Apellidos</th>
+                                <th class="center" data-field="options">Elegir</th>
+                            </tr>
+                        </thead>
 
-                <tbody>
-                    @foreach($trainers as $trainer)
-                    <tr class="fila"  data-target="modal1">
-                        <td class="center">{{ $trainer->id }}</td>
-                        <td>{{ $trainer->name }}</td>
-                        <td>{{ $trainer->lastname1. " " . $trainer->lastname2 }}</td>
-                        <td class="opcion center">
-                            <p>
-                                <input type="checkbox" class="check filled-in" id="{{ $trainer->id }}" />
-                                <label for="{{ $trainer->id }}"></label>
-                            </p>
-                        </td>
+                        <tbody>
+                            @foreach($trainers as $trainer)
+                            <tr class="fila"  data-target="modal1">
+                                <td class="center">{{ $trainer->num_doc }}</td>
+                                <td>{{ $trainer->name }}</td>
+                                <td>{{ $trainer->lastname1. " " . $trainer->lastname2 }}</td>
+                                <td class="opcion center">
+                                    <p>
+                                        <input type="checkbox" class="check filled-in" id="{{ $trainer->id }}" />
+                                        <label for="{{ $trainer->id }}"></label>
+                                    </p>
+                                </td>
 
-                    </tr>   
+                            </tr>   
 
-                    <!--     modal-->
-                    <div id="{{'modal_'.$trainer->id }}" class="modal bottom-sheet">
-                        <div class="modal-content">
-                            <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
-                            <p>Está a punto de eliminar este elemento.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="{{ route('trainer.delete', $trainer->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
-                            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
-                        </div>
-                    </div>
-                    @endforeach                 
-                </tbody>
-            </table>
-
+                            <!--     modal-->
+                            <div id="{{'modal_'.$trainer->id }}" class="modal bottom-sheet">
+                                <div class="modal-content">
+                                    <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
+                                    <p>Está a punto de eliminar este elemento.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ route('trainer.delete', $trainer->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
+                                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
+                                </div>
+                            </div>
+                            @endforeach                 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>                    
     </div>
 

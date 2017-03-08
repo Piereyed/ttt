@@ -4,16 +4,28 @@
 
 <div class="section">
     <div class="row">
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('client.index') }}" class="breadcrumb">Clientes</a>
+                    <a href="#" class="breadcrumb">Nuevo</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="row">
         <div class="col m12">
             <span class="h1">Nuevo cliente</span>
             <div class="row">
-                <form id="crear_cliente" files="true" action="{{ route('client.store') }}" method="post" novalidate="true" class="col s12">
+                <form id="crear_cliente" files="true" enctype="multipart/form-data"  action="{{ route('client.store') }}" method="post" novalidate="true" class="col s12">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <div class="row">
 
+                    <div class="row">
                         <div class="col l6 s12">
                             <div class="input-field col s12 m6 l6">
-                                <select name="tipo_documento">
+                                <select id="tipo_documento" name="tipo_documento">
                                     <option value="0" selected>DNI</option>
                                     <option value="1">Pasaporte</option>
                                     <option value="2">Carnet de extrajería</option>
@@ -22,13 +34,13 @@
                             </div>
                             <div class="input-field col s12 m6 l6">
                                 <i class="fa fa-address-card prefix" aria-hidden="true"></i>
-                                <input id="documento" name="documento" value="{{ old('documento') }}" type="text" class="validate" data-length="15" >
+                                <input id="documento" name="documento" minlength="8" maxlength="8" value="{{ old('documento') }}" type="text" class="validate center" data-length="15" >
                                 <label class="active" for="documento">N° documento</label>
                             </div>
 
                             <div class="input-field col l12 m4 s12">
                                 <i class="material-icons prefix">account_circle</i>
-                                <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate" data-length="100">
+                                <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate " data-length="100">
                                 <label class="active" for="nombre">Nombre</label>
                             </div>
                             <div class="input-field col l12 m4 s12">  
@@ -44,15 +56,17 @@
                         </div>
 
                         <div class="col l6 s12">
-                        <!-- <span style="display: inline-block;text-align: center;">Foto:</span> -->
-                        <label class="active" for="foto">Foto</label>
+
+                            <label class="active" for="foto">Foto (opcional)</label>
                             <div class="file-field input-field col s12 m12 l12">
-                                <input id="foto" type="file" name="foto" class="dropify" data-max-file-size="3M" data-height="240" data-allowed-formats="square" data-allowed-file-extensions="png jpg jpeg" />
+                                <input id="foto" type="file" name="foto" value="{{old('foto')}}" class="dropify" data-max-file-size="3M" data-height="240"  data-allowed-file-extensions="png jpg jpeg" />
                             </div>
+
+
 
                             <div class="col s12 m12 l12" style="text-align:center">
                               <label class="active" for="sexo">Sexo</label>
-                               <div class="switch">
+                              <div class="switch">
                                 <label>
                                   <i for="male" title="Hombre" class="fa fa-male fa-3x" aria-hidden="true"></i>
                                   <input name="sexo" type="checkbox">
@@ -72,7 +86,7 @@
 
               
 
-            <div class="row">
+              <div class="row">
                 <div class="input-field col s12 m6">
                     <i class="fa fa-envelope prefix" aria-hidden="true"></i>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" class="validate" data-length="100">
@@ -226,6 +240,19 @@
             }
         });
         //fin validate
+
+        //validar DNI
+        $( "#tipo_documento").change(function() {
+            if( $("#tipo_documento").val() != "0" ){
+                $("#documento").removeAttr( "maxlength");         
+                $("#documento").removeAttr( "minlength");                       
+            }
+            else if( $("#tipo_documento").val() == "0" ){
+                $("#documento").val('');
+                $("#documento").attr( "maxlength",8);
+                $("#documento").attr( "minlength",8);
+            }
+        });
     });
 
 </script>

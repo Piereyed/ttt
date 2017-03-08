@@ -4,57 +4,85 @@
 
 <div class="section">
     <div class="row">
-        <div class="col m12">
-            <h1>Nuevo entrenador</h1>
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('trainer.index') }}" class="breadcrumb">Entrenadores</a>
+                    <a href="#" class="breadcrumb">Nuevo</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <span class="h1">Nuevo entrenador</span>
             <div class="row">
-                <form id="crear_entrenador" action="{{ route('trainer.store') }}" method="post" novalidate="true" class="col s12">
+                <form id="crear_entrenador" files="true" enctype="multipart/form-data"  action="{{ route('trainer.store') }}" method="post" novalidate="true" class="col s12">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="row">
+                        <div class="col l6 s12">
+                            <div class="input-field col s12 m6 l6">
+                                <select id="tipo_documento" name="tipo_documento">
+                                    <option value="0" selected>DNI</option>
+                                    <option value="1">Pasaporte</option>
+                                    <option value="2">Carnet de extrajería</option>
+                                </select>
+                                <label >Tipo de documento</label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <i class="fa fa-address-card prefix" aria-hidden="true"></i>
+                                <input id="documento" name="documento" minlength="8" maxlength="8" value="{{ old('documento') }}" type="text" class="validate center" data-length="15" >
+                                <label class="active" for="documento">N° documento</label>
+                            </div>
 
-                        <div class="input-field col m4 s12">
-                            <select name="tipo_documento">
-                                <option value="0" selected>DNI</option>
-                                <option value="1">Pasaporte</option>
-                                <option value="2">Carnet de extrajería</option>
-                            </select>
-                            <label >Tipo de documento</label>
+                            <div class="input-field col l12 m4 s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate " data-length="100">
+                                <label class="active" for="nombre">Nombre</label>
+                            </div>
+                            <div class="input-field col l12 m4 s12">  
+                                <i class="material-icons prefix">xxx</i>                          
+                                <input id="apellido_paterno" type="text" value="{{ old('apellido_paterno') }}" name="apellido_paterno" class="validate" data-length="100">
+                                <label class="active" for="apellido_paterno">Apellido paterno</label>
+                            </div>
+                            <div class="input-field col l12 m4 s12">
+                                <i class="material-icons prefix">xxx</i>                          
+                                <input id="apellido_materno" type="text" value="{{ old('apellido_materno') }}" name="apellido_materno" class="validate" data-length="100">
+                                <label class="active" for="apellido_materno">Apellido materno</label>
+                            </div>
                         </div>
-                        <div class="input-field col m4 s12">
-                            <i class="fa fa-address-card prefix" aria-hidden="true"></i>
-                            <input id="documento" name="documento" value="{{ old('documento') }}" type="text" class="validate" data-length="15" >
-                            <label class="active" for="documento">N° documento</label>
-                        </div>
-                        <div class="col s12 m4" style="text-align:center">
-                           Sexo:
-                           <div class="switch">
-                            <label>
-                              <i for="male" title="Hombre" class="fa fa-male fa-3x" aria-hidden="true"></i>
-                              <input name="sexo" type="checkbox">
-                              <span class="lever"></span>
-                              <i for="female" title="Mujer" class="fa fa-female fa-3x" aria-hidden="true"></i>
-                          </label>
+
+                        <div class="col l6 s12">
+
+                            <label class="active" for="foto">Foto (opcional)</label>
+                            <div class="file-field input-field col s12 m12 l12">
+                                <input id="foto" type="file" name="foto" value="{{old('foto')}}" class="dropify" data-max-file-size="3M" data-height="240"  data-allowed-file-extensions="png jpg jpeg" />
+                            </div>
+
+
+
+                            <div class="col s12 m12 l12" style="text-align:center">
+                              <label class="active" for="sexo">Sexo</label>
+                              <div class="switch">
+                                <label>
+                                  <i for="male" title="Hombre" class="fa fa-male fa-3x" aria-hidden="true"></i>
+                                  <input name="sexo" type="checkbox">
+                                  <span class="lever"></span>
+                                  <i for="female" title="Mujer" class="fa fa-female fa-3x" aria-hidden="true"></i>
+                              </label>
+                          </div>
                       </div>
-                  </div> 
+                  </div>
+
+
               </div>
 
 
-              <div class="row">
-                <div class="input-field col m4 s12">
-                    <i class="material-icons prefix">account_circle</i>
-                    <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate" data-length="100">
-                    <label class="active" for="nombre">Nombre</label>
-                </div>
-                <div class="input-field col m4 s6">                           
-                    <input id="apellido_paterno" type="text" value="{{ old('apellido_paterno') }}" name="apellido_paterno" class="validate" data-length="100">
-                    <label class="active" for="apellido_paterno">Apellido paterno</label>
-                </div>
-                <div class="input-field col m4 s6">
-                    <input id="apellido_materno" type="text" value="{{ old('apellido_materno') }}" name="apellido_materno" class="validate" data-length="100">
-                    <label class="active" for="apellido_materno">Apellido materno</label>
-                </div>
-            </div>
+              
 
-            <div class="row">
+              <div class="row">
                 <div class="input-field col s6 m6">
                     <i class="fa fa-envelope prefix" aria-hidden="true"></i>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" class="validate" data-length="100">
@@ -152,12 +180,7 @@
                 fecha_nacimiento:{
                     required:true,
                     date: true
-                },
-                sede:{
-                    required:true
                 }
-
-
             },
             messages:{
                 nombre: {
@@ -194,10 +217,7 @@
                 fecha_nacimiento:{
                     required: "Debe ingresar la fecha de nacimiento",
                     date:"Debe ser una fecha válida"
-                },
-                sede: "Elija una sede" ,
-
-
+                }
             },
             errorClass: 'invalid',
             errorPlacement: function (error, element) {
@@ -205,6 +225,19 @@
             }
         });
         //fin validate
+
+        //validar DNI
+        $( "#tipo_documento").change(function() {
+            if( $("#tipo_documento").val() != "0" ){
+                $("#documento").removeAttr( "maxlength");         
+                $("#documento").removeAttr( "minlength");                       
+            }
+            else if( $("#tipo_documento").val() == "0" ){
+                $("#documento").val('');
+                $("#documento").attr( "maxlength",8);
+                $("#documento").attr( "minlength",8);
+            }
+        });
     });
 
 </script>
