@@ -32,10 +32,9 @@ class HomeController extends Controller
     public function locals()
     {
         $user = Auth::user();
-
         
         $data = [
-        'locals'   =>  $user->person->locals
+        'locals'   =>  $user->person->locals->unique()
         ];
         return view('local.home', $data);
     }

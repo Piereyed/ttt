@@ -33,30 +33,24 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
-        //        dd($request);
         $this->validate($request, [
             'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_paterno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_materno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',
             'email'        => 'email|required|max:100|unique:users,email',
-            'telefono'        => 'max:15',
+            'telefono'        => 'nullable|digits_between:6,15',
             'fecha_nacimiento'     => 'date|required|before:today',
-            'documento'     => 'digits_between:6,15|required|max:15',            
-            'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',
-            'foto'        => 'required' 
+            'documento'     => 'unique:people,num_doc|digits_between:6,15|required|max:15',            
+            'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',        
+            'foto'        => 'nullable|file'   
             
             ]);
-        if ($request->hasFile('foto')) {
-            dd($request);
-        }
-
 
         if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
-            return redirect()->back()->with('warning', 'Número de DNI inválido');
+            return redirect()->back()->with('error', 'Número de DNI inválido');
         } 
 
         try {
-
              //creo el usuario
             $reg = new RegisterController;            
             $reg->create([
@@ -91,7 +85,15 @@ class ClientController extends Controller
                 'person_id' => $client->id,
                 'local_id' => session('sede')
                 ]
-                );
+            );
+
+            //subo la foto
+            if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
+                $path = $request->foto->storeAs('images/fotos_perfil', $client->id.'.jpg');                
+            }
+            else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
+                return redirect()->back()->with('warning', 'Se registró al cliente pero ocurrió un error al subir la foto.');
+            }       
 
             return redirect()->route('client.index')->with('success', 'El cliente se ha registrado con éxito para la sede '.Local::find(session('sede'))->name);
         } catch (Exception $e) {

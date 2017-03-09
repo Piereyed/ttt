@@ -1,11 +1,22 @@
 @extends('index')
 @section('content')
 
-
 <div class="section">
     <div class="row">
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('local.index') }}" class="breadcrumb">Sedes</a>
+                    <a href="#!" class="breadcrumb">Nuevo</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="row">
         <div class="col m12">
-            <h1>Nueva sede</h1>
+        <span class="h1">Nueva sede</span>
             <div class="row">
                 <form id="crear_sede" action="{{ route('local.store') }}" method="post" novalidate="true" class="col s12">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -13,13 +24,13 @@
                     <div class="row">
                         <div class="input-field col m6 s12">
                             <i class="fa fa-building prefix" aria-hidden="true"></i>
-                            <input id="name" name="name" value="{{ old('name') }}" type="text" class="validate" data-length="100">
-                            <label for="name">Sede</label>
+                            <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate" data-length="100">
+                            <label for="nombre">Sede</label>
                         </div>
                         <div class="input-field col m6 s12">
                             <i class="fa fa-map-marker prefix" aria-hidden="true"></i>                            
-                            <input id="address" type="text" name="address" value="{{ old('address') }}" class="validate" data-length="500">
-                            <label for="address">Dirección</label>
+                            <input id="direccion" type="text" name="direccion" value="{{ old('direccion') }}" class="validate" data-length="500">
+                            <label for="direccion">Dirección</label>
                         </div>
 
                     </div>
@@ -52,21 +63,21 @@
         //validate
         $("#crear_sede").validate({
             rules:{
-                name:{
+                nombre:{
                     required:true,
                     maxlength:100
                 },
-                address:{
+                direccion:{
                     required:true,
                     maxlength:500
                 }
             },
             messages:{
-                name: {
+                nombre: {
                     required: "Debe ingresar el nombre de la sede",
                     maxlength: "Sobrepasa el tamaño máximo"
                 },            
-                address:{
+                direccion:{
                     required: "Debe ingresar la dirección",
                     maxlength:"Sobrepasa el tamaño máximo"
                 }

@@ -1,17 +1,26 @@
 @extends('index')
 @section('styles')
 <style>
-    
+
 </style>
 @endsection
 
 @section('content')
 <div class="section">
+    <div class="row">
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('admin.index') }}" class="breadcrumb">Administradores</a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
-    <!--   Icon Section   -->
+    
     <div class="row">
         <div class="col s12">
-
             <div class="row">
                 <div class="col m3 s12">
                     <span class="h1">Administradores</span>
@@ -34,9 +43,10 @@
                     <table class="datatable responsive-table bordered highlight">
                         <thead>
                             <tr>
-                                <th class="center" data-field="id">Código</th>
-                                <th data-field="name">Nombre</th>
-                                <th data-field="lastname1">Apellidos paterno</th>
+                                <th class="center" data-field="id">DNI</th>
+                                <th data-field="name">Nombres</th>
+                                <th data-field="lastname1">Apellidos</th>
+                                <th data-field="local">Sedes</th>
                                 <th class="center" data-field="options">Elegir</th>
                             </tr>
                         </thead>
@@ -44,9 +54,15 @@
                         <tbody>
                             @foreach($admins as $admin)
                             <tr class="fila"  data-target="modal1">
-                                <td class="center">{{ $admin->id }}</td>
+                                <td class="center">{{ $admin->num_doc }}</td>
                                 <td>{{ $admin->name }}</td>
                                 <td>{{ $admin->lastname1. " " . $admin->lastname2 }}</td>
+                                <td> 
+                                @foreach($admin->locals->unique() as $local)
+                                    {{$local->name}}<br> 
+                                @endforeach
+                                 </td>
+                                
                                 <td class="opcion center">
                                     <p>
                                         <input type="checkbox" class="check filled-in" id="{{ $admin->id }}" />

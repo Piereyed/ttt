@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Person;
 use App\Local;
+use App\Role;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Http\UploadedFile; //para archivos
 use Illuminate\Support\Facades\DB; //para usar DB
 
 class AdminController extends Controller
@@ -15,13 +16,10 @@ class AdminController extends Controller
 
     public function index()
     {                 
-        $admins = DB::table('person_role_local')
-            ->join('people', 'people.id', '=', 'person_role_local.person_id')
-            ->select('people.*')
-            ->where('role_id',2)->distinct()->get();
-        //            dd($admins);
+        $admins = Role::find(2)->administradores->unique();
+        
         $data = [
-            'admins'    =>  $admins            
+        'admins'    =>  $admins            
         ];
         return view('admin.index', $data);
     }
@@ -30,30 +28,31 @@ class AdminController extends Controller
     {
         $locals = Local::get();
         $data = [
-            'locals'   =>  $locals
+        'locals'   =>  $locals
         ];
         return view('admin.create',$data);
     }
 
     public function store(Request $request)
     {
-//        dd($request);
-        $this->validate($request, [
+
+        $this->validate($request, [                    
             'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_paterno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_materno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',
             'email'        => 'email|required|max:100|unique:users,email',
-            'telefono'        => 'max:15',
+            'telefono'        => 'nullable|digits_between:6,15',
             'fecha_nacimiento'     => 'date|required|before:today',
-            'documento'     => 'digits_between:6,15|required|max:15',            
+            'documento'     => 'unique:people,num_doc|digits_between:6,15|required|max:15',            
             'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',
-            'sede'        => 'required'            
-        ]);
+            'sede'        => 'required',
+            'foto'        => 'nullable|file'             
+            ]);
+        
 
         if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
-            return redirect()->back()->with('warning', 'Número de DNI inválido');
+            return redirect()->back()->with('error', 'Número de DNI inválido');
         }
-            
 
         try {
 
@@ -63,11 +62,11 @@ class AdminController extends Controller
                 'name'=>$request['nombre'].' '.$request['apellido_paterno'],
                 'email'=>$request['email'],
                 'password'=>'123'
-            ]);
+                ]);
 
             $user =  DB::table('users')
-                ->where('email', $request['email'] )                    
-                ->first();
+            ->where('email', $request['email'] )                    
+            ->first();
 
             //creo la persona
             $admin = new Person;
@@ -89,15 +88,23 @@ class AdminController extends Controller
             foreach($request['sede'] as $key => $sede){
                 DB::table('person_role_local')->insert(
                     ['role_id' => 2,
-                     'person_id' => $admin->id,
-                     'local_id' => $sede
+                    'person_id' => $admin->id,
+                    'local_id' => $sede
                     ]
-                ); 
+                    ); 
+            }
+
+            //subo la foto
+            if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
+                $path = $request->foto->storeAs('images/fotos_perfil', $admin->id.'.jpg');                
+            }
+            else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
+                return redirect()->back()->with('warning', 'Se registró al administrador pero ocurrió un error al subir la foto.');
             }
             
             return redirect()->route('admin.index')->with('success', 'El administrador se ha registrado con éxito para '.count($request['sede']).' sede(s).');
         } catch (Exception $e) {
-            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+            return redirect()->back()->with('error', 'Ocurrió un error al hacer esta acción');
         }
     }
 
@@ -111,8 +118,8 @@ class AdminController extends Controller
     {
         $client = Person::find($id);
         $data = [
-            'client'       => $client,
-            'title'        => "Editar cliente",
+        'client'       => $client,
+        'title'        => "Editar cliente",
         ];
 
         return view('client.edit',$data);

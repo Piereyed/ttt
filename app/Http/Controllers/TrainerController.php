@@ -13,7 +13,6 @@ class TrainerController extends Controller
 {
     public function index()
     {
-
        $trainers = DB::table('person_role_local')
        ->join('people', 'people.id', '=', 'person_role_local.person_id')
        ->select('people.*')
@@ -29,7 +28,7 @@ class TrainerController extends Controller
 
    public function create()
    {
-    
+
     return view('trainer.create');
 }
 
@@ -41,19 +40,19 @@ public function store(Request $request)
         'apellido_paterno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
         'apellido_materno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',
         'email'        => 'email|required|max:100|unique:users,email',
-        'telefono'        => 'max:15',
+        'telefono'        => 'nullable|digits_between:6,15',
         'fecha_nacimiento'     => 'date|required|before:today',
-        'documento'     => 'digits_between:6,15|required|max:15',            
-        'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500'
+        'documento'     => 'unique:people,num_doc|digits_between:6,15|required|max:15',            
+        'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',        
+        'foto'        => 'nullable|file'  
 
         ]);
 
     if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
-        return redirect()->back()->with('warning', 'Número de DNI inválido');
+        return redirect()->back()->with('error', 'Número de DNI inválido');
     }    
 
     try {
-
         //creo el usuario
         $reg = new RegisterController;            
         $reg->create([
@@ -82,26 +81,33 @@ public function store(Request $request)
         $trainer->user_id   = $user->id; //usuario creado antes
         $trainer->save();
 
-            //creo el rol y local
-            
-            DB::table('person_role_local')->insert(
-                ['role_id' => 3,
-                'person_id' => $trainer->id,
-                'local_id' => session('sede')
-                ]
-                );          
-            
-            return redirect()->route('trainer.index')->with('success', 'El entrenador se ha registrado con éxito para la sede '.Local::find(session('sede'))->name);
-        } catch (Exception $e) {
-            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
-        }
-    }
+        //creo el rol y local
+        DB::table('person_role_local')->insert(
+            ['role_id' => 3,
+            'person_id' => $trainer->id,
+            'local_id' => session('sede')
+            ]
+        );  
 
-    
-    public function show($id)
-    {
-        //
+        //subo la foto
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
+            $path = $request->foto->storeAs('images/fotos_perfil', $trainer->id.'.jpg');                
+        }
+        else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
+            return redirect()->back()->with('warning', 'Se registró al entrenador pero ocurrió un error al subir la foto.');
+        }        
+
+        return redirect()->route('trainer.index')->with('success', 'El entrenador se ha registrado con éxito para la sede '.Local::find(session('sede'))->name);
+    } catch (Exception $e) {
+        return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
     }
+}
+
+
+public function show($id)
+{
+        //
+}
 
     /**
      * Show the form for editing the specified resource.

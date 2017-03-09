@@ -2,28 +2,26 @@
 
 @section('styles')
 <style>
-    
+
 </style>
 @endsection
 
 
 @section('content')
 <div class="section">
+    <div class="row">
+        <nav class="bread">
+            <div class="nav-wrapper">
+                <div class="col s12">                            
+                    <a href="#" class="breadcrumb">Inicio</a>
+                    <a href="{{ route('client.index') }}" class="breadcrumb">Clientes</a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
-    <!--   Icon Section   -->
     <div class="row">
         <div class="col s12">
-            <div class="row">
-                <nav class="bread">
-                    <div class="nav-wrapper">
-                        <div class="col s12 m12 l12">                            
-                            <a href="#" class="breadcrumb">Inicio</a>
-                            <a href="{{ route('client.index') }}" class="breadcrumb">Clientes</a>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-
             <div class="row">
                 <div class="col m3 s12">
                     <span class="h1">Clientes</span>
@@ -46,9 +44,9 @@
                     <table class="datatable responsive-table bordered highlight">
                         <thead>
                             <tr>
-                                <th class="center" data-field="id">Código</th>
-                                <th data-field="name">Nombre</th>
-                                <th data-field="lastname1">Apellidos paterno</th>
+                                <th class="center" data-field="id">DNI</th>
+                                <th data-field="name">Nombres</th>
+                                <th data-field="lastname1">Apellidos</th>
                                 <th class="center" data-field="options">Elegir</th>
                             </tr>
                         </thead>
@@ -56,7 +54,7 @@
                         <tbody>
                             @foreach($clients as $client)
                             <tr class="fila"  data-target="modal1">
-                                <td class="center">{{ $client->id }}</td>
+                                <td class="center">{{ $client->num_doc }}</td>
                                 <td>{{ $client->name }}</td>
                                 <td>{{ $client->lastname1. " " . $client->lastname2 }}</td>
                                 <td class="opcion center">
