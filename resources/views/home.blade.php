@@ -109,6 +109,7 @@
 
         <main id="main" class="xxx animate-bottom">
             <div class="container">
+            
                 @yield('content')
             </div>
         </main>

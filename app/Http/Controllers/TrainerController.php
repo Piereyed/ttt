@@ -13,23 +13,63 @@ class TrainerController extends Controller
 {
     public function index()
     {
-       $trainers = DB::table('person_role_local')
-       ->join('people', 'people.id', '=', 'person_role_local.person_id')
-       ->select('people.*')
-       ->where('local_id',session('sede'))
-       ->where('role_id',3)->get();
+     $trainers = DB::table('person_role_local')
+     ->join('people', 'people.id', '=', 'person_role_local.person_id')
+     ->select('people.*')
+     ->where('local_id',session('sede'))
+     ->where('role_id',3)->get();
 
-       $data = [
-       'trainers'    =>  $trainers            
-       ];
-       return view('trainer.index', $data);
-   }
+     $data = [
+     'trainers'    =>  $trainers            
+     ];
+     return view('trainer.index', $data);
+ }
 
 
-   public function create()
-   {
+ public function create()
+ {
 
     return view('trainer.create');
+}
+
+public function assignrole()   {
+
+    $persons = DB::table('person_role_local')
+    ->join('people', 'people.id', '=', 'person_role_local.person_id')
+    ->select('people.*')
+    ->where([
+        ['role_id','<>',3],
+        ['role_id','<>',1]
+        ])->distinct()->get();
+
+
+    $data = [
+    'persons'    =>  $persons            
+    ];
+    return view('trainer.assignrole',$data);
+}
+
+public function storerole(Request $request){
+    // dd($request);
+
+    try{
+        //creo el rol y local
+        DB::table('person_role_local')->insert(
+            ['role_id' => 3,
+            'person_id' => $request['elegido'],
+            'local_id' => session('sede')
+            ]
+        );  
+
+        return redirect()->route('trainer.index')->with('success', 'El entrenador se ha asignado con éxito para la sede '.Local::find(session('sede'))->name);
+
+    } catch (Exception $e) {
+        return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+    }
+
+
+
+
 }
 
 
@@ -87,11 +127,11 @@ public function store(Request $request)
             'person_id' => $trainer->id,
             'local_id' => session('sede')
             ]
-        );  
+            );  
 
         //subo la foto
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
-            $path = $request->foto->storeAs('images/fotos_perfil', $trainer->id.'.jpg');                
+            $path = $request->foto->storeAs('public/fotos_perfil', $trainer->id.'.jpg');                
         }
         else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
             return redirect()->back()->with('warning', 'Se registró al entrenador pero ocurrió un error al subir la foto.');

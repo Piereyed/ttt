@@ -176,7 +176,7 @@
                         <div class="background">
                             <img src="{{ asset('images/logo.png')}}">
                         </div>
-                        <a href="#!user"><img class="circle" src="{{ asset('images/perfil.jpg')}}"></a>
+                        <a href="#!user"><img class="circle" title="Foto perfil" src="{{ asset('storage/'.session('photo'))  }}"></a>
                         <a href="#!name"><span class="white-text name">{{session('name')}}</span></a>                
                         <a href="#!email"><span class="white-text email">{{session('rol_nombre')}} - {{session('sede_nombre')}}</span></a>
                     </div>
@@ -203,6 +203,7 @@
 
 
             <div class="container">
+
                 @yield('content')
 
 

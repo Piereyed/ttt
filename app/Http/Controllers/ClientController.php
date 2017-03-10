@@ -89,7 +89,7 @@ class ClientController extends Controller
 
             //subo la foto
             if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
-                $path = $request->foto->storeAs('images/fotos_perfil', $client->id.'.jpg');                
+                $path = $request->foto->storeAs('public/fotos_perfil', $client->id.'.jpg');                
             }
             else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
                 return redirect()->back()->with('warning', 'Se registró al cliente pero ocurrió un error al subir la foto.');

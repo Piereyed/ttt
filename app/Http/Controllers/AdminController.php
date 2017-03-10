@@ -96,7 +96,7 @@ class AdminController extends Controller
 
             //subo la foto
             if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
-                $path = $request->foto->storeAs('images/fotos_perfil', $admin->id.'.jpg');                
+                $path = $request->foto->storeAs('public/fotos_perfil', $admin->id.'.jpg');                
             }
             else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
                 return redirect()->back()->with('warning', 'Se registró al administrador pero ocurrió un error al subir la foto.');

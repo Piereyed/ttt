@@ -44,8 +44,10 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::group(['prefix' => 'entrenadores'], function(){    
         Route::get('/', ['as' => 'trainer.index', 'uses' => 'TrainerController@index']);
-        Route::get('create', ['as' => 'trainer.create', 'uses' => 'TrainerController@create']);
+        Route::get('create', ['as' => 'trainer.create', 'uses' => 'TrainerController@create']);        
         Route::post('create', ['as' => 'trainer.store', 'uses' => 'TrainerController@store']);
+        Route::get('assignrole', ['as' => 'trainer.assignrole', 'uses' => 'TrainerController@assignrole']);
+        Route::post('assignrole', ['as' => 'trainer.storerole', 'uses' => 'TrainerController@storerole']);
         Route::get('show/{id}', ['as' => 'trainer.show', 'uses' => 'TrainerController@show']);
         Route::get('edit/{id}', ['as' => 'trainer.edit', 'uses' => 'TrainerController@edit']);
         Route::post('edit/{id}', ['as' => 'trainer.update', 'uses' => 'TrainerController@update']);

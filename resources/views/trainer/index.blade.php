@@ -33,10 +33,13 @@
                 </div>
             </div>
 
-            <div class="fixed-action-btn horizontal">
-                <a href="{{ route('trainer.create') }}" title="Nuevo entrenador" class="btn-floating btn-large green">
-                    <i class="large material-icons">add</i>
-                </a>                
+            <div class="fixed-action-btn">
+                <a href="{{ route('trainer.create') }}" title="Nuevo" class="btn-floating btn-large black">
+                    <i class="large material-icons">person_add</i>
+                </a>
+                <ul>
+                <li><a href="{{ route('trainer.assignrole') }}" class="btn-floating grey darken-1" title="Asignar"><i class="material-icons">person</i></a></li>
+                </ul>                
             </div>
 
             <div class="row">

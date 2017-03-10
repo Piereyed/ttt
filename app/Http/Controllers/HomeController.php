@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Local;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -43,6 +44,18 @@ class HomeController extends Controller
     {        
         $user = Auth::user();
         $person = $user->person;
+
+        //la ruta de la foto de perfil
+        
+        $filename = 'fotos_perfil/'.$person->id.'.jpg';
+        if(Storage::disk('local')->exists('public/'.$filename)){
+            session(['photo' => $filename]);
+        }
+        else{
+            session(['photo' => 'fotos_perfil/default.jpg']);
+        }
+        // dd(session()->all());
+           
         
         //guardo el nombre en el session
         session(['name' => trim($person->name.' '.$person->lastname1) ]);        
