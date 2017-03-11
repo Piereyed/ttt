@@ -19,12 +19,32 @@ class TrainerController extends Controller
      ->where('local_id',session('sede'))
      ->where('role_id',3)->get();
 
+
+
      $data = [
      'trainers'    =>  $trainers            
      ];
      return view('trainer.index', $data);
  }
 
+ public function search()
+ {    
+    $query = "
+    SELECT 
+        people.id,people.name,people.lastname1,people.lastname2
+    FROM (
+        SELECT people.id,people.name,people.lastname1,people.lastname2 from person_role_local inner join people on people.id = person_role_local.person_id 
+        where local_id = 1 and role_id= 3
+
+        ) as trainers     
+    RIGHT JOIN people
+    ON people.id = trainers.id
+    WHERE trainers.id IS NULL and people.id != 1"    ;
+
+    $people = DB::select(DB::raw($query));
+
+    echo json_encode($people);
+}
 
  public function create()
  {
@@ -34,29 +54,21 @@ class TrainerController extends Controller
 
 public function assignrole()   {
 
-    $persons = DB::table('person_role_local')
-    ->join('people', 'people.id', '=', 'person_role_local.person_id')
-    ->select('people.*')
-    ->where([
-        ['role_id','<>',3],
-        ['role_id','<>',1]
-        ])->distinct()->get();
-
-
-    $data = [
-    'persons'    =>  $persons            
-    ];
-    return view('trainer.assignrole',$data);
+    return view('trainer.assignrole');
 }
 
 public function storerole(Request $request){
+    
     // dd($request);
+    $this->validate($request, [
+        'nombre'         => 'required',
+        ]);
 
     try{
         //creo el rol y local
         DB::table('person_role_local')->insert(
             ['role_id' => 3,
-            'person_id' => $request['elegido'],
+            'person_id' => $request['nombre'],//codigo
             'local_id' => session('sede')
             ]
         );  

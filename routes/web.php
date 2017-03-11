@@ -98,3 +98,4 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 
+Route::post('/searchTrainer', ['as' => 'search.trainer','uses' => 'TrainerController@search']);//NO TOCAR!

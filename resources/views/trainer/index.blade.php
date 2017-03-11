@@ -38,7 +38,7 @@
                     <i class="large material-icons">person_add</i>
                 </a>
                 <ul>
-                <li><a href="{{ route('trainer.assignrole') }}" class="btn-floating grey darken-1" title="Asignar"><i class="material-icons">person</i></a></li>
+                    <li><a href="#asignar" class="btn-floating grey darken-1" title="Asignar"><i class="material-icons">person</i></a></li>
                 </ul>                
             </div>
 
@@ -89,6 +89,41 @@
     </div>
 
 </div>
+
+
+<!-- Modal Structure -->
+<div id="asignar" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Asignar rol de entrenador</h4>
+      <div class="row">
+        <form id="asignar_entrenador" action="{{route('trainer.storerole')}}" method="post" novalidate="true" class="col s12">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">                    
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                          <i class="material-icons prefix">textsms</i>
+                          <input type="text" id="name" class="autocomplete">
+
+                          <label for="name">Nombre/Apellidos</label>
+                      </div>
+                  </div>
+                  <input type="text" id="nombre" name="nombre" hidden >
+              </div>
+          </div>
+
+
+      </form>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left">clear</i>Cancelar</a>
+  <button type="submit" form="asignar_entrenador" class="waves-effect waves-light btn "><i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar</button>
+</div>
+</div>
+
+
 @endsection
 
 
@@ -96,6 +131,7 @@
 @section('scripts')
 
 <script>
+var people = {};
     $( document ).ready(function(){
 
 
@@ -122,6 +158,39 @@
         //    $("select").val('10');
         $('select').addClass("browser-default");
         $('select').material_select();
+
+                //ajax
+        var params = $('#asignar_entrenador').serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: '/searchTrainer',
+            data: 'action=search&'+params,
+            dataType: 'json',            
+            success: function(personas) {
+                // alert(personas[1]['lastname1']);
+                var size = personas.length;
+                
+                for(var i = 0; i < size; i++){
+                    people[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = personas[i]['id'];
+                }
+
+                $('input.autocomplete').autocomplete({
+                    data: people,
+                    limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+                });
+
+
+            },
+            error: function(data) {
+                alert("Error.")
+            }
+        });
+        // fin ajax
+
+        $( "#name" ).change(function() {
+            $("#nombre").val(people[$( "#name" ).val()]);
+        });
 
     });
 
