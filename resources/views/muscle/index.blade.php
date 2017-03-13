@@ -21,49 +21,47 @@
 
     <!--   Icon Section   -->
     <div class="row">
-        <div class="col s12">
-            <div class="row">
-                <div class="col m3 s12">
-                    <span class="h1">Músculos</span>
-                </div>
-                <div class="opc col m9 s12" style="text-align:right;display:none">
-                    <a id="ver" href="" title="Ver" class=" waves-effect waves-light btn blue "><i class="material-icons left">visibility</i>Ver</a>
-                    <a id="editar" href="" title="Editar" class=" waves-effect waves-light btn yellow darken-1 "><i class="material-icons left">mode_edit</i>Editar</a>
-                    <a id="eliminar" href="" data-target="" title="Eliminar" class=" waves-effect waves-light btn red "><i class="material-icons left">delete</i>Eliminar</a>
-                </div>
-            </div>
+        <div class="col s12">                
+            <span class="h1">Músculos</span>
+            <!-- fixed action buttons -->
+            <div class="fixed-action-btn click-to-toggle">
+                <a title="Opciones" class="btn-floating btn-large grey darken-2">
+                    <i class="material-icons">view_module</i>
+                </a>   
+                <ul>                                 
+                    <li hidden><a id="eliminar"  title="Eliminar" data-target="" class="btn-floating btn-large waves-effect waves-light red "><i class="material-icons">delete</i></a></li>                  
+                    <li hidden><a id="editar"  title="Editar" class="btn-floating btn-large waves-effect waves-light yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
 
-            <div class="fixed-action-btn horizontal">
-                <a href="{{ route('muscle.create') }}" title="Nuevo Músculo" class="btn-floating btn-large green">
-                    <i class="large material-icons">add</i>
-                </a>                
-            </div>
+                    <li><a id="nuevo" href="{{ route('muscle.create') }}" title="Nuevo" class="btn-floating waves-effect waves-light btn-large green"><i class="material-icons">add</i>
+                    </a></li> 
+                </ul>             
+            </div> 
+
+
 
             <div class="row">
                 <div class="col s12">
                     <table class="datatable responsive-table bordered highlight">
                         <thead>
                             <tr>
-                                <th class="center" data-field="id">Código</th>
-                                <th data-field="name">Nombre</th>                                
                                 <th class="center" data-field="options">Elegir</th>
+                                <th class="center" data-field="id">Código</th>
+                                <th data-field="name">Nombre</th>                               
+                                
                             </tr>
                         </thead>
 
                         <tbody>
                             @foreach($muscles as $muscle)
-                            <tr class="fila"  data-target="modal1">
-                                <td class="center">{{ $muscle->id }}</td>
-                                <td>{{ $muscle->name }}</td>
+                            <tr>
                                 <td class="opcion center">
                                     <p>
-                                        <input type="checkbox" class="check filled-in" id="{{ $muscle->id }}" />
+                                        <input type="checkbox" class="filled-in" id="{{ $muscle->id }}" />
                                         <label for="{{ $muscle->id }}"></label>
                                     </p>
-
-
                                 </td>
-
+                                <td class="center">{{ $muscle->id }}</td>
+                                <td>{{ $muscle->name }}</td>                              
                             </tr>   
 
                             <!--     modal-->

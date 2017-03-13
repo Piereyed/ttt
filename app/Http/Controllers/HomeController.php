@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Local;
+use App\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,15 +46,11 @@ class HomeController extends Controller
         $user = Auth::user();
         $person = $user->person;
 
-        //la ruta de la foto de perfil
-        
-        $filename = 'fotos_perfil/'.$person->id.'.jpg';
+        //la ruta de la foto de perfil        
+        $filename = $person->photo;
         if(Storage::disk('local')->exists('public/'.$filename)){
             session(['photo' => $filename]);
-        }
-        else{
-            session(['photo' => 'fotos_perfil/default.jpg']);
-        }
+        }        
         // dd(session()->all());
            
         
@@ -64,25 +61,16 @@ class HomeController extends Controller
         $roles_obj = $person->belongsToMany('App\Role','person_role_local')->wherePivot('local_id', $request['sede'])->get();
         // dd($roles_obj);
         $roles = [];
-        $rol_nombre = '';
+        $rol_min = 9999;        
         foreach($roles_obj as $role){
             array_push($roles,$role->name);
-            if($role->name == "Super"){
-                $rol_nombre = 'admin';
+            if($role->id < $rol_min){
+                $rol_min = $role->id;            
             }
-            else if($role->name == "Administrador"){
-                $rol_nombre = 'Administrador';
-            }
-            else if ($role->name == "Entrenador"){
-                $rol_nombre = 'Entrenador';
-            }
-            else if ($role->name == "Cliente"){
-                $rol_nombre = 'Cliente';
-            }
-        }        
+        } 
         //guardo los roles en el session
         session(['roles' => $roles]); 
-        session(['rol_nombre' => $rol_nombre]);
+        session(['rol_nombre' => Role::find($rol_min)->name]);
 
         //guardo en el session la sede a la que se entro
         session(['sede' => $request['sede'] ]); 

@@ -21,55 +21,58 @@
     
     <div class="row">
         <div class="col s12">
-            <div class="row">
-                <div class="col m3 s12">
-                    <span class="h1">Administradores</span>
-                </div>
-                <div class="opc col m9 s12" style="text-align:right;display:none">
-                    <a id="ver" href="" title="Ver" class=" waves-effect waves-light btn blue "><i class="material-icons left">visibility</i>Ver</a>
-                    <a id="editar" href="" title="Editar" class=" waves-effect waves-light btn yellow darken-1 "><i class="material-icons left">mode_edit</i>Editar</a>
-                    <a id="eliminar" href="" data-target="" title="Eliminar" class=" waves-effect waves-light btn red "><i class="material-icons left">delete</i>Eliminar</a>
-                </div>
-            </div>
 
-            <div class="fixed-action-btn horizontal">
-                <a href="{{ route('admin.create') }}" title="Nuevo administrador" class="btn-floating btn-large green">
-                    <i class="large material-icons">add</i>
-                </a>                
-            </div>
+
+            <span class="h1">Administradores</span> 
+
+            <!-- fixed action buttons -->
+            <div class="fixed-action-btn click-to-toggle">
+                <a title="Opciones" class="btn-floating btn-large grey darken-2">
+                    <i class="material-icons">view_module</i>
+                </a>   
+                <ul>                                 
+                    <li hidden><a id="eliminar" title="Eliminar" data-target="" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">delete</i></a></li>                  
+                    <li hidden><a id="editar" title="Editar" class="btn-floating btn-large waves-effect waves-light yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
+                    <li hidden ><a id="ver"  title="Ver" class="btn-floating btn-large waves-effect waves-light blue "><i class="material-icons">visibility</i></a></li>
+
+                    <li><a href="#asignar" title="Asignar" class="btn-floating waves-effect waves-light btn-large green darken-2">   <i class="material-icons">person</i>
+                    </a></li> 
+
+                    <li><a id="nuevo" href="{{ route('admin.create') }}" title="Nuevo" class="btn-floating waves-effect waves-light btn-large green">   <i class="material-icons">person_add</i>
+                    </a></li> 
+                </ul>             
+            </div>  
 
             <div class="row">
                 <div class="col s12">
                     <table class="datatable responsive-table bordered highlight">
                         <thead>
                             <tr>
+                                <th class="center" data-field="options">Elegir</th>
                                 <th class="center" data-field="id">DNI</th>
                                 <th data-field="name">Nombres</th>
                                 <th data-field="lastname1">Apellidos</th>
-                                <th data-field="local">Sedes</th>
-                                <th class="center" data-field="options">Elegir</th>
+                                <th data-field="local">Sedes</th>                                
                             </tr>
                         </thead>
 
                         <tbody>
                             @foreach($admins as $admin)
-                            <tr class="fila"  data-target="modal1">
+                            <tr>
+                                <td class="opcion center">
+                                    <p>
+                                        <input type="checkbox" class="filled-in" id="{{ $admin->id }}" />
+                                        <label for="{{ $admin->id }}"></label>
+                                    </p>
+                                </td>
                                 <td class="center">{{ $admin->num_doc }}</td>
                                 <td>{{ $admin->name }}</td>
                                 <td>{{ $admin->lastname1. " " . $admin->lastname2 }}</td>
                                 <td> 
-                                @foreach($admin->locals->unique() as $local)
+                                    @foreach($admin->locals->unique() as $local)
                                     {{$local->name}}<br> 
-                                @endforeach
-                                 </td>
-                                
-                                <td class="opcion center">
-                                    <p>
-                                        <input type="checkbox" class="check filled-in" id="{{ $admin->id }}" />
-                                        <label for="{{ $admin->id }}"></label>
-                                    </p>
+                                    @endforeach
                                 </td>
-
                             </tr>   
 
                             <!--     modal-->
@@ -95,6 +98,38 @@
     </div>
 
 </div>
+
+<!-- Modal asignar -->
+<div id="asignar" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Asignar rol de entrenador</h4>
+      <div class="row">
+        <form id="asignar_admin" action="{{route('admin.storerole')}}" method="post" novalidate="true" class="col s12">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">                    
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                          <i class="material-icons prefix">textsms</i>
+                          <input type="text" id="name" class="autocomplete">
+
+                          <label for="name">Nombre/Apellidos</label>
+                      </div>
+                  </div>
+                  <input type="text" id="nombre" name="nombre" hidden >
+              </div>
+          </div>
+
+
+      </form>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left">clear</i>Cancelar</a>
+  <button type="submit" form="asignar_admin" class="waves-effect waves-light btn "><i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar</button>
+</div>
+</div>
 @endsection
 
 
@@ -102,32 +137,71 @@
 @section('scripts')
 
 <script>
-    $( document ).ready(function(){
+    var people = {};
+    var codigos = {};
+
+    $( ".opcion" ).click(function() {
+
+        var me = $( this ).find('input') ;
+        if(me.is(':checked')){
+            me.prop('checked', false); 
+            $('.fixed-action-btn').closeFAB();
+            $("#ver").parent().hide();
+            $("#editar").parent().hide();
+            $("#eliminar").parent().hide();
+        }        
+        else{
+            me.prop('checked', true);            
+            $("#eliminar").attr("data-target","modal_"+me.attr("id"));
+            $("#eliminar").parent().show();
+            $("#editar").attr("href","admins/edit/"+me.attr("id"));
+            $("#editar").parent().show();
+            $("#ver").attr("href","admins/show/"+me.attr("id"));
+            $("#ver").parent().show();
+            $('.fixed-action-btn').openFAB();
+        }    
+           //descheqea los demas
+           $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
+
+       });
 
 
-        //para manejar los botones de opciones para administradores
-        $( ".opcion" ).click(function() {
-
-            var me = $( this ).find('input') ;
-            if(me.is(':checked')){
-                me.prop('checked', false); 
-                $(".opc").slideUp( 400 );
-            }        
-            else{
-                me.prop('checked', true);  
-                $(".opc").slideDown( 400 );
-                $("#eliminar").attr("data-target","modal_"+me.attr("id"));
-                $("#editar").attr("href","admins/edit/"+me.attr("id"));
-            }    
-            //descheqea los demas
-            $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
-
-
-        });
+    $( document ).ready(function(){        
 
         //    $("select").val('10');
         $('select').addClass("browser-default");
         $('select').material_select();
+
+        //ajax
+        var params = $('#asignar_admin').serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: '/searchAdmin',
+            data: 'action=search&'+params,
+            dataType: 'json',            
+            success: function(personas) {                
+                var size = personas.length;                
+                for(var i = 0; i < size; i++){
+                    people[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = 'storage/' + personas[i]['photo']; //ruta de imagen
+                    codigos[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = personas[i]['id']; //codigo
+                }
+
+                $('input.autocomplete').autocomplete({
+                    data: people,
+                    limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+                });
+            },
+            error: function(data) {
+                alert("Error.")
+            }
+        });
+        // fin ajax
+
+        $( "#name" ).change(function() {
+            $("#nombre").val(codigos[$( "#name" ).val()]);
+        });
+
 
     });
 

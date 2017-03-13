@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Muscle;
+use App\Category;
 
 class MuscleController extends Controller
 {
@@ -25,15 +26,23 @@ class MuscleController extends Controller
      */
     public function create()
     {
-        return view('muscle.create');
+        $categories = Category::all(); 
+        $data = [
+        'cats'    =>  $categories        
+        ];
+
+        return view('muscle.create',$data);
     }
 
 
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100'
+            'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',
+            'categoria'         => 'required'
             ]);
+
+        dd($request);
 
         try {
             $muscle             = new Muscle;

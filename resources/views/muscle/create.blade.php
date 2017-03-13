@@ -22,12 +22,49 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="row">
-                        <div class="input-field col s12">                            
+                        <div class="input-field col s12 offset-m4 m4">                            
                             <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate" data-length="100">
                             <label for="name">Nombre</label>
                         </div>
+
+                        <div class="input-field col s12 offset-m4 m4">
+                            <select id="categoria" name="categoria" required="required" class="validate">
+                                <option value="" disabled selected>Elije la categoría</option>
+                                @foreach($cats as $cat)
+                                <option value="{{$cat->id}}">{{$cat->name}}</option>
+                                @endforeach
+                            </select>
+                            <label for="categoria">Categoría</label>                            
+                        </div>
+
+                        <div class="col s12">
+                            <span class="h2">Zonas</span><hr>
+                        </div>
+                        <!-- botones de agregar y quitar -->
+                        <div class="col s12" style="text-align: center;">
+                            <div class="row">
+                                <a id="add" class="waves-effect waves-light btn green"><i class="material-icons left">add</i>Agregar</a>
+                                <a id="remove" class="waves-effect waves-light btn red"><i class="material-icons left">delete</i>Quitar</a>
+                            </div>                            
+                        </div>
+
+                        <!-- tabla -->
+                        <div class="col s12">
+                            <table class="responsive-table bordered highlight">
+                                <thead>
+                                    <tr>
+                                        <th class="center" data-field="options">Elegir</th>
+                                        <th class="center" data-field="name">Nombre</th>
+                                        <th data-field="lastname1">Foto (opcional)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
+
                     <br>
 
                     <div class="row" style="text-align:center">
@@ -47,11 +84,17 @@
         </div>
     </div>
 </div>
+
+
 @endsection
 
 @section('scripts')
 <script>
+    var n = 0;
     $( document ).ready(function(){
+        $.validator.setDefaults({
+            ignore: []
+        });
 
         //validate
         $("#crear_musculo").validate({
@@ -59,6 +102,9 @@
                 nombre:{
                     required:true,
                     maxlength:100
+                },
+                categoria:{
+                    required:true                    
                 }
                 
             },
@@ -66,7 +112,10 @@
                 nombre: {
                     required: "Debe ingresar el nombre del músculo",
                     maxlength: "Sobrepasa el tamaño máximo"
-                }           
+                },
+                categoria: {
+                    required: "Debe elegir la categoría del músculo"                    
+                }            
                 
             },
             errorClass: 'invalid',
@@ -76,7 +125,37 @@
         });
         //fin validate
 
+
+        $("#add").on("click",function(){
+            n++;  
+
+            $("tbody").append('<tr><td class="opcion center"><p><input type="checkbox" class="filled-in" id="'+n+'"/><label for="'+n+'"></label></p></td><td><input type="text" name="nombre['+n+']" /></td><td><input id="foto"'+n+' type="file" name="foto'+n+'" class="dropify" data-max-file-size="3M" data-height="80"  data-allowed-file-extensions="png jpg jpeg" /></td></tr>');
+            $('.dropify').dropify();
+        });
+
+        $("#remove").on("click",function(){
+            var c = $(".opcion input[type=checkbox]");
+            if(c.length==0)
+                toastr.warning('Agrege una zona primero');
+            else if($(".opcion input[type=checkbox]:checked").length == 0)
+                toastr.warning('Seleccione una zona primero');
+            else
+                $(".opcion input[type=checkbox]:checked").each(function(i,e){                   
+                    $(this).parent().parent().parent().remove();
+                });
+        });
+
+        
+        
+
+
+
     });
+
+
+
+
+
 
 </script>
 @endsection

@@ -8,6 +8,8 @@ use App\Local;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; //para usar DB
+use Illuminate\Support\Facades\Storage;
+
 
 class TrainerController extends Controller
 {
@@ -28,37 +30,32 @@ class TrainerController extends Controller
  }
 
  public function search()
- {    
+ {
+
     $query = "
     SELECT 
-        people.id,people.name,people.lastname1,people.lastname2
+    people.id,people.name,people.lastname1,people.lastname2,people.photo
     FROM (
-        SELECT people.id,people.name,people.lastname1,people.lastname2 from person_role_local inner join people on people.id = person_role_local.person_id 
-        where local_id = 1 and role_id= 3
-
-        ) as trainers     
+    SELECT people.id,people.name,people.lastname1,people.lastname2,people.photo from person_role_local inner join people on people.id = person_role_local.person_id 
+    WHERE local_id =".session('sede')." and role_id= 3
+    ) as trainers     
     RIGHT JOIN people
     ON people.id = trainers.id
-    WHERE trainers.id IS NULL and people.id != 1"    ;
+    WHERE trainers.id IS NULL and people.id > 1"    ;
 
     $people = DB::select(DB::raw($query));
 
     echo json_encode($people);
 }
 
- public function create()
- {
+public function create()
+{
 
     return view('trainer.create');
 }
 
-public function assignrole()   {
-
-    return view('trainer.assignrole');
-}
-
 public function storerole(Request $request){
-    
+
     // dd($request);
     $this->validate($request, [
         'nombre'         => 'required',
@@ -72,15 +69,11 @@ public function storerole(Request $request){
             'local_id' => session('sede')
             ]
         );  
-
         return redirect()->route('trainer.index')->with('success', 'El entrenador se ha asignado con éxito para la sede '.Local::find(session('sede'))->name);
 
     } catch (Exception $e) {
         return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
     }
-
-
-
 
 }
 
@@ -99,6 +92,8 @@ public function store(Request $request)
         'foto'        => 'nullable|file'  
 
         ]);
+
+
 
     if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
         return redirect()->back()->with('error', 'Número de DNI inválido');
@@ -142,12 +137,20 @@ public function store(Request $request)
             );  
 
         //subo la foto
-        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
-            $path = $request->foto->storeAs('public/fotos_perfil', $trainer->id.'.jpg');                
+        if ($request->hasFile('foto')){
+            if ($request->file('foto')->isValid()) {            
+                $request->foto->storeAs('public/fotos_perfil', $trainer->id.'.jpg');
+                $trainer->photo   = 'fotos_perfil/'. $trainer->id.'.jpg' ;  
+                $trainer->save();   
+            }
+            else{
+                return redirect()->route('trainer.index')->with('warning', 'Se registró al entrenador pero ocurrió un error al subir la foto.');
+            } 
         }
-        else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
-            return redirect()->back()->with('warning', 'Se registró al entrenador pero ocurrió un error al subir la foto.');
-        }        
+        else{//si no hay foto
+            $trainer->photo   = 'fotos_perfil/default.jpg' ;  
+            $trainer->save();
+        }
 
         return redirect()->route('trainer.index')->with('success', 'El entrenador se ha registrado con éxito para la sede '.Local::find(session('sede'))->name);
     } catch (Exception $e) {

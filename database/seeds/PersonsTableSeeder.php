@@ -22,7 +22,8 @@ class PersonsTableSeeder extends Seeder
         DB::table('people')->insert([ 
             'name' => 'Admin' ,           
             'email' => 'admin',          
-            'user_id' => 1                        
+            'user_id' => 1      ,                  
+            'photo' => 'fotos_perfil/default.jpg'
         ]);
         
         DB::table('person_role_local')->insert([

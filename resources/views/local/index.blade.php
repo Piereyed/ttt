@@ -15,54 +15,50 @@
 
     <div class="row">
         <div class="col s12">
+
+
             <span class="h1">Sedes</span>
-            <div class="row" style="min-height:36px">
-                <div class="col m3 s12">
-                    <h6>Se encontraron {{ $size }} sedes</h6>
-                </div>
-                <div class="opc col m9 s12" style="text-align:right;display:none">
-                    <!--                    <a title="Ver" class="waves-effect waves-light btn blue disabled"><i class="material-icons left">visibility</i>Ver</a>-->
-                    <a id="editar" href="" title="Editar"  class="waves-effect waves-light btn yellow darken-1 "><i class="material-icons left">mode_edit</i>Editar</a>
-                    <a id="eliminar" data-target="" title="Eliminar" class="waves-effect waves-light btn red "><i class="material-icons left">delete</i>Eliminar</a>
-                </div>
+
+
+            <!-- fixed action buttons -->
+            <div class="fixed-action-btn click-to-toggle">
+                <a title="Opciones" class="btn-floating btn-large grey darken-2">
+                    <i class="material-icons">view_module</i>
+                </a>   
+                <ul>                                 
+                    <li hidden><a id="eliminar" title="Eliminar" data-target="" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">delete</i></a></li>                  
+                    <li hidden><a id="editar" title="Editar" class="btn-floating btn-large waves-effect waves-light yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
+
+                    <li><a id="nuevo" href="{{ route('local.create') }}" title="Nueva" class="btn-floating waves-effect waves-light btn-large green">   <i class="material-icons">add</i>
+                    </a></li> 
+                </ul>             
             </div>
-
-            <div class="fixed-action-btn horizontal">
-                <a href="{{ route('local.create') }}" title="Nueva sede" class="btn-floating btn-large green">
-                    <i class="material-icons">add</i>
-                </a>                
-            </div>
-
-
-            <!-- Modal Structure --> 
 
             <div class="row">
                 <div class="col s12">
-                    <table class="responsive-table bordered highlight">
+                    <table class="datatable responsive-table bordered highlight">
                         <thead>
                             <tr>
-                                <th class="center" data-field="id">Código</th>
+                                <th class="center" data-field="options">Elegir</th>
                                 <th class="center" data-field="name">Sede</th>
                                 <th data-field="lastname1">Dirección</th>
-                                <th class="center" data-field="options">Elegir</th>
+
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach($locals as $local)
-                            <tr class="fila" data-target="modal1">
-                                <td class="center">{{ $local->id }}</td>
-                                <td class="center">{{ $local->name }}</td>
-                                <td>{{ $local->address }}</td>
+                            <tr>  
                                 <td class="opcion center">
                                     <p>
-                                        <input type="checkbox" class="check filled-in" id="{{ $local->id }}" />
-                                        <label for="{{ 'check_'.$local->id }}"></label>
+                                        <input type="checkbox" class="filled-in" id="{{ $local->id }}" />
+                                        <label for="{{ $local->id }}"></label>
                                     </p>
-                                </td>
-
+                                </td>                              
+                                <td class="center">{{ $local->name }}</td>
+                                <td>{{ $local->address }}</td>
                             </tr>
 
+                            <!--     modal-->
                             <div id="{{'modal_'.$local->id }}" class="modal bottom-sheet">
                                 <div class="modal-content">
                                     <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
@@ -76,7 +72,7 @@
                             @endforeach                 
                         </tbody>
                     </table>
-                    {{ $locals->links() }}
+
                 </div>
             </div>            
         </div>                    
@@ -89,28 +85,34 @@
 @section('scripts')
 
 <script>
+
+    $( ".opcion" ).click(function() {
+
+        var me = $( this ).find('input') ;
+        if(me.is(':checked')){
+            me.prop('checked', false); 
+            $('.fixed-action-btn').closeFAB();
+            $("#editar").parent().hide();
+            $("#eliminar").parent().hide();
+        }        
+        else{
+            me.prop('checked', true);            
+            $("#eliminar").attr("data-target","modal_"+me.attr("id"));
+            $("#eliminar").parent().show();
+            $("#editar").attr("href","sedes/edit/"+me.attr("id"));
+            $("#editar").parent().show();
+            $('.fixed-action-btn').openFAB();
+        }    
+           //descheqea los demas
+           $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
+
+       });
+
     $( document ).ready(function(){
 
-
-        //para manejar los botones de opciones para sedes
-        $( ".opcion" ).click(function() {
-
-            var me = $( this ).find('input') ;
-            if(me.is(':checked')){
-                me.prop('checked', false); 
-                $(".opc").slideUp( 400 );
-            }        
-            else{
-                me.prop('checked', true);  
-                $(".opc").slideDown( 400 );
-                $("#eliminar").attr("data-target","modal_"+me.attr("id"));
-                $("#editar").attr("href","sedes/edit/"+me.attr("id"));
-            }    
-            //descheqea los demas
-            $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
-
-
-        });
+        //    $("select").val('10');
+        $('select').addClass("browser-default");
+        $('select').material_select();
 
     });
 

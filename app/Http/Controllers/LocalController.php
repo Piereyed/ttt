@@ -11,10 +11,11 @@ class LocalController extends Controller
     public function index()
     {   
         $locals = Local::get();
-        $locals_pag = Local::paginate(10);
+        
+        // $locals_pag = Local::paginate(10);
         $data = [
-        'locals'    =>  $locals_pag,
-        'size'       => count($locals),
+        'locals'    =>  $locals,
+        // 'size'       => count($locals),
         ];
         return view('local.index', $data);
     }

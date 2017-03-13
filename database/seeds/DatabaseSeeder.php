@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LocalsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(PersonsTableSeeder::class);  //crea el admin
+        $this->call(CategoriesTableSeeder::class);  
         
     }
 }

@@ -25,6 +25,7 @@ class CreatePeopleTable extends Migration
             $table->string('email',100)->nullable();
             $table->date('birthday')->nullable();
             $table->string('phone',15)->nullable();
+            $table->string('photo',100)->nullable();//ruta de la foto
             
             $table->integer('user_id')->unsigned();           
             

@@ -38,9 +38,19 @@ main {
     display: inline-block;
     margin-bottom: 30px;
 }
+.h2{
+    font-size: 35px;
+    line-height: 35px;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-bottom: 0px;
+}
 
-.fixed-action-btn{
-    bottom: 78px !important;
+.opcion p{
+    margin: 0;
+}
+.opcion label:before, .opcion label:after{
+    box-sizing: border-box !important;
 }
 
 /*para datatables*/
@@ -72,6 +82,10 @@ main {
 .dataTables_length select{
     display: inline-block !important;
     width: inherit;
+}
+
+table p {
+    text-align: center !important;
 }
 
 /*fin de datatables*/

@@ -10,6 +10,6 @@ class Local extends Model
     use SoftDeletes;
 
     public function people(){        
-        return $this->hasMany('App\Person');
+        return $this->belongsToMany('App\Person','person_role_local');
     }
 }

@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/', ['as' => 'admin.index', 'uses' => 'AdminController@index']);
         Route::get('create', ['as' => 'admin.create', 'uses' => 'AdminController@create']);
         Route::post('create', ['as' => 'admin.store', 'uses' => 'AdminController@store']);
+        Route::post('assignrole', ['as' => 'admin.storerole', 'uses' => 'AdminController@storerole']);
         Route::get('show/{id}', ['as' => 'admin.show', 'uses' => 'AdminController@show']);
         Route::get('edit/{id}', ['as' => 'admin.edit', 'uses' => 'AdminController@edit']);
         Route::post('edit/{id}', ['as' => 'admin.update', 'uses' => 'AdminController@update']);
@@ -45,8 +46,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::group(['prefix' => 'entrenadores'], function(){    
         Route::get('/', ['as' => 'trainer.index', 'uses' => 'TrainerController@index']);
         Route::get('create', ['as' => 'trainer.create', 'uses' => 'TrainerController@create']);        
-        Route::post('create', ['as' => 'trainer.store', 'uses' => 'TrainerController@store']);
-        Route::get('assignrole', ['as' => 'trainer.assignrole', 'uses' => 'TrainerController@assignrole']);
+        Route::post('create', ['as' => 'trainer.store', 'uses' => 'TrainerController@store']);        
         Route::post('assignrole', ['as' => 'trainer.storerole', 'uses' => 'TrainerController@storerole']);
         Route::get('show/{id}', ['as' => 'trainer.show', 'uses' => 'TrainerController@show']);
         Route::get('edit/{id}', ['as' => 'trainer.edit', 'uses' => 'TrainerController@edit']);
@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/', ['as' => 'client.index', 'uses' => 'ClientController@index']);
         Route::get('create', ['as' => 'client.create', 'uses' => 'ClientController@create']);
         Route::post('create', ['as' => 'client.store', 'uses' => 'ClientController@store']);
+        Route::post('assignrole', ['as' => 'client.storerole', 'uses' => 'ClientController@storerole']);
         Route::get('show/{id}', ['as' => 'client.show', 'uses' => 'ClientController@show']);
         Route::get('edit/{id}', ['as' => 'client.edit', 'uses' => 'ClientController@edit']);
         Route::post('edit/{id}', ['as' => 'client.update', 'uses' => 'ClientController@update']);
@@ -99,3 +100,5 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 Route::post('/searchTrainer', ['as' => 'search.trainer','uses' => 'TrainerController@search']);//NO TOCAR!
+Route::post('/searchClient', ['as' => 'search.client','uses' => 'ClientController@search']);//NO TOCAR!
+Route::post('/searchAdmin', ['as' => 'search.admin','uses' => 'AdminController@search']);//NO TOCAR!

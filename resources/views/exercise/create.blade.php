@@ -26,6 +26,10 @@
                             <input id="nombre" name="nombre" value="{{ old('nombre') }}" type="text" class="validate" data-length="100">
                             <label for="name">Nombre</label>
                         </div>
+                        <div class="input-field col s12">                            
+                            <textarea  id="descripcion" name="descripcion" value="{{ old('descripcion') }}" type="text" class="validate materialize-textarea" data-length="1000"></textarea>
+                            <label for="descripcion">Descripción</label>
+                        </div>
                     </div>
                     
                     <br>

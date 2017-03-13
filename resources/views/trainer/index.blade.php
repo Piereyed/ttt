@@ -21,53 +21,51 @@
     <!--   Icon Section   -->
     <div class="row">
         <div class="col s12">
+            <span class="h1">Entrenadores</span>
+            <!-- fixed action buttons -->
+            <div class="fixed-action-btn click-to-toggle">
+                <a title="Opciones" class="btn-floating btn-large grey darken-2">
+                    <i class="material-icons">view_module</i>
+                </a>   
+                <ul>                                 
+                    <li hidden><a id="eliminar"  title="Eliminar" data-target="" class="btn-floating btn-large waves-effect waves-light red "><i class="material-icons">delete</i></a></li>                  
+                    <li hidden><a id="editar"  title="Editar" class="btn-floating btn-large waves-effect waves-light yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
 
-            <div class="row">
-                <div class="col m3 s12">
-                    <span class="h1">Entrenadores</span>
-                </div>
-                <div class="opc col m9 s12" style="text-align:right;display:none">
-                    <a id="ver" href="" title="Ver" class=" waves-effect waves-light btn blue "><i class="material-icons left">visibility</i>Ver</a>
-                    <a id="editar" href="" title="Editar" class=" waves-effect waves-light btn yellow darken-1 "><i class="material-icons left">mode_edit</i>Editar</a>
-                    <a id="eliminar" href="" data-target="" title="Eliminar" class=" waves-effect waves-light btn red "><i class="material-icons left">delete</i>Eliminar</a>
-                </div>
-            </div>
+                    <li hidden ><a id="ver"  title="Ver" class="btn-floating btn-large waves-effect waves-light blue "><i class="material-icons">visibility</i></a></li>
 
-            <div class="fixed-action-btn">
-                <a href="{{ route('trainer.create') }}" title="Nuevo" class="btn-floating btn-large black">
-                    <i class="large material-icons">person_add</i>
-                </a>
-                <ul>
-                    <li><a href="#asignar" class="btn-floating grey darken-1" title="Asignar"><i class="material-icons">person</i></a></li>
-                </ul>                
-            </div>
+                    <li><a href="#asignar" title="Asignar" class="btn-floating waves-effect waves-light btn-large green darken-2"><i class="material-icons">person</i>
+                    </a></li> 
+
+                    <li><a id="nuevo" href="{{ route('trainer.create') }}" title="Nuevo" class="btn-floating waves-effect waves-light btn-large green"><i class="material-icons">person_add</i>
+                    </a></li> 
+                </ul>             
+            </div>             
 
             <div class="row">
                 <div class="col s12">
                     <table class="datatable responsive-table bordered highlight">
                         <thead>
                             <tr>
+                                <th class="center" data-field="options">Elegir</th>
                                 <th class="center" data-field="id">DNI</th>
                                 <th data-field="name">Nombres</th>
                                 <th data-field="lastname1">Apellidos</th>
-                                <th class="center" data-field="options">Elegir</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @foreach($trainers as $trainer)
-                            <tr class="fila"  data-target="modal1">
-                                <td class="center">{{ $trainer->num_doc }}</td>
-                                <td>{{ $trainer->name }}</td>
-                                <td>{{ $trainer->lastname1. " " . $trainer->lastname2 }}</td>
+                            <tr>
                                 <td class="opcion center">
                                     <p>
-                                        <input type="checkbox" class="check filled-in" id="{{ $trainer->id }}" />
+                                    <input type="checkbox" class="filled-in" id="{{ $trainer->id }}" />
                                         <label for="{{ $trainer->id }}"></label>
                                     </p>
                                 </td>
-
-                            </tr>   
+                                <td class="center">{{ $trainer->num_doc }}</td>
+                                <td>{{ $trainer->name }}</td>
+                                <td>{{ $trainer->lastname1. " " . $trainer->lastname2 }}</td>
+                            </tr>
 
                             <!--     modal-->
                             <div id="{{'modal_'.$trainer->id }}" class="modal bottom-sheet">
@@ -91,7 +89,7 @@
 </div>
 
 
-<!-- Modal Structure -->
+<!-- Modal Asignar -->
 <div id="asignar" class="modal modal-fixed-footer">
     <div class="modal-content">
       <h4>Asignar rol de entrenador</h4>
@@ -104,18 +102,14 @@
                         <div class="input-field col s12">
                           <i class="material-icons prefix">textsms</i>
                           <input type="text" id="name" class="autocomplete">
-
                           <label for="name">Nombre/Apellidos</label>
                       </div>
                   </div>
                   <input type="text" id="nombre" name="nombre" hidden >
               </div>
           </div>
-
-
       </form>
   </div>
-
 </div>
 <div class="modal-footer">
   <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left">clear</i>Cancelar</a>
@@ -131,56 +125,59 @@
 @section('scripts')
 
 <script>
-var people = {};
+    var people = {};
+    var codigos = {};
+    $( ".opcion" ).click(function() {
+
+        var me = $( this ).find('input') ;
+        if(me.is(':checked')){
+            me.prop('checked', false); 
+            $('.fixed-action-btn').closeFAB();
+            $("#ver").parent().hide();
+            $("#editar").parent().hide();
+            $("#eliminar").parent().hide();
+            
+        }        
+        else{
+            me.prop('checked', true);            
+            $("#eliminar").attr("data-target","modal_"+me.attr("id"));
+            $("#eliminar").parent().show();
+            $("#editar").attr("href","entrenadores/edit/"+me.attr("id"));
+            $("#editar").parent().show();
+            $("#ver").attr("href","entrenadores/show/"+me.attr("id"));
+            $("#ver").parent().show();
+            $('.fixed-action-btn').openFAB();
+        }    
+           //descheqea los demas
+           $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
+
+       });
+
     $( document ).ready(function(){
-
-
-        //para manejar los botones de opciones para entrenadores
-        $( ".opcion" ).click(function() {
-
-            var me = $( this ).find('input') ;
-            if(me.is(':checked')){
-                me.prop('checked', false); 
-                $(".opc").slideUp( 400 );
-            }        
-            else{
-                me.prop('checked', true);  
-                $(".opc").slideDown( 400 );
-                $("#eliminar").attr("data-target","modal_"+me.attr("id"));
-                $("#editar").attr("href","entrenadores/edit/"+me.attr("id"));
-            }    
-            //descheqea los demas
-            $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
-
-
-        });
 
         //    $("select").val('10');
         $('select').addClass("browser-default");
         $('select').material_select();
 
                 //ajax
-        var params = $('#asignar_entrenador').serialize();
+                var params = $('#asignar_entrenador').serialize();
 
-        $.ajax({
-            type: 'POST',
-            url: '/searchTrainer',
-            data: 'action=search&'+params,
-            dataType: 'json',            
-            success: function(personas) {
-                // alert(personas[1]['lastname1']);
-                var size = personas.length;
-                
-                for(var i = 0; i < size; i++){
-                    people[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = personas[i]['id'];
+                $.ajax({
+                    type: 'POST',
+                    url: '/searchTrainer',
+                    data: 'action=search&'+params,
+                    dataType: 'json',            
+                    success: function(personas) {                
+                        var size = personas.length;                
+                        for(var i = 0; i < size; i++){
+                    people[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = 'storage/' + personas[i]['photo']; //ruta de imagen
+                    codigos[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = personas[i]['id']; //codigo
                 }
 
                 $('input.autocomplete').autocomplete({
                     data: people,
                     limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
                 });
-
-
             },
             error: function(data) {
                 alert("Error.")
@@ -189,7 +186,7 @@ var people = {};
         // fin ajax
 
         $( "#name" ).change(function() {
-            $("#nombre").val(people[$( "#name" ).val()]);
+            $("#nombre").val(codigos[$( "#name" ).val()]);
         });
 
     });

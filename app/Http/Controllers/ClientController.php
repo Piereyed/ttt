@@ -24,10 +24,51 @@ class ClientController extends Controller
         return view('client.index', $data);
     }
 
+    public function search()
+    {
+        $query = "
+        SELECT 
+        people.id,people.name,people.lastname1,people.lastname2,people.photo
+        FROM (
+        SELECT people.id,people.name,people.lastname1,people.lastname2,people.photo from person_role_local inner join people on people.id = person_role_local.person_id 
+        WHERE local_id =".session('sede')." and role_id= 4
+        ) as clients     
+        RIGHT JOIN people
+        ON people.id = clients.id
+        WHERE clients.id IS NULL and people.id > 1"    ;
+
+        $people = DB::select(DB::raw($query));
+
+        echo json_encode($people);
+    }
+
 
     public function create()
     {        
         return view('client.create');
+    }
+
+    public function storerole(Request $request){
+
+    // dd($request);
+        $this->validate($request, [
+            'nombre'         => 'required',
+            ]);
+
+        try{
+        //creo el rol y local
+            DB::table('person_role_local')->insert(
+                ['role_id' => 4,
+            'person_id' => $request['nombre'],//codigo
+            'local_id' => session('sede')
+            ]
+            );  
+            return redirect()->route('client.index')->with('success', 'El cliente se ha asignado con éxito para la sede '.Local::find(session('sede'))->name);
+
+        } catch (Exception $e) {
+            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+        }
+
     }
 
 
@@ -85,14 +126,22 @@ class ClientController extends Controller
                 'person_id' => $client->id,
                 'local_id' => session('sede')
                 ]
-            );
+                );
 
             //subo la foto
-            if ($request->hasFile('foto') && $request->file('foto')->isValid()) {            
-                $path = $request->foto->storeAs('public/fotos_perfil', $client->id.'.jpg');                
+            if ($request->hasFile('foto')){
+                if ($request->file('foto')->isValid()) {            
+                    $request->foto->storeAs('public/fotos_perfil', $client->id.'.jpg');
+                    $client->photo   = 'fotos_perfil/'. $client->id.'.jpg' ;  
+                    $client->save();   
+                }
+                else{
+                    return redirect()->route('client.index')->with('warning', 'Se registró al cliente pero ocurrió un error al subir la foto.');
+                } 
             }
-            else if ($request->hasFile('foto') && !$request->file('foto')->isValid() ){
-                return redirect()->back()->with('warning', 'Se registró al cliente pero ocurrió un error al subir la foto.');
+            else{//si no hay foto
+                $client->photo   = 'fotos_perfil/default.jpg' ;  
+                $client->save();
             }       
 
             return redirect()->route('client.index')->with('success', 'El cliente se ha registrado con éxito para la sede '.Local::find(session('sede'))->name);
