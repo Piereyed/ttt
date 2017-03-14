@@ -111,7 +111,7 @@
             <div class="row">                       
                 <div class="input-field col m12 s6">
                     <i class="fa fa-building prefix" aria-hidden="true"></i>
-                    <select id="sede" name="sede[]" multiple>
+                    <select id="sede" name="sede[]" required="required" class="validate" multiple>
                         <option value="" disabled selected>Seleccione una o varias sedes</option>
                         @foreach($locals as $local)
                         <option value="{{$local->id}}">{{$local->name}}</option>
@@ -153,6 +153,9 @@
 @section('scripts')
 <script>
     $( document ).ready(function(){
+        $.validator.setDefaults({
+            ignore: []
+        });
         //validate
         $("#crear_administrador").validate({
             rules:{

@@ -18,7 +18,7 @@
         <div class="col s12">
             <span class="h1">Nuevo músculo</span>
             <div class="row">
-                <form id="crear_musculo" action="{{ route('muscle.store') }}" method="post" novalidate="true" class="col s12">
+                <form id="crear_musculo" action="{{ route('muscle.store') }}" files="true" enctype="multipart/form-data" method="post" novalidate="true" class="col s12">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="row">
@@ -129,7 +129,7 @@
         $("#add").on("click",function(){
             n++;  
 
-            $("tbody").append('<tr><td class="opcion center"><p><input type="checkbox" class="filled-in" id="'+n+'"/><label for="'+n+'"></label></p></td><td><input type="text" name="nombre['+n+']" /></td><td><input id="foto"'+n+' type="file" name="foto'+n+'" class="dropify" data-max-file-size="3M" data-height="80"  data-allowed-file-extensions="png jpg jpeg" /></td></tr>');
+            $("tbody").append('<tr><td class="opcion center"><p><input type="checkbox" class="filled-in" id="'+n+'"/><label for="'+n+'"></label></p></td><td><input type="text" name="nombrezona['+n+']" /></td><td><input id="foto"'+n+' type="file" name="fotozona['+n+']" class="dropify" data-max-file-size="3M" data-height="80"  data-allowed-file-extensions="png jpg jpeg" /></td></tr>');
             $('.dropify').dropify();
         });
 

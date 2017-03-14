@@ -37,18 +37,34 @@ class MuscleController extends Controller
 
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',
-            'categoria'         => 'required'
+            'categoria'         => 'required',
+            'nombrezona'         => 'nullable',
+            'fotozona'         => 'nullable'
             ]);
 
-        dd($request);
+        //si hay al menos una zona hay que validarla
+        if(isset($request['nombrezona'])){
+            foreach ($request['nombrezona'] as $value) {
+                validate();
+            }
+             
+        }
+
+        dd($request);        
 
         try {
             $muscle             = new Muscle;
             $muscle->name       = $request['nombre']; 
-
+            $muscle->category       = $request['categoria']; 
             $muscle->save();
+
+            
+            if(isset($request['nombrezona'])){
+
+            }
             return redirect()->route('muscle.index')->with('success', 'El músculo se ha registrado con éxito');
         } catch (Exception $e) {
             return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
