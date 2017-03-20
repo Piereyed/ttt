@@ -49,7 +49,7 @@
                 vertical-align: middle;                
                 height: 100%;                
                 background-image: url(  {{ asset('images/wallpapaer.jpg') }} );
-                background-repeat: no-repeat;                
+                background-repeat: repeat-x;                
                 background-position: center top;                
             }
             .card-panel{

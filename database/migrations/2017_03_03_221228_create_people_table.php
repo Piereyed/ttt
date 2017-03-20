@@ -28,6 +28,7 @@ class CreatePeopleTable extends Migration
             $table->string('photo',100)->nullable();//ruta de la foto
             
             $table->integer('user_id')->unsigned();           
+            $table->integer('experience_id')->unsigned()->nullable();           
             
             $table->softDeletes();
             $table->timestamps();
@@ -35,6 +36,7 @@ class CreatePeopleTable extends Migration
         
         Schema::table('people', function (Blueprint $table) {
              $table->foreign('user_id')->references('id')->on('users');             
+             $table->foreign('experience_id')->references('id')->on('experiences');             
         });
     }
 
@@ -47,6 +49,7 @@ class CreatePeopleTable extends Migration
     {
         Schema::table('people', function (Blueprint $table) {
             $table->dropForeign('people_user_id_foreign');            
+            $table->dropForeign('people_experience_id_foreign');            
         });
         
         Schema::dropIfExists('people');

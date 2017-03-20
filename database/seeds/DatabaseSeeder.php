@@ -16,7 +16,11 @@ class DatabaseSeeder extends Seeder
         $this->call(LocalsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(PersonsTableSeeder::class);  //crea el admin
-        $this->call(CategoriesTableSeeder::class);  
-        
+        $this->call(ExperiencesTableSeeder::class);  
+        $this->call(TrainingPhasesTableSeeder::class);  
+        $this->call(GoalsTableSeeder::class);  
+        $this->call(PeriodsTableSeeder::class);
+        $this->call(MeasuresTableSeeder::class);
+        $this->call(MusclesTableSeeder::class);        
     }
 }
