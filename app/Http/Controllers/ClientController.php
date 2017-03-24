@@ -152,8 +152,18 @@ class ClientController extends Controller
 
     public function show($id)
     {
-        //
-    }
+        $client = Person::find($id);
+
+     // dd($client->birthday);
+      $birthDate = explode("-", $client->birthday);
+      $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md") ? ((date("Y") - $birthDate[0]) - 1): (date("Y") - $birthDate[0]));
+
+      $data = [
+             'client'    =>  $client,
+            'age'        => $age
+      ];
+      return view('client.show', $data);
+  }
 
     /**
      * Show the form for editing the specified resource.

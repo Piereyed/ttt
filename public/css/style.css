@@ -102,6 +102,23 @@ table p {
 
 /*fin para dropify*/
 
+/*sexo*/
+.fa-male{
+    color: blue;
+}
+.sexswitch label .lever{
+    background-color: #8787e6;
+}
+.sexswitch label .lever:after{
+    background-color: blue;
+}
+.sexswitch label input[type=checkbox]:checked+.lever:after{
+    background-color: #e91e63;
+}
+.sexswitch label input[type=checkbox]:checked+.lever{
+    background-color: #f197b6;
+}
+/*fin sexo*/
 
 /*media query*/
 

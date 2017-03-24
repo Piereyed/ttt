@@ -65,10 +65,10 @@
 
                             <div class="col s12 m12 l12" style="text-align:center">
                               <label class="active" for="sexo">Sexo</label>
-                              <div class="switch">
+                              <div class="switch sexswitch">
                                 <label>
                                   <i for="male" title="Hombre" class="fa fa-male fa-3x" aria-hidden="true"></i>
-                                  <input name="sexo" type="checkbox">
+                                  <input id="sexo" name="sexo" type="checkbox">
                                   <span class="lever"></span>
                                   <i for="female" title="Mujer" class="fa fa-female fa-3x" aria-hidden="true"></i>
                               </label>
@@ -238,6 +238,18 @@
                 $("#documento").attr( "minlength",8);
             }
         });
+    });
+
+    $("#sexo").on("change", function(){
+        if($(this).is(':checked')){ //mujer
+            $(".fa-female").css("color","#e91e63");
+            $(".fa-male").css("color","#9e9e9e"); 
+
+        }
+        else{ //hombre
+            $(".fa-female").css("color","#9e9e9e");
+            $(".fa-male").css("color","blue"); 
+        }
     });
 
 </script>

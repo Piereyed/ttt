@@ -95,6 +95,16 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('delete/{id}', ['as' => 'exercise.delete', 'uses' => 'ExerciseController@destroy']);
     });
 
+    Route::group(['prefix' => 'evaluaciones'], function(){    
+        Route::get('/', ['as' => 'evaluation.index', 'uses' => 'EvaluationController@index']);
+        Route::get('create/{id}', ['as' => 'evaluation.create', 'uses' => 'EvaluationController@create']);
+        Route::post('create', ['as' => 'evaluation.store', 'uses' => 'EvaluationController@store']);
+        Route::get('show/{id}', ['as' => 'evaluation.show', 'uses' => 'EvaluationController@show']);
+        Route::get('edit/{id}', ['as' => 'evaluation.edit', 'uses' => 'EvaluationController@edit']);
+        Route::post('edit/{id}', ['as' => 'evaluation.update', 'uses' => 'EvaluationController@update']);
+        Route::get('delete/{id}', ['as' => 'evaluation.delete', 'uses' => 'EvaluationController@destroy']);
+    });
+
 });
 
 

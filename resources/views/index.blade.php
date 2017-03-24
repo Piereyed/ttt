@@ -241,6 +241,8 @@
         <script src="{{ URL::asset('js/jquery.dataTables.min.js')}}"></script>
         <!-- dropify-->
         <script src="{{ URL::asset('js/dropify.min.js')}}"></script>
+        <!-- formater -->
+        <script src="{{ URL::asset('js/jquery.formatter.min.js')}}"></script>
         <!-- custom-->
         <script src="{{ URL::asset('js/init.js')}}"></script>
 
