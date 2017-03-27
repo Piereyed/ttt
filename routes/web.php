@@ -143,3 +143,4 @@ Route::post('/searchTrainer', ['as' => 'search.trainer','uses' => 'TrainerContro
 Route::post('/searchClient', ['as' => 'search.client','uses' => 'ClientController@search']);//NO TOCAR!
 Route::post('/searchAdmin', ['as' => 'search.admin','uses' => 'AdminController@search']);//NO TOCAR!
 Route::post('/getZones/{id}', ['as' => 'search.zones','uses' => 'ExerciseController@getZones']);//NO TOCAR!
+Route::post('/getMeasures/{id}', ['as' => 'client.measure','uses' => 'ClientController@getMeasures']);//NO TOCAR!

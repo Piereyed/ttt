@@ -41,43 +41,142 @@
         </div>
         <div class="col l8 s12">
           <div class="card">                    
-                  <div class="card-tabs">
-                    <ul class="tabs tabs-fixed-width">
-                      <li class="tab"><a class="active" href="#test1">Programa</a></li>
-                      <li class="tab"><a href="#test2">Evaluaciones</a></li>
-                    </ul>
-                  </div>
-                  <div class="card-content grey lighten-4">
-                    <!-- pertania 1 -->
-                    <div id="test1">
-                    Entrenador: {{$client->trainer->name.' '.$client->trainer->lastname1}} <br>
-                    Experiencia: {{$client->experience_id!=null?$client->experience->name:'-'}}
-                    </div>
-                    <!-- pestania 2 -->
-                    <div id="test2">
-                      Evaluaciones <br>
-                      <a href="{{ route('evaluation.create',$client->id) }}" title="Nueva evaluación" class="btn-large waves-effect waves-light btn ">
-                        <i class="left material-icons">assignment</i>Nueva evaluación
-                      </a >
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+            <div class="card-tabs">
+              <ul class="tabs tabs-fixed-width">
+                <li class="tab"><a class="active" href="#test1">Programa</a></li>
+                <li class="tab"><a href="#test2">Evaluaciones</a></li>
+              </ul>
             </div>
-
+            <div class="card-content grey lighten-4">
+              <!-- pertania 1 -->
+              <div id="test1">
+                Entrenador: {{$client->trainer->name.' '.$client->trainer->lastname1}} <br>
+                Experiencia: {{$client->experience_id!=null?$client->experience->name:'-'}}
+              </div>
+              <!-- pestania 2 -->
+              <div id="test2">
+                Evaluaciones <br>
+                <a href="{{ route('evaluation.create',$client->id) }}" title="Nueva evaluación" class="btn-large waves-effect waves-light btn ">
+                  <i class="left material-icons">assignment</i>Nueva evaluación
+                </a >
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
 
+    </div>
+  </div>
+  <div class="col s12">
+    <canvas id="myChart" width="400" height="400"></canvas>
+  </div>
+</div>
 
-      @endsection
+<form id="form">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}">                    
+  <input id="idClient" type="hidden" name="idClient" value="{{$client->id}}">                    
+  
+</form>
 
-      @section('scripts')
-      <script>
-        $( document ).ready(function(){
+@endsection
 
+@section('scripts')
+<script>
+  var arrr;
+  var ctx = $("#myChart");
+
+  Chart.defaults.global.defaultFontSize = 20;
+  Chart.defaults.global.responsiveAnimationDuration = 1000;
+
+  Chart.defaults.global.elements.line.tension =  0.1;
+  Chart.defaults.global.elements.line.fill = false;
+
+  $( document ).ready(function(){
+    var params = $('#form').serialize();
+    
+    $.ajax({
+      type: 'POST',
+      url: '/getMeasures/' + $("#idClient").val(),
+      data: 'action=search&'+params,
+      dataType: 'json',            
+      success: function(arr) {                
+        var size = arr.length;  
+        arrr = arr;
+        arrlabels=[];    //size n 
+        arrmeasures=[];  //size 19             
+        for(var i = 0; i < size; i++){
+          arrlabels.push(arr[i][0]['created_at']);
+        }
+
+        for (var j = 0; j < 19 ; j++) { 
+          var values = [];
+
+          for(var i = 0; i < size; i++){
+            values.push(arr[i][1][j]['pivot']['value']); 
+          }
+
+          var obj = {
+            label: arr[0][1][j]['name'],        
+            borderColor: "red",
+            backgroundColor: "red",
+            data: values,  
+          }
+
+          arrmeasures.push(obj);
+        }
+
+
+
+        var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: arrlabels,
+            datasets: arrmeasures
+          },
+          options: {
+
+            title: {
+              display: true,
+              text: 'Progreso muscular',
+              fontSize:30
+            },
+
+            hover: {            
+              mode: 'nearest'
+            },
+
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero:true
+                }
+              }]
+            },
+
+            legend: {
+              display: true,
+              labels: {
+                fontColor: 'rgb(255, 99, 132)'
+              }
+            }
+          }
         });
 
-      </script>
-      @endsection
+      },
+      error: function(data) {
+        alert("Error.")
+      }
+    });
+
+  });
+
+  
+
+
+
+
+
+
+</script>
+@endsection

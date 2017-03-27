@@ -247,6 +247,8 @@
     <script src="{{ URL::asset('js/dropify.min.js')}}"></script>
     <!-- formater -->
     <script src="{{ URL::asset('js/jquery.formatter.min.js')}}"></script>
+    <!-- chatjs -->
+    <script src="{{ URL::asset('js/chart.min.js')}}"></script>
     <!-- custom-->
     <script src="{{ URL::asset('js/init.js')}}"></script>
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Person;
 use App\Person_Role_Local;
 use App\Local;
+use App\Physical_evaluation;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\DB; //para usar DB
 
@@ -51,6 +52,18 @@ class ClientController extends Controller
         $people = DB::select(DB::raw($query));
 
         echo json_encode($people);
+    }
+
+    public function getMeasures($id)
+    {
+
+        $evs = Physical_evaluation::where('person_id',$id)->get();
+         $arr = [];
+         foreach ($evs as $ev) {
+             array_push($arr, [$ev,$ev->measures]);
+         }
+
+        echo json_encode($arr);
     }
 
 
