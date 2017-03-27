@@ -20,6 +20,14 @@ class Person extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+
+    public function trainer(){
+        return $this->belongsTo('App\Person','trainer_id');
+    }
+
+    public function experience(){
+        return $this->belongsTo('App\Experience');
+    }
     
     
 }

@@ -130,136 +130,140 @@
                     <li><a href="{{ route('trainer.index') }}"><i class="material-icons left">group</i>Entrenadores</a></li>
                     @endif
 
-                    @if(in_array("Entrenador", session('roles')) || in_array("Administrador", session('roles')))
+                    @if(in_array("Administrador", session('roles')))
                     <li><a href="{{ route('client.index') }}"><i class="material-icons left">wc</i>Clientes</a></li>
                     @endif
 
                     <!--   roles del Entrenador de gimnasio    -->
+                    @if(in_array("Entrenador", session('roles')))
+                    <li><a href="{{ route('myathletes.index',Auth::user()->person->id) }}"><i class="material-icons left">directions_run</i>Mis atletas</a></li>
+                    @endif
+
                     @if(in_array("Entrenador", session('roles')))     
                     <li><a class="dropdown-button" href="#!" data-activates="parametros"><i class="material-icons left">settings</i>Parámetros<i class="material-icons right">arrow_drop_down</i></a></li>
 
-                        <ul id="parametros" class="dropdown-content">
-                            <li><a href="{{ route('exercise.index') }}"><i class="material-icons left">fitness_center</i>Ejercicios</a></li>
-                            <li><a href="{{ route('muscle.index') }}"><i class="material-icons left">accessibility</i>Músculos</a></li>
-                            <li><a href="{{ route('muscle.index') }}"><i class="material-icons left">gps_fixed</i>Objetivos</a></li>
-                            <li><a href="{{ route('muscle.index') }}"><i class="material-icons left">linear_scale</i>Periodos</a></li>
-                        </ul>
+                    <ul id="parametros" class="dropdown-content">
+                        <li><a href="{{ route('exercise.index') }}"><i class="material-icons left">fitness_center</i>Ejercicios</a></li>
+                        <!-- <li><a href="{{ route('muscle.index') }}"><i class="material-icons left">accessibility</i>Músculos</a></li> -->
+                        <li><a href="{{ route('goal.index') }}"><i class="material-icons left">gps_fixed</i>Objetivos</a></li>
+                        <li><a href="{{ route('period.index') }}"><i class="material-icons left">linear_scale</i>Periodos</a></li>
+                    </ul>
 
-                        @endif
+                    @endif
 
-                        <!-- nombre -->
-                        @if (!Auth::guest())
-                        <li><a class="dropdown-button" href="#!" data-activates="salir">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                    <!-- nombre -->
+                    @if (!Auth::guest())
+                    <li><a class="dropdown-button" href="#!" data-activates="salir">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i></a></li>
 
-                        <ul id="salir" class="dropdown-content">
+                    <ul id="salir" class="dropdown-content">
 
-                            <li><a href=""><i class="material-icons left">perm_identity</i>Mi cuenta</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/inicio_sedes"><i class="material-icons left">business</i>Sedes</a></li>
-                            <li>
-                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();" ><i class="left material-icons">power_settings_new</i> Salir</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-
-                        </ul>
-
-                        @endif
+                        <li><a href=""><i class="material-icons left">perm_identity</i>Mi cuenta</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/inicio_sedes"><i class="material-icons left">business</i>Sedes</a></li>
+                        <li>
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();" ><i class="left material-icons">power_settings_new</i> Salir</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        </li>
 
                     </ul>
 
-                    <!--                        boton de menu-->
-                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <main id="main" class="xxx animate-bottom">
-        <ul id="slide-out" class="side-nav">
-            <li>
-                <div class="userView">
-                    <div class="background">
-                        <img src="{{ asset('images/logo.png')}}">
-                    </div>
-                    <a href="#!user"><img class="circle" title="Foto perfil" src="{{ asset('storage/'.session('photo'))  }}"></a>
-                    <a href="#!name"><span class="white-text name">{{session('name')}}</span></a>                
-                    <a href="#!email"><span class="white-text email">{{session('rol_nombre')}} - {{session('sede_nombre')}}</span></a>
-                </div>
-            </li>
-            <li><a href="{{ route('client.index') }}"><i class="material-icons">group</i> Clientes</a></li>
-            <li class="active"><a href="{{ route('local.index') }}"><i class="material-icons">location_city</i> Sedes</a></li>
-
-            <li class="dropdown">
-                <a class="ripple-effect dropdown-toggle" data-toggle="dropdown" href="#"><i class="material-icons">settings</i> Configuración <b class="caret"></b></a>
-                <ul class="dropdown-menu"> 
-
-                    <li class=""><a href="{{ route('local.index') }}"><i class="material-icons">location_city</i> Sedes</a></li>
+                    @endif
 
                 </ul>
 
-            </li>
+                <!--                        boton de menu-->
+                <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+            </div>
+        </nav>
+    </div>
+</header>
 
-            <li><a class="waves-effect" href="{{ route('logout') }}" onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();" ><i class="material-icons">exit_to_app</i> Cerrar sesión</a></li>
+<main id="main" class="xxx animate-bottom">
+    <ul id="slide-out" class="side-nav">
+        <li>
+            <div class="userView">
+                <div class="background">
+                    <img src="{{ asset('images/logo.png')}}">
+                </div>
+                <a href="#!user"><img class="circle" title="Foto perfil" src="{{ asset('storage/'.session('photo'))  }}"></a>
+                <a href="#!name"><span class="white-text name">{{session('name')}}</span></a>                
+                <a href="#!email"><span class="white-text email">{{session('rol_nombre')}} - {{session('sede_nombre')}}</span></a>
+            </div>
+        </li>
+        <li><a href="{{ route('client.index') }}"><i class="material-icons">group</i> Clientes</a></li>
+        <li class="active"><a href="{{ route('local.index') }}"><i class="material-icons">location_city</i> Sedes</a></li>
+
+        <li class="dropdown">
+            <a class="ripple-effect dropdown-toggle" data-toggle="dropdown" href="#"><i class="material-icons">settings</i> Configuración <b class="caret"></b></a>
+            <ul class="dropdown-menu"> 
+
+                <li class=""><a href="{{ route('local.index') }}"><i class="material-icons">location_city</i> Sedes</a></li>
 
             </ul>
-            <!--                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>-->
+
+        </li>
+
+        <li><a class="waves-effect" href="{{ route('logout') }}" onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();" ><i class="material-icons">exit_to_app</i> Cerrar sesión</a></li>
+
+        </ul>
+        <!--                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>-->
 
 
 
+        <div class="container">
+
+            @yield('content')
+
+
+        </div>
+
+    </main>
+
+    <footer class="xxx page-footer grey darken-2" style="padding-top:0">
+        <div class="footer-copyright">
             <div class="container">
-
-                @yield('content')
-
-
+                Copyright © 2017 Todos los derechos reservados
+                <span class="piereyed right">
+                    Made by <a class="grey-text text-lighten-3" href="http://materializecss.com">Piereyed</a>
+                </span>
             </div>
+        </div>
+    </footer>
 
-        </main>
+    <script src="{{ URL::asset('js/jquery.min.js')}}"></script>
+    <script src="{{ URL::asset('js/materialize.js')}}"></script>        
+    <script src="{{ URL::asset('js/validate/jquery.validate.min.js')}}"></script>
+    <script src="{{ URL::asset('js/validate/additional-methods.min.js')}}"></script>
+    <!--  toastr-->
+    <script src="{{ asset('js/toastr/toastr.min.js')}}"></script>
+    <!-- nprogress-->
+    <script src="{{ URL::asset('js/nprogress.js')}}"></script>
+    <script src="{{ URL::asset('js/jquery.dataTables.min.js')}}"></script>
+    <!-- dropify-->
+    <script src="{{ URL::asset('js/dropify.min.js')}}"></script>
+    <!-- formater -->
+    <script src="{{ URL::asset('js/jquery.formatter.min.js')}}"></script>
+    <!-- custom-->
+    <script src="{{ URL::asset('js/init.js')}}"></script>
 
-        <footer class="xxx page-footer grey darken-2" style="padding-top:0">
-            <div class="footer-copyright">
-                <div class="container">
-                    Copyright © 2017 Todos los derechos reservados
-                    <span class="piereyed right">
-                        Made by <a class="grey-text text-lighten-3" href="http://materializecss.com">Piereyed</a>
-                    </span>
-                </div>
-            </div>
-        </footer>
+    @yield('scripts')
 
-        <script src="{{ URL::asset('js/jquery.min.js')}}"></script>
-        <script src="{{ URL::asset('js/materialize.js')}}"></script>        
-        <script src="{{ URL::asset('js/validate/jquery.validate.min.js')}}"></script>
-        <script src="{{ URL::asset('js/validate/additional-methods.min.js')}}"></script>
-        <!--  toastr-->
-        <script src="{{ asset('js/toastr/toastr.min.js')}}"></script>
-        <!-- nprogress-->
-        <script src="{{ URL::asset('js/nprogress.js')}}"></script>
-        <script src="{{ URL::asset('js/jquery.dataTables.min.js')}}"></script>
-        <!-- dropify-->
-        <script src="{{ URL::asset('js/dropify.min.js')}}"></script>
-        <!-- formater -->
-        <script src="{{ URL::asset('js/jquery.formatter.min.js')}}"></script>
-        <!-- custom-->
-        <script src="{{ URL::asset('js/init.js')}}"></script>
+    <script>
+        var myVar;
+        function myFunction() {
+            myVar = setTimeout(showPage, 500);
+        }
+        function showPage() {
+            $("#loader").hide();
+            $(".xxx").show();
+        }
+    </script>
 
-        @yield('scripts')
-
-        <script>
-            var myVar;
-            function myFunction() {
-                myVar = setTimeout(showPage, 500);
-            }
-            function showPage() {
-                $("#loader").hide();
-                $(".xxx").show();
-            }
-        </script>
-
-        <script type="text/javascript">
+    <script type="text/javascript">
             //Code for show success  messages            
             @if( @Session::has('success') )
             toastr.success('{{ @Session::get('success') }}');

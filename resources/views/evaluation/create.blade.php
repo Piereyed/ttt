@@ -22,29 +22,56 @@
                 <div class="col s12">
                     <ul class="collection">
                         <li class="collection-item avatar">
-                          <img src="{{ asset('storage/'.session('photo'))  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
+                          <img src="{{ asset('storage/'.$client->photo)  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
                           <span class="title">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}</span>
-                          <p>Nivel: Principiante</p>
+
+                          
                           <!-- <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a> -->
                       </li>
                   </ul>
               </div>
-              <form id="crear_cliente" files="true" enctype="multipart/form-data"  action="{{ route('client.store') }}" method="post" novalidate="true" class="col s12">
+              <form id="evaluar" files="true"  action="{{ route('evaluation.store',$client->id) }}" method="post" novalidate="true" class="col s12">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
+                <!-- experiencia -->
+                @if($client->experience_id != null)
                 <div class="row">
-                    <div class="input-field col s8 offset-s2 m4 offset-m4">
-                        <input type="text" id="ee" name="ee" placeholder="44">
-                        <label class="active" for="ee">Cuellito</label>
-                    </div>                    
+                    <div class="input-field col s4 offset-s2 m4 offset-m4">
+                        <i class="material-icons prefix">grade</i>
+                        <select id="experience" name="experiencia" required="required" class="validate">
+                            <option value="" disabled >Seleccione el nivel de experiencia</option>
+                            @foreach($experiences as $experience)                            
+                            <option @if($experience->id==$client->experience_id) selected @endif value="{{$experience->id}}">{{$experience->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Experiencia</label>
+                    </div>
                 </div>
-
+                @else
+                <div class="row">
+                    <div class="input-field col s4 offset-s2 m4 offset-m4">
+                        <i class="material-icons prefix">grade</i>
+                        <select id="experience" name="experiencia" required="required" class="validate">
+                            <option value="" disabled selected>Seleccione el nivel de experiencia</option>
+                            @foreach($experiences as $experience)
+                            <option value="{{$experience->id}}">{{$experience->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Experiencia</label>
+                    </div>
+                </div>
+                @endif
+                
+                <!-- medidas -->
                 @foreach($measures as $measure)
                 <div class="row">
-                    <div class="input-field col s8 offset-s2 m4 offset-m4">
-                        <input id="{{$measure->name}}" type="text" name="{{$measure->name}}" placeholder="23" class="measure">
-                        <label class="active" for="{{$measure->name}}">{{$measure->name}}</label>
-                    </div>                    
+                    <div class="input-field col s4 offset-s2 m2 offset-m4">
+                        <input id="{{$measure->label}}" type="text" value="{{old($measure->label)}}" name="{{$measure->label}}" placeholder="" class="measure center" @if($measure->id>=14) readonly @endif>
+                        <label class="active" for="{{$measure->label}}">{{$measure->name}}</label>
+                    </div>  
+                    <div class="input-field col s4 m2">
+                        <input type="text" class="center" disabled value="{{$measure->unity}}"> 
+                    </div>                   
                 </div>
                 @endforeach
 
@@ -74,11 +101,25 @@
 
 @section('scripts')
 <script>
+$("#porcentajeGrasa").on("change",function (){
+    cintura = $("#cintura").val();
+    cadera = $("#cadera").val() ;
+    peso = $("#peso").val();
+    talla = $("#talla").val();
+    porcgrasa = $("#porcentajeGrasa").val();
+    porcmasa = $("#porcentajeMasaMagra").val();
 
-    $('#ee').formatter({
-          'pattern': '{{9999}}-{{99}}-{{99}}',
-          'persistent': true
-      });
+
+    $("#grasa").val( porcgrasa * peso /100);
+    $("#porcentajeMasaMagra").val( 100 - porcgrasa  );
+    $("#masaMagra").val(          (100 -  porcgrasa) * peso /100 );
+    $("#imc").val( Math.round(peso / (talla * talla )*100)/100               );
+    $("#icc").val( Math.round( cintura / cadera *100)/100);
+    $("#ica").val( Math.round( cintura / talla * 100)/100);
+
+
+});
+    
 
     
 

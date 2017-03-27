@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Person;
+use App\Person_Role_Local;
 use App\Local;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\DB; //para usar DB
@@ -12,20 +13,30 @@ class ClientController extends Controller
 {
     public function index()
     {          
-        $clients = DB::table('person_role_local')
+        // $clients = DB::table('person_role_local')
+        // ->join('people', 'people.id', '=', 'person_role_local.person_id')
+        // ->select('people.*')
+        // ->where('local_id',session('sede'))
+        // ->where('role_id',4)->get();
+
+        $clients=Person_Role_Local::where('local_id',session('sede'))->where('role_id',4)->get();
+
+        $trainers = DB::table('person_role_local')
         ->join('people', 'people.id', '=', 'person_role_local.person_id')
         ->select('people.*')
         ->where('local_id',session('sede'))
-        ->where('role_id',4)->get();
+        ->where('role_id',3)->get();
 
         $data = [
-        'clients'    =>  $clients
+        'clients'    =>  $clients,
+        'trainers'    =>  $trainers
         ];
         return view('client.index', $data);
     }
 
     public function search()
     {
+        //devuelve las personas que no son clientes de mi sede
         $query = "
         SELECT 
         people.id,people.name,people.lastname1,people.lastname2,people.photo
@@ -44,8 +55,19 @@ class ClientController extends Controller
 
 
     public function create()
-    {        
-        return view('client.create');
+    {
+
+        $trainers = DB::table('person_role_local')
+        ->join('people', 'people.id', '=', 'person_role_local.person_id')
+        ->select('people.*')
+        ->where('local_id',session('sede'))
+        ->where('role_id',3)->get();
+
+        $data = [
+        'trainers'    =>  $trainers
+        ];
+
+        return view('client.create',$data);
     }
 
     public function storerole(Request $request){
@@ -53,16 +75,31 @@ class ClientController extends Controller
     // dd($request);
         $this->validate($request, [
             'nombre'         => 'required',
+            'entrenador'     => 'required'
             ]);
 
         try{
-        //creo el rol y local
-            DB::table('person_role_local')->insert(
-                ['role_id' => 4,
-            'person_id' => $request['nombre'],//codigo
-            'local_id' => session('sede')
-            ]
-            );  
+            //borro los roles del cliente en otra sede si hubiera
+            Person_Role_Local::where('role_id',4)->where('person_id',$request['nombre'])->delete();
+
+            //creo el rol y local
+            $person_role_local = new Person_Role_Local;
+            $person_role_local->role_id = 4;
+            $person_role_local->person_id = $request['nombre'];//codigo
+            $person_role_local->local_id = session('sede');
+            $person_role_local->save();
+
+            //actualizo su entrenador
+            $person_role_local->person->trainer_id=$request['entrenador'];
+            $person_role_local->person->save();
+
+            //actualizar el session rol        
+            if($request['nombre'] == Auth::user()->person->id ){
+                $roles = session('roles');
+                array_push($roles,'Cliente');
+                session(['roles' => $roles]); 
+            } 
+            
             return redirect()->route('client.index')->with('success', 'El cliente se ha asignado con éxito para la sede '.Local::find(session('sede'))->name);
 
         } catch (Exception $e) {
@@ -83,9 +120,11 @@ class ClientController extends Controller
             'fecha_nacimiento'     => 'date|required|before:today',
             'documento'     => 'unique:people,num_doc|digits_between:6,15|required|max:15',            
             'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',        
-            'foto'        => 'nullable|file'   
+            'foto'        => 'nullable|file'  ,
+            'entrenador' =>'required' 
             
             ]);
+        // dd($request);
 
         if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
             return redirect()->back()->with('error', 'Número de DNI inválido');
@@ -117,6 +156,7 @@ class ClientController extends Controller
             $client->phone      = $request['telefono'];
             $client->birthday   = $request['fecha_nacimiento'];
             $client->user_id   = $user->id; //usuario creado antes
+            $client->trainer_id   = $request['entrenador']; //su entrenador
             $client->save();
 
 
@@ -155,15 +195,15 @@ class ClientController extends Controller
         $client = Person::find($id);
 
      // dd($client->birthday);
-      $birthDate = explode("-", $client->birthday);
-      $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md") ? ((date("Y") - $birthDate[0]) - 1): (date("Y") - $birthDate[0]));
+        $birthDate = explode("-", $client->birthday);
+        $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md") ? ((date("Y") - $birthDate[0]) - 1): (date("Y") - $birthDate[0]));
 
-      $data = [
-             'client'    =>  $client,
-            'age'        => $age
-      ];
-      return view('client.show', $data);
-  }
+        $data = [
+        'client'    =>  $client,
+        'age'        => $age
+        ];
+        return view('client.show', $data);
+    }
 
     /**
      * Show the form for editing the specified resource.

@@ -45,8 +45,8 @@
                         <thead>
                             <tr>
                                 <th class="center" data-field="options">Elegir</th>
-                                <th class="center" data-field="id">Código</th>
                                 <th data-field="name">Nombre</th>                               
+
                                 
                             </tr>
                         </thead>
@@ -60,7 +60,6 @@
                                         <label for="{{ $muscle->id }}"></label>
                                     </p>
                                 </td>
-                                <td class="center">{{ $muscle->id }}</td>
                                 <td>{{ $muscle->name }}</td>                              
                             </tr>   
 
@@ -115,7 +114,7 @@
 
         });
 
-        //    $("select").val('10');
+        // $("select").val('25');
         $('select').addClass("browser-default");
         $('select').material_select();
 

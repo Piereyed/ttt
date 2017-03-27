@@ -21,8 +21,7 @@
     </div>
 
     <div class="row">
-        <div class="col s12">           
-
+        <div class="col s12">
             <span class="h1">Clientes</span>
             <!-- fixed action buttons -->
             <div class="fixed-action-btn click-to-toggle">
@@ -52,7 +51,8 @@
                                 <th class="center" data-field="options">Elegir</th>
                                 <th class="center" data-field="id">DNI</th>
                                 <th data-field="name">Nombres</th>
-                                <th data-field="lastname1">Apellidos</th>                                
+                                <th data-field="lastname1">Apellidos</th>
+                                <th data-field="trainer">Entrenador</th>                                
                             </tr>
                         </thead>
 
@@ -61,23 +61,24 @@
                             <tr>
                                 <td class="opcion center">
                                     <p>
-                                        <input type="checkbox" class="filled-in" id="{{ $client->id }}" />
-                                        <label for="{{ $client->id }}"></label>
+                                        <input type="checkbox" class="filled-in" id="{{ $client->person->id }}" />
+                                        <label for="{{ $client->person->id }}"></label>
                                     </p>
                                 </td>
-                                <td class="center">{{ $client->num_doc }}</td>
-                                <td>{{ $client->name }}</td>
-                                <td>{{ $client->lastname1. " " . $client->lastname2 }}</td>
+                                <td class="center">{{ $client->person->num_doc }}</td>
+                                <td>{{ $client->person->name }}</td>
+                                <td>{{ $client->person->lastname1. " " . $client->person->lastname2 }}</td>
+                                <td>{{ $client->person->trainer->name. " " . $client->person->trainer->lastname1 }}</td>
                             </tr>   
 
                             <!--     modal-->
-                            <div id="{{'modal_'.$client->id }}" class="modal bottom-sheet">
+                            <div id="{{'modal_'.$client->person->id }}" class="modal bottom-sheet">
                                 <div class="modal-content">
                                     <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> CUIDADO</h4>
                                     <p>Está a punto de eliminar este elemento.</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="{{ route('client.delete', $client->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
+                                    <a href="{{ route('client.delete', $client->person->id) }}" class=" modal-action modal-close waves-effect waves-green btn red">ELIMINAR</a>
                                     <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CANCELAR</a>
                                 </div>
                             </div>
@@ -112,14 +113,35 @@
                       <input type="text" id="nombre" name="nombre" hidden >
                   </div>
               </div>
-          </form>
-      </div>
+              <input hidden type="text" id="entrenador" name="entrenador">
+              <h5>Entrenador</h5>
+              <div class="row">
+                @foreach($trainers as $trainer)
+                <div class="col s12 m4 l3">
+                    <div class="card">
+                        <div class="card-image waves-effect waves-block waves-light">
+                          <img class="activator" src="{{ asset('storage/'.$trainer->photo)  }}">
+                      </div>
+                      <div class="card-content">
+                          <span class="card-title activator grey-text text-darken-4">{{$trainer->name.' '.$trainer->lastname1}}</span>
+                          <p>Asignados: 3</p>
+                          <input class="trainerid" type="tex" hidden value="{{$trainer->id}}">
+                      </div>
 
+                  </div>
+              </div>
+              @endforeach
+          </div>
+
+
+      </form>
   </div>
-  <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left">clear</i>Cancelar</a>
-      <button type="submit" form="asignar_cliente" class="waves-effect waves-light btn "><i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar</button>
-  </div>
+
+</div>
+<div class="modal-footer">
+  <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left">clear</i>Cancelar</a>
+  <button type="submit" form="asignar_cliente" class="waves-effect waves-light btn "><i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar</button>
+</div>
 </div>
 
 
@@ -194,6 +216,12 @@
 
         $( "#name" ).change(function() {
             $("#nombre").val(codigos[$( "#name" ).val()]);
+        });
+
+        $(".card").on("click",function(){
+            $(".card").css("border","none");
+            $(this).css("border","1px solid green");
+            $("#entrenador").val($(this).find(".trainerid").val());
         });
 
     });

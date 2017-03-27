@@ -98,11 +98,41 @@ Route::group(['middleware' => 'auth'], function(){
     Route::group(['prefix' => 'evaluaciones'], function(){    
         Route::get('/', ['as' => 'evaluation.index', 'uses' => 'EvaluationController@index']);
         Route::get('create/{id}', ['as' => 'evaluation.create', 'uses' => 'EvaluationController@create']);
-        Route::post('create', ['as' => 'evaluation.store', 'uses' => 'EvaluationController@store']);
+        Route::post('create/{id}', ['as' => 'evaluation.store', 'uses' => 'EvaluationController@store']);
         Route::get('show/{id}', ['as' => 'evaluation.show', 'uses' => 'EvaluationController@show']);
         Route::get('edit/{id}', ['as' => 'evaluation.edit', 'uses' => 'EvaluationController@edit']);
         Route::post('edit/{id}', ['as' => 'evaluation.update', 'uses' => 'EvaluationController@update']);
         Route::get('delete/{id}', ['as' => 'evaluation.delete', 'uses' => 'EvaluationController@destroy']);
+    });
+
+    Route::group(['prefix' => 'mis_atletas'], function(){    
+        Route::get('/{id}', ['as' => 'myathletes.index', 'uses' =>'TrainerController@index_my_athletes']);
+        // Route::get('create', ['as' => 'athlete.create', 'uses' => 'ExerciseController@create']);
+        // Route::post('create', ['as' => 'athlete.store', 'uses' => 'ExerciseController@store']);
+        // Route::get('show/{id}', ['as' => 'athlete.show', 'uses' => 'ExerciseController@show']);
+        // Route::get('edit/{id}', ['as' => 'athlete.edit', 'uses' => 'ExerciseController@edit']);
+        // Route::post('edit/{id}', ['as' => 'athlete.update', 'uses' => 'ExerciseController@update']);
+        // Route::get('delete/{id}', ['as' => 'athlete.delete', 'uses' => 'ExerciseController@destroy']);
+    });
+
+    Route::group(['prefix' => 'objetivos'], function(){    
+        Route::get('/', ['as' => 'goal.index', 'uses' => 'GoalController@index']);
+        Route::get('create', ['as' => 'goal.create', 'uses' => 'GoalController@create']);
+        Route::post('create', ['as' => 'goal.store', 'uses' => 'GoalController@store']);
+        Route::get('show/{id}', ['as' => 'goal.show', 'uses' => 'GoalController@show']);
+        Route::get('edit/{id}', ['as' => 'goal.edit', 'uses' => 'GoalController@edit']);
+        Route::post('edit/{id}', ['as' => 'goal.update', 'uses' => 'GoalController@update']);
+        Route::get('delete/{id}', ['as' => 'goal.delete', 'uses' => 'GoalController@destroy']);
+    });
+
+    Route::group(['prefix' => 'periodos'], function(){    
+        Route::get('/', ['as' => 'period.index', 'uses' => 'PeriodController@index']);
+        Route::get('create', ['as' => 'period.create', 'uses' => 'PeriodController@create']);
+        Route::post('create', ['as' => 'period.store', 'uses' => 'PeriodController@store']);
+        Route::get('show/{id}', ['as' => 'period.show', 'uses' => 'PeriodController@show']);
+        Route::get('edit/{id}', ['as' => 'period.edit', 'uses' => 'PeriodController@edit']);
+        Route::post('edit/{id}', ['as' => 'period.update', 'uses' => 'PeriodController@update']);
+        Route::get('delete/{id}', ['as' => 'period.delete', 'uses' => 'PeriodController@destroy']);
     });
 
 });
@@ -112,3 +142,4 @@ Route::group(['middleware' => 'auth'], function(){
 Route::post('/searchTrainer', ['as' => 'search.trainer','uses' => 'TrainerController@search']);//NO TOCAR!
 Route::post('/searchClient', ['as' => 'search.client','uses' => 'ClientController@search']);//NO TOCAR!
 Route::post('/searchAdmin', ['as' => 'search.admin','uses' => 'AdminController@search']);//NO TOCAR!
+Route::post('/getZones/{id}', ['as' => 'search.zones','uses' => 'ExerciseController@getZones']);//NO TOCAR!

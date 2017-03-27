@@ -15,22 +15,29 @@ class TrainerController extends Controller
 {
     public function index()
     {
-     $trainers = DB::table('person_role_local')
-     ->join('people', 'people.id', '=', 'person_role_local.person_id')
-     ->select('people.*')
-     ->where('local_id',session('sede'))
-     ->where('role_id',3)->get();
+       $trainers = DB::table('person_role_local')
+       ->join('people', 'people.id', '=', 'person_role_local.person_id')
+       ->select('people.*')
+       ->where('local_id',session('sede'))
+       ->where('role_id',3)->get();
 
 
 
-     $data = [
-     'trainers'    =>  $trainers            
-     ];
-     return view('trainer.index', $data);
- }
+       $data = [
+       'trainers'    =>  $trainers            
+       ];
+       return view('trainer.index', $data);
+   }
+   public function index_my_athletes($id){
+    $athletes = Person::where('trainer_id',$id)->get();
+    $data = [
+    'athletes'    =>  $athletes            
+    ];
+    return view('trainer.index_my_athletes', $data);
+}
 
- public function search()
- {
+public function search()
+{
 
     $query = "
     SELECT 
@@ -68,7 +75,14 @@ public function storerole(Request $request){
             'person_id' => $request['nombre'],//codigo
             'local_id' => session('sede')
             ]
-        );  
+            ); 
+
+        //actualizar el session rol        
+        if($request['nombre'] == Auth::user()->person->id ){
+            $roles = session('roles');
+            array_push($roles,'Entrenador');
+            session(['roles' => $roles]); 
+        } 
         return redirect()->route('trainer.index')->with('success', 'El entrenador se ha asignado con éxito para la sede '.Local::find(session('sede'))->name);
 
     } catch (Exception $e) {

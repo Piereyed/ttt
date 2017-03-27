@@ -17,12 +17,13 @@ class CreateExerciseMuscleTable extends Migration
             $table->increments('id');
             $table->integer('exercise_id')->unsigned();
             $table->integer('muscle_id')->unsigned();
-            $table->timestamps();
+            $table->integer('zone_id')->nullable()->unsigned();
         });
 
          Schema::table('exercise_muscle', function (Blueprint $table) {
              $table->foreign('exercise_id')->references('id')->on('exercises');
              $table->foreign('muscle_id')->references('id')->on('muscles');
+             $table->foreign('zone_id')->references('id')->on('zones');
         });
     }
 
@@ -36,6 +37,7 @@ class CreateExerciseMuscleTable extends Migration
         Schema::table('exercise_muscle', function (Blueprint $table) {
             $table->dropForeign('exercise_muscle_exercise_id_foreign');
             $table->dropForeign('exercise_muscle_muscle_id_foreign');
+            $table->dropForeign('exercise_muscle_zone_id_foreign');
         });
         
         Schema::dropIfExists('exercise_muscle');

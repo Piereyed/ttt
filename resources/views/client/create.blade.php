@@ -1,4 +1,14 @@
 @extends('index')
+
+@section('styles')
+<style type="text/css">
+    .card{
+        cursor: pointer;
+        
+    }
+</style>
+@endsection
+
 @section('content')
 
 
@@ -116,6 +126,26 @@
                 </div>
             </div>
 
+            <h5>Entrenador</h5>
+
+            <div class="row">
+            @foreach($trainers as $trainer)
+                <div class="col s6 m4 l3">
+                    <div class="card">
+                        <div class="card-image waves-effect waves-block waves-light">
+                          <img class="activator" src="{{ asset('storage/'.$trainer->photo)  }}">
+                      </div>
+                      <div class="card-content">
+                          <span class="card-title activator grey-text text-darken-4">{{$trainer->name.' '.$trainer->lastname1}}</span>
+                          <p>Asignados: 3</p>
+                          <input class="trainerid" type="tex" hidden value="{{$trainer->id}}">
+                      </div>
+
+                  </div>
+              </div>
+              @endforeach
+          </div>
+
 
 
             <div class="row"  style="text-align:center">
@@ -128,9 +158,13 @@
                     </button >
                 </div>
             </div>
-        </form>
+            <input hidden type="text" id="entrenador" name="entrenador">
 
-    </div>
+            
+
+      </form>
+
+  </div>
 
 </div>
 </div>
@@ -265,6 +299,12 @@
             $(".fa-female").css("color","#9e9e9e");
             $(".fa-male").css("color","blue"); 
         }
+    });
+
+    $(".card").on("click",function(){
+        $(".card").css("border","none");
+        $(this).css("border","1px solid green");
+        $("#entrenador").val($(this).find(".trainerid").val());
     });
 
 </script>
