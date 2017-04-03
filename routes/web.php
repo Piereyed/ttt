@@ -15,7 +15,7 @@ Route::get('/',['as'=>'inicio',function () {
     return view('index');
 }] )->middleware('auth');
 
-Route::get('/login', function () {
+Route::get('/login', function () {    
     return view('auth.login');
 });
 
@@ -28,8 +28,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
 
-    //Route::get('/home', 'HomeController@index');
-    Route::get('/inicio_sedes', 'HomeController@locals');
+    Route::get('/inicio_sedes','HomeController@locals')->name('inicio_sedes');;
     Route::post('/entrar_sede', 'HomeController@entrar');
     
     Route::group(['prefix' => 'administradores'], function(){    
