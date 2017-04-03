@@ -21,7 +21,7 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-   
+
     protected $redirectTo = '/inicio_sedes';
 
 
@@ -35,5 +35,11 @@ class LoginController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
+
+
+    // protected function redirectTo(){  
+    
+    //     return '/inicio_sedes';
+    // }
 
 }
