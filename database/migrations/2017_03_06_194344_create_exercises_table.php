@@ -17,8 +17,9 @@ class CreateExercisesTable extends Migration
             $table->increments('id');
             $table->string('name',100);
             $table->string('description',1000);
-            $table->string('photo',100)->nullable();
             $table->integer('type')->unsigned()->nullable();//0=> aerobico,1=>anaerobico
+            $table->boolean('use_weight');           
+            $table->string('photo',100)->nullable();
             $table->integer('training_phase_id')->unsigned();
             $table->integer('experience_id')->unsigned();            
             
@@ -27,7 +28,7 @@ class CreateExercisesTable extends Migration
         });
 
         Schema::table('exercises', function (Blueprint $table) {
-             $table->foreign('training_phase_id')->references('id')->on('training_phases');             
+             $table->foreign('training_phase_id')->references('id')->on('training_phases');
              $table->foreign('experience_id')->references('id')->on('experiences');       
         });
     }

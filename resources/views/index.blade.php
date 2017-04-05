@@ -146,7 +146,7 @@
                         <li><a href="{{ route('exercise.index') }}"><i class="material-icons left">fitness_center</i>Ejercicios</a></li>
                         <!-- <li><a href="{{ route('muscle.index') }}"><i class="material-icons left">accessibility</i>Músculos</a></li> -->
                         <li><a href="{{ route('goal.index') }}"><i class="material-icons left">gps_fixed</i>Objetivos</a></li>
-                        <li><a href="{{ route('period.index') }}"><i class="material-icons left">linear_scale</i>Periodos</a></li>
+                        <li><a href="{{ route('microcycle.index') }}"><i class="material-icons left">linear_scale</i>Microciclos</a></li>
                     </ul>
 
                     @endif

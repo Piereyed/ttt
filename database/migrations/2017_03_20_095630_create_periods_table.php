@@ -15,10 +15,10 @@ class CreatePeriodsTable extends Migration
     {
         Schema::create('periods', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name',100)->nullable();
-            
-            $table->softDeletes();
-            $table->timestamps();
+            $table->string('name',100);
+            $table->string('specific_goal',100);
+            $table->integer('rest_duration')->unsigned(); //en segundos
+            $table->integer('number_series')->unsigned();
         });
     }
 

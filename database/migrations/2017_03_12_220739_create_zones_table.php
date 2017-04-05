@@ -16,11 +16,7 @@ class CreateZonesTable extends Migration
         Schema::create('zones', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',100)->nullable();
-            $table->string('photo',100)->nullable();
-            $table->integer('muscle_id')->unsigned()->nullable(); 
-
-            $table->softDeletes();
-            $table->timestamps();
+            $table->integer('muscle_id')->unsigned()->nullable();
         });
 
         Schema::table('zones', function (Blueprint $table) {

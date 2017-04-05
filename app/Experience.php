@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Experience extends Model
 {
-    use SoftDeletes;
+    public $timestamps = false;
+
+    public function goals(){        
+        return $this->belongsToMany('App\Goal');
+    }
 }

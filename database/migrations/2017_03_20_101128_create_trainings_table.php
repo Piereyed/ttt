@@ -15,12 +15,12 @@ class CreateTrainingsTable extends Migration
     {
         Schema::create('trainings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('letter',1)->nullable();
-            $table->integer('resting_time')->unsigned();
+            $table->string('letter',1);
+            $table->integer('level')->unsigned()->nullable(); // 1, 2, 3
+            $table->integer('type_session')->unsigned(); // 1->musculacion, 2=>cardio
+            $table->integer('resting_time')->unsigned();//en segundos
             $table->integer('routine_id')->unsigned();
             $table->integer('strength_type_id')->unsigned();
-
-            $table->timestamps();
         });
 
         Schema::table('trainings', function (Blueprint $table) {

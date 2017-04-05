@@ -15,11 +15,8 @@ class CreateTrainingPhasesTable extends Migration
     {
         Schema::create('training_phases', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name',100)->nullable();
-            $table->integer('max_duration')->unsigned()->nullable();
-            
-            $table->softDeletes();
-            $table->timestamps();
+            $table->string('name',100);
+            $table->integer('max_duration')->unsigned()->nullable(); // en minutos            
         });
     }
 

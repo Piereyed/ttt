@@ -12,27 +12,15 @@ class GoalsTableSeeder extends Seeder
     public function run()
     {
         DB::table('goals')->insert([  
-            'name' => 'Tonificar',
-            'created_at' => date("Y-m-d H:i:s"),         
-            'updated_at' => date("Y-m-d H:i:s")         
+            'name' => 'Aprendizaje'
         ]);
 
         DB::table('goals')->insert([  
-            'name' => 'Ganar masa muscular',
-            'created_at' => date("Y-m-d H:i:s"),         
-            'updated_at' => date("Y-m-d H:i:s")         
+            'name' => 'Acondicionamiento físico'
         ]);
 
         DB::table('goals')->insert([  
-            'name' => 'Perder peso',    
-            'created_at' => date("Y-m-d H:i:s"),         
-            'updated_at' => date("Y-m-d H:i:s")         
-        ]);
-
-        DB::table('goals')->insert([  
-            'name' => 'Adaptar',
-            'created_at' => date("Y-m-d H:i:s"),         
-            'updated_at' => date("Y-m-d H:i:s")         
+            'name' => 'Competición/Fitness'
         ]);
     }
 }

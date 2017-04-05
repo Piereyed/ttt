@@ -14,10 +14,12 @@ class CreateTrainingExercisesTable extends Migration
     public function up()
     {
         Schema::create('training_exercises', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('exercise_id')->unsigned();
+            $table->increments('id');            
+            $table->integer('time')->unsigned()->nullable(); //seconds
+            $table->integer('min_heart_rate')->unsigned()->nullable();
+            $table->integer('max_heart_rate')->unsigned()->nullable();
+            $table->integer('exercise_id')->unsigned();    
             $table->integer('training_detail_id')->unsigned();
-            $table->integer('time')->unsigned(); //seconds
 
             $table->timestamps();
         });

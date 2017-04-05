@@ -5,22 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Goal;
 use App\Experience;
-use App\Period;
-use App\Measure;
-use Illuminate\Support\Facades\DB; //para usar DB
 
-
-class GoalController extends Controller
+class MicrocycleController extends Controller
 {
-    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $goals = Goal::get();
-        
-        $data = [
-        'goals'    =>  $goals,
-        ];
-        return view('goal.index', $data);
+        //
     }
 
     /**
@@ -30,22 +25,16 @@ class GoalController extends Controller
      */
     public function create()
     {
-        $measures = Measure::all();
+       $goals = Goal::all();
+       $experiences = Experience::all();
 
-        $data = [
-        'measures'    =>  $measures
-        ];
+       $data = [
+       'goals'    =>  $goals,
+       'experiences'    =>  $experiences
+       ];
 
-        return view('goal.create', $data);
-        
-    }
-
-     public function getGoals($id_experience)
-    {
-        $goals = Experience::find($id_experience)->goals;
-        echo json_encode($goals);
-        // echo "ok";
-    }
+       return view('microcycle.create', $data);
+   }
 
     /**
      * Store a newly created resource in storage.

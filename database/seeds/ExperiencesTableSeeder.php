@@ -13,20 +13,14 @@ class ExperiencesTableSeeder extends Seeder
     public function run()
     {
          DB::table('experiences')->insert([  
-            'name' => 'Principiante',    
-            'created_at' => date("Y-m-d H:i:s"),         
-            'updated_at' => date("Y-m-d H:i:s")         
+            'name' => 'Principiante'
         ]);
 
          DB::table('experiences')->insert([  
-            'name' => 'Intermedio',    
-            'created_at' => date("Y-m-d H:i:s"),         
-            'updated_at' => date("Y-m-d H:i:s")         
+            'name' => 'Intermedio'
         ]);
          DB::table('experiences')->insert([  
-            'name' => 'Avanzado',    
-            'created_at' => date("Y-m-d H:i:s"),         
-            'updated_at' => date("Y-m-d H:i:s")         
+            'name' => 'Avanzado'
         ]);
     }
 }

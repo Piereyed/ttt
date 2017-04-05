@@ -15,7 +15,7 @@ class CreateTrainingDetailsTable extends Migration
     {
         Schema::create('training_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('type')->unsigned();  // 1=> simple, 2=> compuesta, 3=>superserie
+            $table->integer('type')->unsigned();  // 1=> simple, 2=> compuesta, 3=>superserie, 4=>triserie, 5=>serie gigante
             $table->integer('training_id')->unsigned();
 
             $table->timestamps();

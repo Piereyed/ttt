@@ -13,14 +13,12 @@ class CreateProgramsTable extends Migration
             $table->increments('id');
             $table->integer('number')->unsigned();
             $table->integer('person_id')->unsigned();
-            $table->integer('trainer_id')->unsigned();
             $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::table('programs', function (Blueprint $table) {
              $table->foreign('person_id')->references('id')->on('people');             
-             $table->foreign('trainer_id')->references('id')->on('people');             
         });
     }
 
@@ -29,7 +27,6 @@ class CreateProgramsTable extends Migration
     {
         Schema::table('programs', function (Blueprint $table) {
             $table->dropForeign('programs_person_id_foreign');            
-            $table->dropForeign('programs_trainer_id_foreign');            
         });
 
         Schema::dropIfExists('programs');

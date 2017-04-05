@@ -124,14 +124,14 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('delete/{id}', ['as' => 'goal.delete', 'uses' => 'GoalController@destroy']);
     });
 
-    Route::group(['prefix' => 'periodos'], function(){    
-        Route::get('/', ['as' => 'period.index', 'uses' => 'PeriodController@index']);
-        Route::get('create', ['as' => 'period.create', 'uses' => 'PeriodController@create']);
-        Route::post('create', ['as' => 'period.store', 'uses' => 'PeriodController@store']);
-        Route::get('show/{id}', ['as' => 'period.show', 'uses' => 'PeriodController@show']);
-        Route::get('edit/{id}', ['as' => 'period.edit', 'uses' => 'PeriodController@edit']);
-        Route::post('edit/{id}', ['as' => 'period.update', 'uses' => 'PeriodController@update']);
-        Route::get('delete/{id}', ['as' => 'period.delete', 'uses' => 'PeriodController@destroy']);
+    Route::group(['prefix' => 'microciclos'], function(){    
+        Route::get('/', ['as' => 'microcycle.index', 'uses' => 'MicrocycleController@index']);
+        Route::get('create', ['as' => 'microcycle.create', 'uses' => 'MicrocycleController@create']);
+        Route::post('create', ['as' => 'microcycle.store', 'uses' => 'MicrocycleController@store']);
+        Route::get('show/{id}', ['as' => 'microcycle.show', 'uses' => 'MicrocycleController@show']);
+        Route::get('edit/{id}', ['as' => 'microcycle.edit', 'uses' => 'MicrocycleController@edit']);
+        Route::post('edit/{id}', ['as' => 'microcycle.update', 'uses' => 'MicrocycleController@update']);
+        Route::get('delete/{id}', ['as' => 'microcycle.delete', 'uses' => 'MicrocycleController@destroy']);
     });
 
 });
@@ -142,4 +142,5 @@ Route::post('/searchTrainer', ['as' => 'search.trainer','uses' => 'TrainerContro
 Route::post('/searchClient', ['as' => 'search.client','uses' => 'ClientController@search']);//NO TOCAR!
 Route::post('/searchAdmin', ['as' => 'search.admin','uses' => 'AdminController@search']);//NO TOCAR!
 Route::post('/getZones/{id}', ['as' => 'search.zones','uses' => 'ExerciseController@getZones']);//NO TOCAR!
+Route::post('/getGoals/{id}', ['as' => 'search.goals','uses' => 'GoalController@getGoals']);//NO TOCAR!
 Route::post('/getMeasures/{id}', ['as' => 'client.measure','uses' => 'ClientController@getMeasures']);//NO TOCAR!

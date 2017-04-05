@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePeriodGoalTable extends Migration
+class CreatePyramidsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreatePeriodGoalTable extends Migration
      */
     public function up()
     {
-        Schema::create('period_goal', function (Blueprint $table) {
+        Schema::create('pyramids', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('goal_id')->unsigned();
+            $table->integer('percentage_rm')->unsigned();
             $table->integer('period_id')->unsigned();
-        });
-        Schema::table('period_goal', function (Blueprint $table) {
-             $table->foreign('goal_id')->references('id')->on('goals');
-             $table->foreign('period_id')->references('id')->on('periods');
+            
         });
 
+        Schema::table('pyramids', function (Blueprint $table) {
+             $table->foreign('period_id')->references('id')->on('periods');
+        });
     }
 
     /**
@@ -32,11 +32,10 @@ class CreatePeriodGoalTable extends Migration
      */
     public function down()
     {
-        Schema::table('period_goal', function (Blueprint $table) {
-            $table->dropForeign('period_goal_goal_id_foreign');
-            $table->dropForeign('period_goal_period_id_foreign');
+        Schema::table('pyramids', function (Blueprint $table) {
+            $table->dropForeign('pyramids_period_id_foreign');
         });
-
-        Schema::dropIfExists('period_goal');
+        
+        Schema::dropIfExists('pyramids');
     }
 }

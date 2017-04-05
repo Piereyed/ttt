@@ -18,8 +18,6 @@ class CreateMeasuresTable extends Migration
             $table->string('name',100)->nullable();
             $table->string('label',100)->nullable(); 
             $table->string('unity',10)->nullable(); //unidad de medida: kg, cm, %, -, etc
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 

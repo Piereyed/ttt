@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExperiencesTable extends Migration
+class AddFkToMusclesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateExperiencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('experiences', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name',100);            
+        Schema::table('muscles', function (Blueprint $table) {
+            $table->foreign('measure_id')->references('id')->on('measures');
         });
     }
 
@@ -26,6 +25,8 @@ class CreateExperiencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('experiences');
+        Schema::table('muscles', function (Blueprint $table) {
+            $table->dropForeign('muscles_measure_id_foreign');
+        });
     }
 }

@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-
-class TrainingPhase extends Model
+class Microcycle extends Model
 {
     public $timestamps = false;
+    
 }

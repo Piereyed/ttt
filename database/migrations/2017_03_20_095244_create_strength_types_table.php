@@ -16,10 +16,7 @@ class CreateStrengthTypesTable extends Migration
         Schema::create('strength_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',100)->nullable();
-            $table->string('description',1000)->nullable();
-
-            $table->softDeletes();
-            $table->timestamps();
+            $table->string('description',1000)->nullable();            
         });
     }
 

@@ -15,13 +15,11 @@ class CreateSeriesTable extends Migration
     {
         Schema::create('series', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('number')->unsigned()->nullable();
+            $table->integer('number')->unsigned();
             $table->integer('repetitions')->unsigned()->nullable();
             $table->float('weight', 8, 2)->nullable();
             $table->float('percentage_weight', 8, 2)->nullable();
-            $table->integer('training_exercise_id')->unsigned()->nullable();
-
-            $table->timestamps();
+            $table->integer('training_exercise_id')->unsigned();            
         });
 
         Schema::table('series', function (Blueprint $table) {
