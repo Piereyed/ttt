@@ -134,6 +134,16 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('delete/{id}', ['as' => 'microcycle.delete', 'uses' => 'MicrocycleController@destroy']);
     });
 
+    Route::group(['prefix' => 'piramides'], function(){    
+        Route::get('/', ['as' => 'pyramid.index', 'uses' => 'PyramidController@index']);
+        Route::get('create', ['as' => 'pyramid.create', 'uses' => 'PyramidController@create']);
+        Route::post('create', ['as' => 'pyramid.store', 'uses' => 'PyramidController@store']);
+        Route::get('show/{id}', ['as' => 'pyramid.show', 'uses' => 'PyramidController@show']);
+        Route::get('edit/{id}', ['as' => 'pyramid.edit', 'uses' => 'PyramidController@edit']);
+        Route::post('edit/{id}', ['as' => 'pyramid.update', 'uses' => 'PyramidController@update']);
+        Route::get('delete/{id}', ['as' => 'pyramid.delete', 'uses' => 'PyramidController@destroy']);
+    });
+
 });
 
 

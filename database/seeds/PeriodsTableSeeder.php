@@ -14,7 +14,7 @@ class PeriodsTableSeeder extends Seeder
     	DB::table('periods')->insert([  
             'name' => 'Iniciación',
             'specific_goal' => 'Aprender',
-            'rest_duration' => 2,
+            'rest_duration' => 120,
     		'number_series' => 4
     		]);
 

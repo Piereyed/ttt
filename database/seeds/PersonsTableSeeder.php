@@ -40,7 +40,8 @@ class PersonsTableSeeder extends Seeder
         ]);
   
         DB::table('people')->insert([ 
-            'sex' => 'H' ,           
+            'sex' => 'H' ,   
+            'type_doc' => 0 ,         
             'num_doc' => '32329087' ,           
             'name' => 'Alex' ,           
             'lastname1' => 'Aranibar' ,           
@@ -86,6 +87,33 @@ class PersonsTableSeeder extends Seeder
         DB::table('person_role_local')->insert([
             'person_id' => '3', 
             'role_id' => '3',
+            'local_id' => '1',
+        ]);
+
+        //cliente 1
+        DB::table('users')->insert([  // se creo el usuario
+            'name' => 'Sharvel Irigoyen',    
+            'email' => 'elmaster_11@hotmail.com',         
+            'password' => bcrypt('123')            
+        ]);
+        DB::table('people')->insert([ 
+            'sex' => 'H' ,           
+            'type_doc' => 0 ,           
+            'num_doc' => '91234543' ,           
+            'name' => 'Sharvel' ,           
+            'lastname1' => 'Irigoyen' ,           
+            'lastname2' => 'Matos' ,           
+            'address' => 'Surco 2323232',          
+            'email' => 'elmaster@hotmail.com',          
+            'birthday' => '1991-06-22',          
+            'user_id' => 4      ,                  
+            'photo' => 'fotos_perfil/4.jpg',
+            'trainer_id' => 2
+        ]);
+        
+        DB::table('person_role_local')->insert([
+            'person_id' => '4', 
+            'role_id' => '4',
             'local_id' => '1',
         ]);
     }

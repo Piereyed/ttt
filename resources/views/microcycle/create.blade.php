@@ -4,6 +4,10 @@
     input{
         text-align: center;
     }
+
+    .micro{
+        margin-bottom: 20px;
+    }
 </style>
 @endsection
 @section('content')
@@ -42,7 +46,7 @@
 
                         <div class="input-field col m4  s12">     
                             <i class="material-icons prefix" >gps_fixed</i>                       
-                            <select id="goal" name="goal" required="required" class="validate">
+                            <select id="objetivo" name="objetivo" required="required" class="validate">
                                 <option value="" disabled selected>Seleccione</option>
                                 
                             </select>
@@ -63,16 +67,21 @@
                         <div class="col center s1">D</div> 
                     </div>
                     <div class="micros row">
-                        <div class="col offset-s3 center s1">
-                            <select>
+                        <div class="micro col offset-s3 center s1">
+                            <select name="letra[0]" class="miselect">
                                 <option value="descanso" selected>-</option>
                                 <option value="a">A</option>
+                                <option value="a1">A1</option>
                                 <option value="b">B</option>
+                                <option value="b1">B1</option>
                                 <option value="c">C</option>
+                                <option value="c1">C1</option>
                                 <option value="d">D</option>
+                                <option value="d1">D1</option>
                                 <option value="e">E</option>
+                                <option value="e1">E1</option>
                             </select>
-                            <select>
+                            <select name="tipo_sesion[0]" class="miselect">
                                 <option value="m" selected>Musc.</option>
                                 <option value="c">Card.</option>
                             </select>
@@ -108,17 +117,19 @@
     var count = 1;
     $( document ).ready(function(){
         
-        $('select').addClass("browser-default");
+        $('.miselect').addClass("browser-default");
         $('select').material_select();
 
         $("#add").on("click",function(){
             count++;
             if(count % 7 == 1){
-                $(".micros").append('<div class="col offset-s3 s1"> <input type="text" name=""> </div>');
+                $(".micros").append('<div class="micro col offset-s3 center s1"><select name="letra['+(count-1)+']" class="miselect">                                <option value="descanso" selected>-</option>                                <option value="a">A</option>                                <option value="a1">A1</option>                                <option value="b">B</option>                                <option value="b1">B1</option>                                <option value="c">C</option>                                <option value="c1">C1</option>                                <option value="d">D</option>                                <option value="d1">D1</option>                                <option value="e">E</option>                                <option value="e1">E1</option>                            </select>                            <select name="tipo_sesion['+(count-1)+']" class="miselect">                                <option value="m" selected>Musc.</option>                                <option value="c">Card.</option>                            </select>                        </div>');
             }
             else{
-                $(".micros").append('<div class="col s1"> <input type="text" name=""> </div>');
+                $(".micros").append('<div class="micro col center s1"><select name="letra['+(count-1)+']" class="miselect">                                <option value="descanso" selected>-</option>                                <option value="a">A</option>                                <option value="a1">A1</option>                                <option value="b">B</option>                                <option value="b1">B1</option>                                <option value="c">C</option>                                <option value="c1">C1</option>                                <option value="d">D</option>                                <option value="d1">D1</option>                                <option value="e">E</option>                                <option value="e1">E1</option>                            </select>                            <select name="tipo_sesion['+(count-1)+']" class="miselect">                                <option value="m" selected>Musc.</option>                                <option value="c">Card.</option>                            </select>                        </div>');
             }
+            $('.miselect').addClass("browser-default");
+            $('select').material_select();
             
         });
 
@@ -131,19 +142,19 @@
             dataType: 'json',            
             success: function(goals) {      
                 //vacio el select          
-                $('#goal option').remove();
-                $("#goal").append('<option value="" disabled selected>Seleccione</option>');
-                $('#goal').material_select('');
+                $('#objetivo option').remove();
+                $("#objetivo").append('<option value="" disabled selected>Seleccione</option>');
+                $('#objetivo').material_select('');
                 //llenar el select de zonas
                 var size = goals.length;                
                 for(var i = 0; i < size; i++){
-                    $("#goal").append($('<option>', {
+                    $("#objetivo").append($('<option>', {
                         value: goals[i]['id'],
                         text: goals[i]['name']
                     }));
                 }
 
-                $('#goal').material_select();
+                $('#objetivo').material_select();
 
             },
             error: function(data) {

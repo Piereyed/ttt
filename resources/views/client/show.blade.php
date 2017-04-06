@@ -69,7 +69,11 @@
     </div>
   </div>
   <div class="col s12">
-    <canvas id="myChart" width="400" height="400"></canvas>
+    <canvas id="muscular_chart" width="400" height="400"></canvas>
+  </div>
+
+  <div class="col s12">
+    <canvas id="measures_chart" width="400" height="400"></canvas>
   </div>
 </div>
 
@@ -83,8 +87,10 @@
 
 @section('scripts')
 <script>
+  var colors = ["red","green","blue","yellow", "purple","orange","brown","coral","cyan","#26a69a"]
   var arrr;
-  var ctx = $("#myChart");
+  var ctx = $("#muscular_chart");
+  var ctx2 = $("#measures_chart");
 
   Chart.defaults.global.defaultFontSize = 20;
   Chart.defaults.global.responsiveAnimationDuration = 1000;
@@ -102,14 +108,16 @@
       dataType: 'json',            
       success: function(arr) {                
         var size = arr.length;  
-        arrr = arr;
-        arrlabels=[];    //size n 
-        arrmeasures=[];  //size 19             
+        
+        arrlabels=[];    //size n
+        arrmeasures1=[];  //size 19
+        arrmeasures2=[];  //size 19
         for(var i = 0; i < size; i++){
           arrlabels.push(arr[i][0]['created_at']);
         }
 
-        for (var j = 0; j < 19 ; j++) { 
+        //primer grafico
+        for (var j = 0; j < 10 ; j++) {
           var values = [];
 
           for(var i = 0; i < size; i++){
@@ -118,12 +126,30 @@
 
           var obj = {
             label: arr[0][1][j]['name'],        
-            borderColor: "red",
-            backgroundColor: "red",
+            borderColor: colors[j],
+            backgroundColor: colors[j],
             data: values,  
           }
 
-          arrmeasures.push(obj);
+          arrmeasures1.push(obj);
+        }
+
+        //segundo grafico
+        for (var j = 11; j < 16 ; j++) {
+          var values = [];
+
+          for(var i = 0; i < size; i++){
+            values.push(arr[i][1][j]['pivot']['value']); 
+          }
+
+          var obj = {
+            label: arr[0][1][j]['name'],        
+            borderColor: colors[j-11],
+            backgroundColor: colors[j-11],
+            data: values,  
+          }
+
+          arrmeasures2.push(obj);
         }
 
 
@@ -132,7 +158,7 @@
           type: 'line',
           data: {
             labels: arrlabels,
-            datasets: arrmeasures
+            datasets: arrmeasures1
           },
           options: {
 
@@ -157,7 +183,43 @@
             legend: {
               display: true,
               labels: {
-                fontColor: 'rgb(255, 99, 132)'
+                fontColor: '#616161'
+              }
+            }
+          }
+        });
+
+        //segundo chart
+        var myChart2 = new Chart(ctx2, {
+          type: 'line',
+          data: {
+            labels: arrlabels,
+            datasets: arrmeasures2
+          },
+          options: {
+
+            title: {
+              display: true,
+              text: 'Progreso General',
+              fontSize:30
+            },
+
+            hover: {            
+              mode: 'nearest'
+            },
+
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero:true
+                }
+              }]
+            },
+
+            legend: {
+              display: true,
+              labels: {
+                fontColor: '#616161'
               }
             }
           }
