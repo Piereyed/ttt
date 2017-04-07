@@ -51,6 +51,7 @@ class EvaluationController extends Controller
     {
         $this->validate($request, [
         'experiencia'         => 'required',            
+        'objetivo'         => 'required',            
         'cuello'         => 'required|numeric',            
         'hombros'         => 'required|numeric'  ,          
         'pecho'         => 'required|numeric'     ,       
@@ -78,6 +79,7 @@ class EvaluationController extends Controller
 
         $person = Person::find($id);
         $person->experience_id = $request['experiencia'];
+        $person->goal_id = $request['objetivo'];
         $person->save();
 
         

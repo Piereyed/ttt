@@ -28,6 +28,10 @@ class Person extends Model
     public function experience(){
         return $this->belongsTo('App\Experience');
     }
+
+    public function goal(){
+        return $this->belongsTo('App\Goal');
+    }
     
     
 }

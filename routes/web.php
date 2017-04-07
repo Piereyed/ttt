@@ -144,6 +144,17 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('delete/{id}', ['as' => 'pyramid.delete', 'uses' => 'PyramidController@destroy']);
     });
 
+    Route::group(['prefix' => 'rutinas'], function(){    
+        
+        Route::get('/{id}', ['as' => 'routine.index', 'uses' => 'RoutineController@index']);
+        Route::get('create/{id}/{period}/{microcycle}', ['as' => 'routine.create', 'uses' => 'RoutineController@create']);        
+        Route::post('create/{id}', ['as' => 'routine.store', 'uses' => 'RoutineController@store']);
+        Route::get('show/{id}', ['as' => 'routine.show', 'uses' => 'RoutineController@show']);
+        Route::get('edit/{id}', ['as' => 'routine.edit', 'uses' => 'RoutineController@edit']);
+        Route::post('edit/{id}', ['as' => 'routine.update', 'uses' => 'RoutineController@update']);
+        Route::get('delete/{id}', ['as' => 'routine.delete', 'uses' => 'RoutineController@destroy']);
+    });
+
 });
 
 
@@ -154,3 +165,5 @@ Route::post('/searchAdmin', ['as' => 'search.admin','uses' => 'AdminController@s
 Route::post('/getZones/{id}', ['as' => 'search.zones','uses' => 'ExerciseController@getZones']);//NO TOCAR!
 Route::post('/getGoals/{id}', ['as' => 'search.goals','uses' => 'GoalController@getGoals']);//NO TOCAR!
 Route::post('/getMeasures/{id}', ['as' => 'client.measure','uses' => 'ClientController@getMeasures']);//NO TOCAR!
+Route::post('/getMicrocycles/{goal_id}/{experience_id}', ['as' => 'search.microcycles','uses' => 'MicrocycleController@getMicrocycles']);//NO TOCAR!
+Route::post('/getMicrocycle/{id}', ['as' => 'get.microcycle','uses' => 'MicrocycleController@getMicrocycle']);//NO TOCAR!

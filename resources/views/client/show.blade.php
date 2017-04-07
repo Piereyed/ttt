@@ -108,7 +108,7 @@
       dataType: 'json',            
       success: function(arr) {                
         var size = arr.length;  
-        
+        arrr=arr;
         arrlabels=[];    //size n
         arrmeasures1=[];  //size 19
         arrmeasures2=[];  //size 19

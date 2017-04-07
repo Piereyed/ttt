@@ -51,7 +51,7 @@
                 <div class="row">
                     <div class="input-field col s4 offset-s2 m4 offset-m4">
                         <i class="material-icons prefix">grade</i>
-                        <select id="experience" name="experiencia" required="required" class="validate">
+                        <select id="experiencia" name="experiencia" required="required" class="validate">
                             <option value="" disabled selected>Seleccione el nivel de experiencia</option>
                             @foreach($experiences as $experience)
                             <option value="{{$experience->id}}">{{$experience->name}}</option>
@@ -61,6 +61,19 @@
                     </div>
                 </div>
                 @endif
+
+                <!-- Objetivo -->                
+                <div class="row">
+                    <div class="input-field col s4 offset-s2 m4 offset-m4">
+                        <i class="material-icons prefix">gps_fixed</i>
+                        <select id="objetivo" name="objetivo" required="required" class="validate">
+                            <option value="" disabled selected>Seleccione el objetivo deseado</option>
+                            
+                        </select>
+                        <label>Objetivo</label>
+                    </div>
+                </div>
+                
                 
                 <!-- medidas -->
                 @foreach($measures as $measure)
@@ -96,32 +109,69 @@
 
 </div>
 
+<form id="formulario" method="post" novalidate="true" class="col s12">
+   <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
+</form>
+
 
 @endsection
 
 @section('scripts')
 <script>
-$("#porcentajeGrasa").on("change",function (){
-    cintura = $("#cintura").val();
-    cadera = $("#cadera").val() ;
-    peso = $("#peso").val();
-    talla = $("#talla").val();
-    porcgrasa = $("#porcentajeGrasa").val();
-    porcmasa = $("#porcentajeMasaMagra").val();
+    $("#porcentajeGrasa").on("change",function (){
+        cintura = $("#cintura").val();
+        cadera = $("#cadera").val() ;
+        peso = $("#peso").val();
+        talla = $("#talla").val();
+        porcgrasa = $("#porcentajeGrasa").val();
+        porcmasa = $("#porcentajeMasaMagra").val();
 
 
-    $("#grasa").val( porcgrasa * peso /100);
-    $("#porcentajeMasaMagra").val( 100 - porcgrasa  );
-    $("#masaMagra").val(          (100 -  porcgrasa) * peso /100 );
-    $("#imc").val( Math.round(peso / (talla * talla )*100)/100               );
-    $("#icc").val( Math.round( cintura / cadera *100)/100);
-    $("#ica").val( Math.round( cintura / talla * 100)/100);
+        $("#grasa").val( porcgrasa * peso /100);
+        $("#porcentajeMasaMagra").val( 100 - porcgrasa  );
+        $("#masaMagra").val(          (100 -  porcgrasa) * peso /100 );
+        $("#imc").val( Math.round(peso / (talla * talla )*100)/100               );
+        $("#icc").val( Math.round( cintura / cadera *100)/100);
+        $("#ica").val( Math.round( cintura / talla * 100)/100);
 
 
-});
-    
+    });
 
-    
+    var params = $('#formulario').serialize();
+    $("#experiencia").on("change",function (){
+
+       $.ajax({
+        type: 'POST',
+        url: '/getGoals/' + $(this).val(),
+        data: 'action=search&'+params,
+        dataType: 'json',            
+        success: function(goals) {      
+
+                //vacio el select          
+                $('#objetivo option').remove();
+                $("#objetivo").append('<option value="" disabled selected>Seleccione</option>');
+                $('#objetivo').material_select('');
+                //llenar el select de zonas
+                var size = goals.length;                
+                for(var i = 0; i < size; i++){
+                    $("#objetivo").append($('<option>', {
+                        value: goals[i]['id'],
+                        text: goals[i]['name']
+                    }));
+                }
+
+                $('#objetivo').material_select();
+            },
+            error: function(data) {
+                alert("Error al recuperar los objetivos.")
+            }
+        });
+
+   });
+
+
+
+
 
 </script>
 @endsection

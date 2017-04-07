@@ -29,6 +29,7 @@ class CreatePeopleTable extends Migration
             
             $table->integer('user_id')->unsigned();           
             $table->integer('experience_id')->unsigned()->nullable(); 
+            $table->integer('goal_id')->unsigned()->nullable(); 
 
             $table->integer('trainer_id')->unsigned()->nullable();           
             
@@ -39,6 +40,7 @@ class CreatePeopleTable extends Migration
         Schema::table('people', function (Blueprint $table) {
              $table->foreign('user_id')->references('id')->on('users');             
              $table->foreign('experience_id')->references('id')->on('experiences');
+             $table->foreign('goal_id')->references('id')->on('goals'); //problema
              $table->foreign('trainer_id')->references('id')->on('people');             
         });
     }
@@ -53,6 +55,7 @@ class CreatePeopleTable extends Migration
         Schema::table('people', function (Blueprint $table) {
             $table->dropForeign('people_user_id_foreign');            
             $table->dropForeign('people_experience_id_foreign');            
+            $table->dropForeign('people_goal_id_foreign');            
             $table->dropForeign('people_trainer_id_foreign');            
         });
         

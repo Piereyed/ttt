@@ -22,5 +22,8 @@ class ExperiencesTableSeeder extends Seeder
          DB::table('experiences')->insert([  
             'name' => 'Avanzado'
         ]);
+
+        
+
     }
 }

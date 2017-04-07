@@ -45,5 +45,55 @@ class PeriodsTableSeeder extends Seeder
             'rest_duration' => 120,
             'number_series' => 3           
         ]);
+
+
+          //experiencia vs periodo
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 1,
+            'period_id' => 1
+        ]);
+
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 2,
+            'period_id' => 2
+        ]);
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 2,
+            'period_id' => 3
+        ]);
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 2,
+            'period_id' => 4
+        ]);
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 2,
+            'period_id' => 5
+        ]);
+
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 3,
+            'period_id' => 2
+        ]);
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 3,
+            'period_id' => 3
+        ]);
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 3,
+            'period_id' => 4
+        ]);
+
+        DB::table('experience_period')->insert([  
+            'experience_id' => 3,
+            'period_id' => 5
+        ]);
     }
 }

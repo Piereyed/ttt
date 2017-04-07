@@ -38,6 +38,7 @@
             <span class="card-title activator grey-text text-darken-4">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}<i class="material-icons right">more_vert</i></span>
             <p><a href="{{route('evaluation.create',$client->id)}}">Evaluar</a></p>
             <p><a href="#">Entrenar</a></p>
+            <p><a href="{{route('routine.index',$client->id)}}">Rutinas</a></p>
           </div>
           <div class="card-reveal">
             <span class="card-title grey-text text-darken-4">Datos personales<i class="material-icons right">close</i></span>

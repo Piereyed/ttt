@@ -11,4 +11,8 @@ class Experience extends Model
     public function goals(){        
         return $this->belongsToMany('App\Goal');
     }
+
+    public function periods(){        
+        return $this->belongsToMany('App\Period');
+    }
 }

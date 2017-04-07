@@ -33,16 +33,33 @@ class MicrocycleController extends Controller
      */
     public function create()
     {
-     $goals = Goal::all();
-     $experiences = Experience::all();
+       $goals = Goal::all();
+       $experiences = Experience::all();
 
-     $data = [
-     'goals'    =>  $goals,
-     'experiences'    =>  $experiences
-     ];
+       $data = [
+       'goals'    =>  $goals,
+       'experiences'    =>  $experiences
+       ];
 
-     return view('microcycle.create', $data);
- }
+       return view('microcycle.create', $data);
+   }
+
+   public function getMicrocycles($goal_id,$experience_id) //ajax
+   {
+       $microcycles = Microcycle::where('goal_id',$goal_id)->where('experience_id',$experience_id)->get();
+       foreach ($microcycles as $microcycle) { //para sacar las units
+           $uni = $microcycle->units;
+       }       
+       echo json_encode($microcycles);
+   }
+
+   public function getMicrocycle($id) //ajax
+   {
+       $microcycle = Microcycle::find($id);       
+       $uni = $microcycle->units;//para sacar su units       
+       echo json_encode($microcycle);
+   }
+
 
     /**
      * Store a newly created resource in storage.
