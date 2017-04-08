@@ -13,4 +13,8 @@ class Exercise extends Model
         return $this->belongsToMany('App\Muscle');
     }
 
+    public function phase(){        
+        return $this->belongsTo('App\Training_phase','training_phase_id');
+    }
+
 }

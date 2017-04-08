@@ -49,6 +49,8 @@
                             <tr>
                                 <th class="center" data-field="options">Elegir</th>
                                 <th data-field="name">Nombre</th>                        
+                                <th data-field="type">Tipo</th>                        
+                                <th data-field="phase">Phase</th>                        
                                 <th class="center" data-field="muscle">Músculo</th>
                             </tr>
                         </thead>
@@ -63,7 +65,9 @@
                                     </p>
                                 </td>
                                 <td>{{ $exercise->name }}</td>                        
-                                <td class="center">{{ $exercise->muscles[0]->name }}</td>
+                                <td class="center">@if($exercise->type == 0) Aaeróbico @else Anaeróbico @endif </td>                        
+                                <td class="center">{{$exercise->phase->name}}</td>                        
+                                <td class="center">@if($exercise->type == 0) Todos @else {{ $exercise->muscles[0]->name }}@endif</td>
                             </tr>   
 
                             <!--     modal-->

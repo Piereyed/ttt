@@ -60,44 +60,77 @@
                             <label for="name">Nombre</label>
                         </div>
 
-                        <div class="input-field col m8 s12">         
+                        <div class="input-field col m4 s12">         
                             <i class="material-icons prefix">subject</i>                   
                             <textarea  id="descripcion" name="descripcion" type="text" class="validate materialize-textarea" data-length="1000">{{old('descripcion')}}</textarea>
                             <label for="descripcion">Descripción</label>
                         </div> 
 
+                        <div style="min-height: 70px;text-align: center;" class="input-field col m4 s12">
+
+                            <div class="switch">
+                                <label style="width: 100%">
+                                    Sin peso
+                                    <input id="usapeso" name="peso" required="required" type="checkbox">
+                                    <span class="lever"></span>
+                                    Con peso
+                                </label>
+                            </div>
+                        </div> 
+
                         <!-- foto -->
-                        <label class="active" for="foto">Foto</label>
+                        <label style="display: inline-block;width: 100%" class="active" for="foto">Foto</label>
                         <div class="file-field input-field col s12">
                             <input id="foto" type="file" name="foto" value="{{old('foto')}}" class="dropify" data-max-file-size="3M" data-height="240"  data-allowed-file-extensions="png jpg jpeg" />
-                            
+
                         </div>                        
 
                         <!-- musculos -->
+                        <div class="col s12">
+                            <h4>Músculos</h4>                            
+                        </div>
 
-                        <div class="input-field col m6 s12">     
+                        <!-- musculos -->
+                        <div class="ej input-field col m6 offset-m3 s12">     
                             <i class="material-icons prefix" >accessibility</i>                       
-                            <select id="musculo" name="musculo" required="required" class="validate">
+                            <select id="musculo" name="musculo[]" required="required" multiple class="validate">
                                 <option value="" disabled selected>Seleccione</option>
                                 @foreach($muscles as $muscle)
                                 <option value="{{$muscle->id}}">{{$muscle->name}}</option>
                                 @endforeach
                             </select>
-                            <label>Músculos</label>
+                            <label>Músculo</label>
                         </div> 
 
-                        <div class="input-field col m6 s12">     
+                        <!-- zonas ocultas -->
+
+                        <div id="select_pecho" hidden class="input-field col m6 offset-m3 s12">     
                             <i class="material-icons prefix" >center_focus_weak</i>                       
-                            <select id="zona" name="zona" required="required" class="validate">
+                            <select id="zona" name="zona_pecho" required="required" class="validate">
                                 <option value="" disabled selected>Seleccione</option>
-                                
+                                @foreach($muscles[4]->zones as $zone)
+                                <option value="{{$zone->id}}">{{$zone->name}}</option>
+                                @endforeach
                             </select>
-                            <label>Zona</label>
+                            <label>Zona del Pecho</label>
                         </div>
+
+                        <div id="select_espalda" hidden class="input-field col offset-m3 m6 s12">     
+                            <i class="material-icons prefix" >center_focus_weak</i>                       
+                            <select id="zona" name="zona_espalda" required="required" class="validate">
+                                <option value="" disabled selected>Seleccione</option>
+                                @foreach($muscles[5]->zones as $zone)
+                                <option value="{{$zone->id}}">{{$zone->name}}</option>
+                                @endforeach
+                            </select>
+                            <label>Zona de la espalda</label>
+                        </div>
+
+                        
                     </div>
 
-                    
-                    
+
+
                     <br>
 
                     <div class="row" style="text-align:center">
@@ -118,12 +151,13 @@
     </div>
 </div>
 <form id="formulario" method="post" novalidate="true" class="col s12">
- <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
+   <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
 </form>
 @endsection
 
 @section('scripts')
 <script>
+    var ej = 1;
     $( document ).ready(function(){
 
         //validate
@@ -156,37 +190,26 @@
         });
         //fin validate
 
-
-        //ajax
-        var params = $('#formulario').serialize();
         $("#musculo").on("change",function(){
-         $.ajax({
-            type: 'POST',
-            url: '/getZones/' + $(this).val(),
-            data: 'action=search&'+params,
-            dataType: 'json',            
-            success: function(zones) {      
-                //vacio el select          
-                $('#zona option').remove();
-                $("#zona").append('<option value="" disabled selected>Seleccione</option>');
-                $('#zona').material_select('');
-                //llenar el select de zonas
-                var size = zones.length;                
-                for(var i = 0; i < size; i++){
-                    $("#zona").append($('<option>', {
-                        value: zones[i]['id'],
-                        text: zones[i]['name']
-                    }));
-                }
+            arr = $(this).val();
 
-                $('#zona').material_select();
-            },
-            error: function(data) {
-                alert("Error al recuperar las zonas.")
+            if($.inArray( "5" , arr ) != -1 ){
+                $("#select_pecho").show();
             }
+            else{
+                $("#select_pecho").hide();
+            }
+
+            if($.inArray( "6" , arr ) != -1 ){
+                $("#select_espalda").show();
+            }
+            else{
+                $("#select_espalda").hide();
+            }
+
         });
-        // fin ajax
-    });
+
+
 
     });
 

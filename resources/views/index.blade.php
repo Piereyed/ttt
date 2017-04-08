@@ -137,7 +137,7 @@
 
                     <!--   roles del Entrenador de gimnasio    -->
                     @if(in_array("Entrenador", session('roles')))
-                    <li><a href="{{ route('myathletes.index',Auth::user()->person->id) }}"><i class="material-icons left">directions_run</i>Mis atletas</a></li>
+                    <li><a href="{{ route('myathletes.index') }}"><i class="material-icons left">directions_run</i>Mis atletas</a></li>
                     @endif
 
                     @if(in_array("Entrenador", session('roles')))     

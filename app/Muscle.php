@@ -11,4 +11,8 @@ class Muscle extends Model
     public function exercises(){        
         return $this->belongsToMany('App\Exercise');
     }
+
+    public function zones(){        
+        return $this->hasMany('App\Zone');
+    }
 }

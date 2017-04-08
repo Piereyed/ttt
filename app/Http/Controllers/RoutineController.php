@@ -8,6 +8,10 @@ use App\Microcycle;
 use App\Person;
 use App\Program;
 use App\Exercise;
+use App\Muscle;
+use App\Training_phase;
+use Illuminate\Support\Facades\Auth;
+
 
 class RoutineController extends Controller
 {
@@ -36,18 +40,24 @@ class RoutineController extends Controller
      */
     public function create($id,$p,$m)
     {
+        $trainer = Auth::user()->person;
+
         $person = Person::find($id);
         $period = Period::find($p);
         $microcycle = Microcycle::find($m);
         $exercises = Exercise::all();
+        $muscles = Muscle::all();
+        $phases = Training_phase::all();
 
         $arrLetters = [];
         $arrSub    = [];
+        $arr_type    = [];
         foreach ($microcycle->units as $unit) {
             if($unit->letter != '-'){
                 if(!in_array($unit->letter, $arrLetters, true)){
                     array_push($arrLetters, $unit->letter);
                     array_push($arrSub, $unit->level);
+                    array_push($arr_type, $unit->type_session);
                 }
                 else{
                     $key = array_search($unit->letter, $arrLetters);
@@ -61,8 +71,12 @@ class RoutineController extends Controller
         'period'        =>  $period,
         'microcycle'    =>  $microcycle,
         'client'        =>  $person,
+        'trainer'       =>  $trainer,
         'exercises'     =>  $exercises  ,      
+        'phases'        =>  $phases  ,      
+        'muscles'       =>  $muscles  ,      
         'arrLetters'    =>  $arrLetters  ,      
+        'arr_type'      =>  $arr_type  ,      
         'arrSub'        =>  $arrSub
         ];       
 
@@ -77,7 +91,7 @@ class RoutineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

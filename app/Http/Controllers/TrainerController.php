@@ -7,7 +7,7 @@ use App\Person;
 use App\Local;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB; //para usar DB
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -28,13 +28,15 @@ class TrainerController extends Controller
        ];
        return view('trainer.index', $data);
    }
-   public function index_my_athletes($id){
-    $athletes = Person::where('trainer_id',$id)->get();
-    $data = [
-    'athletes'    =>  $athletes            
-    ];
-    return view('trainer.index_my_athletes', $data);
-}
+   public function index_my_athletes(){
+        $trainer = Auth::user()->person;
+
+        $athletes = Person::where('trainer_id',$trainer->id)->get();
+        $data = [
+        'athletes'    =>  $athletes            
+        ];
+        return view('trainer.index_my_athletes', $data);
+    }
 
 public function search()
 {

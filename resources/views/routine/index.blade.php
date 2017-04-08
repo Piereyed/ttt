@@ -36,7 +36,8 @@
             <div class="nav-wrapper">
                 <div class="col s12">                            
                     <a href="#" class="breadcrumb">Inicio</a>
-                    <a href="#!" class="breadcrumb">Rutinas</a>
+                    <a href="{{route('myathletes.index')}}" class="breadcrumb">Mis atletas</a>
+                    <a href="#" class="breadcrumb">Rutinas</a>
                 </div>
             </div>
         </nav>

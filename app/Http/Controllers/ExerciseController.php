@@ -35,7 +35,7 @@ class ExerciseController extends Controller
         $phases = TrainingPhase::all();
         $muscles = Muscle::all();
         $experiences = Experience::all();
-
+        
         $data = [
         'phases'    =>  $phases,
         'muscles'    =>  $muscles,
@@ -66,9 +66,11 @@ class ExerciseController extends Controller
         'fase'         => 'required',
         'descripcion'  => 'required',
         'experiencia'  => 'required',
-        'musculo'      => 'required',
-        'zona'         => 'nullable',
-        'foto'        => 'required|file'  ,
+        'peso'         => 'nullable',
+        'musculo'      => 'nullable', //observacion
+        'zona_pecho'   => 'nullable',
+        'zona_espalda' => 'nullable',
+        'foto'         => 'required|file'  ,        
 
         ]);
 
@@ -76,21 +78,38 @@ class ExerciseController extends Controller
 
      try {
         $exercise = new Exercise;
-        $exercise->name       = $request['nombre']; 
+        $exercise->name              = $request['nombre']; 
         $exercise->description       = $request['descripcion']; 
-        $exercise->type       = $request['tipo']; 
-        $exercise->training_phase_id       = $request['fase']; 
-        $exercise->experience_id       = $request['experiencia']; 
+        $exercise->type              = $request['tipo']; 
+        $exercise->use_weight        = isset($request['peso']) ;      // V o F 
+        $exercise->training_phase_id = $request['fase']; 
+        $exercise->experience_id     = $request['experiencia']; 
         $exercise->photo      = $request['foto'];
 
         $exercise->save();
 
-        //se guarda la relacion
-        $exer_muscle = new Exercise_Muscle;
-        $exer_muscle->muscle_id = $request['musculo'];
-        $exer_muscle->zone_id = $request['zona'];
-        $exer_muscle->exercise_id = $exercise->id;
-        $exer_muscle->save();
+        //se guardan las relaciones
+        if($request['tipo'] == 0){ //si es de calentamiento son todos los musculos
+            $musculos = ["1","2","3","4","5","6","7","8","9","10","11","12","13"];
+        }
+        else{
+            $musculos = $request['musculo'];
+        }
+        
+
+        for ($i=0; $i < sizeof($musculos) ; $i++) { 
+            $exer_muscle = new Exercise_Muscle;
+            $exer_muscle->muscle_id = $musculos[$i] ;
+            if( $musculos[$i] == "5" &&  isset($request['zona_pecho'])){
+                $exer_muscle->zone_id = $request['zona_pecho'];
+            }
+            else if( $musculos[$i] == "6" && isset($request['zona_espalda'])){
+                $exer_muscle->zone_id = $request['zona_espalda'];
+            }
+            $exer_muscle->exercise_id = $exercise->id;
+            $exer_muscle->save();
+        }
+        
 
         //subo la foto
         if ($request->hasFile('foto')){
@@ -105,10 +124,10 @@ class ExerciseController extends Controller
         }
 
         return redirect()->route('exercise.index')->with('success', 'El ejercicio se ha registrado con éxito.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
-        }
+    } catch (Exception $e) {
+        return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
     }
+}
 
     /**
      * Display the specified resource.

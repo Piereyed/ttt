@@ -60,7 +60,7 @@ class MusclesTableSeeder extends Seeder
             'priority' => 1, 
             ]);
         DB::table('muscles')->insert([  
-        	'name' => 'Cuatríceps',
+        	'name' => 'Cuádriceps',
         	'measure_id' => 9,
             'body_part' => 1, //abajo
             'priority' => 1, 

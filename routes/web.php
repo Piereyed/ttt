@@ -105,7 +105,7 @@ Route::group(['middleware' => 'auth'], function(){
     });
 
     Route::group(['prefix' => 'mis_atletas'], function(){    
-        Route::get('/{id}', ['as' => 'myathletes.index', 'uses' =>'TrainerController@index_my_athletes']);
+        Route::get('/', ['as' => 'myathletes.index', 'uses' =>'TrainerController@index_my_athletes']);
         // Route::get('create', ['as' => 'athlete.create', 'uses' => 'ExerciseController@create']);
         // Route::post('create', ['as' => 'athlete.store', 'uses' => 'ExerciseController@store']);
         // Route::get('show/{id}', ['as' => 'athlete.show', 'uses' => 'ExerciseController@show']);
@@ -148,7 +148,7 @@ Route::group(['middleware' => 'auth'], function(){
         
         Route::get('/{id}', ['as' => 'routine.index', 'uses' => 'RoutineController@index']);
         Route::get('create/{id}/{period}/{microcycle}', ['as' => 'routine.create', 'uses' => 'RoutineController@create']);        
-        Route::post('create/{id}', ['as' => 'routine.store', 'uses' => 'RoutineController@store']);
+        Route::post('create/', ['as' => 'routine.store', 'uses' => 'RoutineController@store']);
         Route::get('show/{id}', ['as' => 'routine.show', 'uses' => 'RoutineController@show']);
         Route::get('edit/{id}', ['as' => 'routine.edit', 'uses' => 'RoutineController@edit']);
         Route::post('edit/{id}', ['as' => 'routine.update', 'uses' => 'RoutineController@update']);

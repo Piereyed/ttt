@@ -19,5 +19,16 @@ class Microcycle extends Model
     public function units(){
         return $this->hasMany('App\UnitMicrocycle');
     }
+
+    public function sessions(){
+        $units = $this->units;
+        $arr=[];
+        foreach ($units as $unit) {
+            if($unit->letter != '-'){
+                array_push($arr, $unit);
+            }
+        }
+        return $arr;
+    }
     
 }
