@@ -175,28 +175,41 @@
                         </div>
 
                         <!-- <div class="input-field col m6 s12">     
-                            <i class="material-icons prefix" >accessibility</i>                       
-                            <select id="musculo" name="musculo" required="required" multiple class="validate">
-                                <option value="" disabled selected>Seleccione</option>
-                                @foreach($muscles as $muscle)
-                                <option value="{{$muscle->id}}">{{$muscle->name}}</option>
-                                @endforeach
-                            </select>
-                            <label>Músculos</label>
-                        </div> --> 
+<i class="material-icons prefix" >accessibility</i>                       
+<select id="musculo" name="musculo" required="required" multiple class="validate">
+<option value="" disabled selected>Seleccione</option>
+@foreach($muscles as $muscle)
+<option value="{{$muscle->id}}">{{$muscle->name}}</option>
+@endforeach
+</select>
+<label>Músculos</label>
+</div> --> 
 
-                        <!-- calentamiento -->
-                        <div class="row calentamiento">
-                            <h4>Calentamiento</h4>                            
+<!-- calentamiento -->
+<div class="row calentamiento">
+    <h4>Calentamiento</h4>                            
 
-                            <div class="col m12 s12 input-field">     
-                                <i class="material-icons prefix" >query_builder</i> 
-                                <input type="number" name="duracion_calentamiento" value="{{$phases[0]->max_duration}}" required="required" class="validate">
-                                <label>Tiempo(minutos)</label>
-                            </div>
+    <div class="col m12 s12 input-field">     
+        <i class="material-icons prefix" >query_builder</i> 
+        <!-- <input type="number" name="duracion_calentamiento" value="{{$phases[0]->max_duration}}" required="required" class="validate"> -->
+        <select id="tipo_ejercicio" name="duracion_calentamiento"  required="required" class="validate">
+                        <option value="" disabled selected>Seleccione</option>                
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option selected value="5">5</option>
+                    </select>
+        <label>Tiempo(minutos)</label>
+    </div>
 
-                            <div class="col s12 center">
+                            <!-- <div class="col s12 center">
                                 <a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
+                            </div> -->
+
+                            <!-- tabla -->
+                            <div id="tabla_calentamiento" class="col s12">
+                                
                             </div>
 
                         </div>
@@ -211,9 +224,9 @@
                                 <label>Tiempo(minutos)</label>
                             </div>
 
-                            <div class="col s12 center">
+                            <!-- <div class="col s12 center">
                                 <a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
-                            </div>
+                            </div> -->
                         </div>
 
                         <!-- principal -->
@@ -225,7 +238,7 @@
                         </div>
 
 
-                        
+
                     </div>
                     @endforeach
                 </div>
@@ -435,68 +448,83 @@
     <input type="hidden" id="microcycle_id" name="microcycle_id" value="{{ $microcycle->id }}"> 
 </form>
 
+<form id="pedir_ejercicios_calentamiento" method="post" action="{{ route('exercise.obtain_warm') }}">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+</form>
+
 <!-- modal -->
 <div id="modal" class="modal modal-fixed-footer">
     <div class="modal-content">
-      <h4>Agregar Ejercicio</h4>
-      <div class="row ejer_box">
-          <div class="input-field col m4 offset-m4 s12">            
-            <select id="tipo_ejercicio" name="tipo_ejercicio" required="required" class="validate">
-                <option value="" disabled selected>Seleccione</option>                
-                <option value="1">Simple</option>                
-                @if($client->experience->id < 2)
-                <option value="2">Compuesta</option>
-                <option value="3">Superserie</option>
-                @endif
-                @if($client->experience->id < 3)
-                <option value="4">Triserie</option>
-                <option value="5">Gigante</option>                
-                @endif
-            </select>
-            <label>Tipo</label>
-        </div>
+        <h4>Agregar Ejercicio</h4>
+        <form id="pedir_ejercicios" method="POST" action="{{ route('exercise.obtain') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
 
-        <!-- simple o compuesto-->
-        <div id="select_simple_compuesto" hidden class="select_fugaz input-field col m4 offset-m4 s12">     
-            <i class="material-icons prefix" >accessibility</i>                       
-            <select id="musculo" name="musculo" required="required" class="validate">
-                <option value="" disabled selected>Seleccione</option>
-                @foreach($muscles as $muscle)
-                <option value="{{$muscle->id}}">{{$muscle->name}}</option>
-                @endforeach
-            </select>
-            <label>Músculo</label>
-        </div> 
-        <!-- fin simple -->
+            <div class="row ejer_box">
+                <div class="input-field col m4 offset-m4 s12">            
+                    <select id="tipo_ejercicio" name="tipo_ejercicio" required="required" class="validate">
+                        <option value="" disabled selected>Seleccione</option>                
+                        <option value="1">Simple</option>                
+                        @if($client->experience->id >= 2)
+                        <option value="2">Compuesta</option>
+                        <option value="3">Superserie</option>
+                        @endif
+                        @if($client->experience->id == 3)
+                        <option value="4">Triserie</option>
+                        <option value="5">Gigante</option>                
+                        @endif
+                    </select>
+                    <label>Tipo</label>
+                </div>
 
-        <!-- superserie-->
-        <div id="select_superserie1" hidden class="select_fugaz input-field col m4 offset-m2 s12">     
-            <i class="material-icons prefix" >accessibility</i>                       
-            <select id="musculo" name="musculo" required="required" class="validate">
-                <option value="" disabled selected>Seleccione</option>
-                @foreach($muscles as $muscle)
-                <option value="{{$muscle->id}}">{{$muscle->name}}</option>
-                @endforeach
-            </select>
-            <label>Músculo 1</label>
-        </div> 
-        <div id="select_superserie2" hidden class="select_fugaz input-field col m4 s12">     
-            <i class="material-icons prefix" >accessibility</i>                       
-            <select id="musculo" name="musculo" required="required" class="validate">
-                <option value="" disabled selected>Seleccione</option>
+                <!-- simple o compuesto-->
+                <div id="select_simple_compuesto" hidden class="select_fugaz input-field col m4 offset-m4 s12">     
+                    <i class="material-icons prefix" >accessibility</i>                       
+                    <select id="musculo1" name="musculo1" required="required" class="validate">
+                        <option value="" disabled selected>Seleccione</option>
+                        @foreach($muscles as $muscle)
+                        <option value="{{$muscle->id}}">{{$muscle->name}}</option>
+                        @endforeach
+                    </select>
+                    <label>Músculo</label>
+                </div> 
+                <!-- fin simple o compuesto -->
 
-            </select>
-            <label>Músculo 2</label>
-        </div> 
-        <!-- fin superserie -->
+                <!-- superserie-->
+                <div id="select_superserie1" hidden class="select_fugaz input-field col m4 offset-m2 s12">     
+                    <i class="material-icons prefix" >accessibility</i>                       
+                    <select id="musculo2" name="musculo2" required="required" class="validate">
+                        <option value="" disabled selected>Seleccione</option>
+                        @foreach($muscles as $muscle)
+                        <option value="{{$muscle->id}}">{{$muscle->name}}</option>
+                        @endforeach
+                    </select>
+                    <label>Músculo 1</label>
+                </div> 
+                <div id="select_superserie2" hidden class="select_fugaz input-field col m4 s12">     
+                    <i class="material-icons prefix" >accessibility</i>                       
+                    <select id="musculo3" name="musculo3" required="required" class="validate">
+                        <option value="" disabled selected>Seleccione</option>
+
+                    </select>
+                    <label>Músculo 2</label>
+                </div> 
+                <!-- fin superserie -->
+
+
+            </div> 
+
+            <div id="table-exercises" class="row">
+                <!-- aca entrara la tabla por ajax -->
+
+            </div>  
+
+        </form>
 
 
     </div>
-
-</div>
-<div class="modal-footer">
-  <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
-</div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left" >add</i>Agregar</a>
+    </div>
 </div>
 
 
@@ -587,12 +615,12 @@
             if($(this).val() <=2){
 
                 $("#select_simple_compuesto").show();
-                
+
             }
             else if($(this).val() == 3){ //superserie
                 $("#select_superserie1").show();
                 $("#select_superserie2").show();                
-                
+
             }
             else if($(this).val() == 4){ //triserie
 
@@ -601,9 +629,26 @@
 
             }
         });
-        $("#musculo").on("change",function(){
+
+        //ajax para imprimir los ejercicios de calentamiento
+        form = $("#pedir_ejercicios_calentamiento");
+            var data = form.serialize();
+            $.post(form.attr('action'), data, function(table) {
+                $('#tabla_calentamiento').html(table);
+            });
+
+
+        //ajax para pedir ejercicios segun el musculo
+        $("#musculo1").on("change",function(){
             //pedir ejercicios
+            form = $("#pedir_ejercicios");
+            var data = form.serialize();
+            $.post(form.attr('action'), data, function(table) {
+                $('#table-exercises').html(table);
+            });
         });
+
+
 
     });
 

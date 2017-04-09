@@ -52,15 +52,38 @@ class ExerciseController extends Controller
         // echo "ok";
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function obtain(Request $request)
+    {
+        $this->validate($request, [
+            'musculo1'         => 'required'
+        ]);
+
+        // dd($request);
+        
+        try {            
+            $exercises = Exercise_Muscle::where('muscle_id',$request['musculo1'])->get();
+            //le paso todo a la vista donde esta la tabla
+            return response()->view('exercise.obtain', compact('exercises'));        
+        } catch (Exception $e) {
+            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+        }
+    }
+
+    public function obtain_warm(Request $request)
+    {
+        // dd($request);        
+        try {            
+            $exercises = Exercise::where('training_phase_id',1)->get();
+            //le paso todo a la vista donde esta la tabla
+            return response()->view('exercise.obtain_warm', compact('exercises'));        
+        } catch (Exception $e) {
+            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+        }
+    }
+
     public function store(Request $request)
     {
-     $this->validate($request, [
+       $this->validate($request, [
         'nombre'       => 'regex:/^[\pL\s\-]+$/u|required|max:100',
         'tipo'         => 'required',
         'fase'         => 'required',
@@ -76,7 +99,7 @@ class ExerciseController extends Controller
 
      // dd($request);
 
-     try {
+       try {
         $exercise = new Exercise;
         $exercise->name              = $request['nombre']; 
         $exercise->description       = $request['descripcion']; 
@@ -115,7 +138,7 @@ class ExerciseController extends Controller
         if ($request->hasFile('foto')){
             if ($request->file('foto')->isValid()) {            
                 $request->foto->storeAs('public/fotos_ejercicios', $exercise->id.'.jpg');
-                $exercise->photo   = 'fotos_perfil/'. $exercise->id.'.jpg' ;  
+                $exercise->photo   = 'fotos_ejercicios/'. $exercise->id.'.jpg' ;  
                 $exercise->save();
             }
             else{

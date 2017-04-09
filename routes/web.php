@@ -167,3 +167,5 @@ Route::post('/getGoals/{id}', ['as' => 'search.goals','uses' => 'GoalController@
 Route::post('/getMeasures/{id}', ['as' => 'client.measure','uses' => 'ClientController@getMeasures']);//NO TOCAR!
 Route::post('/getMicrocycles/{goal_id}/{experience_id}', ['as' => 'search.microcycles','uses' => 'MicrocycleController@getMicrocycles']);//NO TOCAR!
 Route::post('/getMicrocycle/{id}', ['as' => 'get.microcycle','uses' => 'MicrocycleController@getMicrocycle']);//NO TOCAR!
+Route::post('/obtenerEjercicios/', ['as' => 'exercise.obtain','uses' => 'ExerciseController@obtain']);//NO TOCAR!
+Route::post('/obtenerEjerciciosCalentamiento/', ['as' => 'exercise.obtain_warm','uses' => 'ExerciseController@obtain_warm']);//NO TOCAR!
