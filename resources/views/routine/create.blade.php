@@ -34,14 +34,16 @@
         color: white !important;
     }
     .container_tabs{
-        padding-bottom: 20px;
         border: 2px black solid;
     }
     .container_musculos_index{
         background-color: rgba(0,0,0,0.2);
         /*border: 1px solid red;*/
     }
-    
+    .target{
+        margin-bottom: 20px;
+    }
+
 </style>
 @endsection
 
@@ -160,7 +162,7 @@
                         </ul>
                     </div>
                     @foreach($arrLetters as $key => $letter)
-                    <div id="{{strtoupper($letter)}}" class="col s12">
+                    <div id="{{strtoupper($letter)}}" class="entrenamiento col s12">
                         <div class="col m6 s12 input-field">         
                             <select id="tipo_sesion" name="tipo_sesion[]" required="required" class="validate">
                                 <option @if($arr_type[$key]==1) selected @endif value="1">Musculación</option>
@@ -186,38 +188,43 @@
 <label>Músculos</label>
 </div> --> 
 
-<!-- calentamiento -->
-<div class="row calentamiento">
-    <h4>Calentamiento</h4>                            
+                        <!-- calentamiento -->
+                        <div class="row calentamiento">
+                            <div class="col s12">
+                                <h4>Calentamiento</h4>
+                            </div>
 
-    <div class="col m12 s12 input-field">     
-        <i class="material-icons prefix" >query_builder</i> 
-        <!-- <input type="number" name="duracion_calentamiento" value="{{$phases[0]->max_duration}}" required="required" class="validate"> -->
-        <select id="tipo_ejercicio" name="duracion_calentamiento"  required="required" class="validate">
-                        <option value="" disabled selected>Seleccione</option>                
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option selected value="5">5</option>
-                    </select>
-        <label>Tiempo(minutos)</label>
-    </div>
+                            <div class="col m12 s12 input-field">     
+                                <i class="material-icons prefix" >query_builder</i> 
+                                <!-- <input type="number" name="duracion_calentamiento" value="{{$phases[0]->max_duration}}" required="required" class="validate"> -->
+                                <select id="duracion_calentamiento" name="duracion_calentamiento"  required="required" class="validate">
+                                    <option value="" disabled selected>Seleccione</option>                
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option selected value="5">5</option>
+                                </select>
+                                <label>Tiempo(minutos)</label>
+                            </div>
 
                             <!-- <div class="col s12 center">
-                                <a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
-                            </div> -->
+<a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
+</div> -->
 
                             <!-- tabla -->
                             <div id="tabla_calentamiento" class="col s12">
-                                
+
                             </div>
 
                         </div>
 
                         <!-- estiramiento -->
                         <div class="row estiramiento">
-                            <h4>Estiramiento</h4> 
+                            <div class="col s12">
+                                <h4>Estiramiento</h4>    
+                            </div>
+
 
                             <div class="col m12 s12 input-field">     
                                 <i class="material-icons prefix" >query_builder</i> 
@@ -226,17 +233,39 @@
                             </div>
 
                             <!-- <div class="col s12 center">
-                                <a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
-                            </div> -->
+<a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
+</div> -->
                         </div>
+                        <!--fin de estiramiento-->
 
                         <!-- principal -->
                         <div class="row principal">
-                            <h4>Principal</h4>
+                            <div class="col s12">
+                                <h4>Principal</h4>   
+                            </div>
+                            <div class="target col s12">
+                                <table class="responsive-table bordered highlight" name="table-objs">
+                                    <thead>
+                                        <tr>
+                                            <th class="center" data-field="options">Quitar</th>
+                                            <th class="center" data-field="type">Tipo</th>
+                                            <th class="center" data-field="muscle">Músculo</th>
+                                            <th data-field="name">Nombre</th>
+                                            <th class="center" data-field="name">Series</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <div class="col s12 center">
-                                <a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
+                                <a href="#modal" class="btn-agregar-ejercicio modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
                             </div>
                         </div>
+                        <!-- fin de principal-->
 
 
 
@@ -247,7 +276,9 @@
 
                 <!-- musculos indice -->
                 <div class="row container_musculos_index">
-                    <h5>Músculos</h5>
+                    <div class="col s12 center">
+                        <h5>Músculos</h5>   
+                    </div>
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
@@ -438,6 +469,7 @@
                     </div>
                 </div>
             </form>
+            <!-- fin de crear-->
         </div>                    
     </div>
 
@@ -447,6 +479,7 @@
 <form id="formulario" method="post" novalidate="true" class="col s12">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">    
     <input type="hidden" id="microcycle_id" name="microcycle_id" value="{{ $microcycle->id }}"> 
+    <input type="hidden" id="period_id" name="period_id" value="{{ $period->id }}"> 
 </form>
 
 <form id="pedir_ejercicios_calentamiento" method="post" action="{{ route('exercise.obtain_warm') }}">
@@ -520,11 +553,9 @@
             </div>  
 
         </form>
-
-
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left" >add</i>Agregar</a>
+        <a id="btn-agregar" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left" >add</i>Agregar</a>
     </div>
 </div>
 
@@ -537,11 +568,15 @@
 
 <script>
     var aux_microciclo;
+    var aux_periodo;
+    var entrenamiento;
 
     $( document ).ready(function(){
 
 
         var params = $('#formulario').serialize();
+
+        //pedir el microciclo
         $.ajax({
             type: 'POST',
             url: '/getMicrocycle/' + $("#microcycle_id").val(),
@@ -554,8 +589,22 @@
                 alert("Error al recuperar el microciclo.")
             }
         });
+        
+        //pedir la piramide del periodo
+        $.ajax({
+            type: 'POST',
+            url: '/getPeriod/' + $("#period_id").val(),
+            data: 'action=search&'+params,
+            dataType: 'json',            
+            success: function(period) {      
+                aux_periodo = period;
+            },
+            error: function(data) {
+                alert("Error al recuperar el periodo.")
+            }
+        });
 
-
+        // mostrar las sesiones graficamente segun duracion de microciclos
         $("#duracion").on("change",function(){
             $("#total_sesiones").val($(this).val() * $("#sesiones").val());
             $("#num_sesiones").html($(this).val() * $("#sesiones").val());
@@ -583,16 +632,13 @@
                     if(aux_microciclo['units'][j]['level'] > 0 ){
                         cad+=aux_microciclo['units'][j]['level'];
                     }
-
                     if(aux_microciclo['units'][j]['type_session'] == 1){
                         cad+='<sub>M</sub>';
                     }
                     else if (aux_microciclo['units'][j]['type_session'] == 2) {
                         cad+='<sub>C</sub>';   
                     }
-
                     cad+='</div>';
-
                     if( ((count+1) % 7 )== 0){
                         cad+='<br>';
                     }
@@ -605,16 +651,15 @@
                     cad+='<div style="display:inline-block !important" class="caja blanco">-</div>';
                 }
             }
-
             $(".cronograma .center").append(cad);
             $("#num_semanas").html(Math.ceil((sizetotal/7)));
         });
 
+        // muestra el tipo de ejercicio : simple superserie etc
         $("#tipo_ejercicio").on("change",function(){
             $(".select_fugaz").hide();
 
             if($(this).val() <=2){
-
                 $("#select_simple_compuesto").show();
 
             }
@@ -633,10 +678,10 @@
 
         //ajax para imprimir los ejercicios de calentamiento
         form = $("#pedir_ejercicios_calentamiento");
-            var data = form.serialize();
-            $.post(form.attr('action'), data, function(table) {
-                $('#tabla_calentamiento').html(table);
-            });
+        var data = form.serialize();
+        $.post(form.attr('action'), data, function(table) {
+            $('#tabla_calentamiento').html(table);
+        });
 
 
         //ajax para pedir ejercicios segun el musculo
@@ -648,6 +693,38 @@
                 $('#table-exercises').html(table);
             });
         });
+
+        // agregar los ejercicios a principal
+        $("#btn-agregar").on("click", function(){
+            $(".elegido").each( function( index, tr ) {
+                new_tr = tr;
+                $(this).find('input').prop('checked', false);
+                $(this).find('.opc').remove();
+                $(this).children('.hidden').each(function(){
+                    $(this).css("display","table-cell");
+                });
+                
+                //armo la cadena
+                cad = '<td class="center">';
+                var i;
+                for(i=0; i < aux_periodo['pyramids'].length - 1; i++){
+                    repeticion = aux_periodo['pyramids'][i]['percentage_rm'] ;
+                    cad+=repeticion + ', ';
+                }
+                
+                repeticion = aux_periodo['pyramids'][aux_periodo['pyramids'].length - 1]['percentage_rm'] ;
+                cad+=repeticion +'';
+                
+                cad += '</td>';
+                $(this).append(cad);
+                $("#"+entrenamiento+" .target tbody").append(tr);
+            });
+        });
+
+        $(".btn-agregar-ejercicio").on("click", function(){
+            entrenamiento = $(this).parents("div.entrenamiento:first").attr("id");
+        });
+
 
 
 

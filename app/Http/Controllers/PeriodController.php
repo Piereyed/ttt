@@ -44,12 +44,13 @@ class PeriodController extends Controller
         return view('period.create', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function getPeriod($id){
+        {
+       $period = Period::find($id);       
+       $pyra = $period->pyramids;//para sacar sus pyramides       
+       echo json_encode($period);
+   }
+    }
     public function store(Request $request)
     {
         $this->validate($request, [
