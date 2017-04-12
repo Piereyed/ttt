@@ -117,7 +117,7 @@
                 <input type="hidden" name="trainer_id" value="{{ $trainer->id }}">    
                 <input type="hidden" name="period_id" value="{{ $period->id }}">    
                 <input type="hidden" name="goal_id" value="{{ $client->goal->id }}">    
-                <input type="hidden" id="total_sesiones" name="total_sessions" value="">    
+                <input type="hidden" id="total_sesiones" name="total_sesiones" value="">    
                 <input type="hidden" id="sesiones" value="{{ sizeof($microcycle->sessions()) }}">    
 
 
@@ -161,32 +161,18 @@
                             @endforeach
                         </ul>
                     </div>
+                    <!--  para cada entrenamiento-->
                     @foreach($arrLetters as $key => $letter)
                     <div id="{{strtoupper($letter)}}" class="entrenamiento col s12">
-                        <div class="col m6 s12 input-field">         
-                            <select id="tipo_sesion" name="tipo_sesion[]" required="required" class="validate">
-                                <option @if($arr_type[$key]==1) selected @endif value="1">Musculación</option>
-                                <option @if($arr_type[$key]==2) selected @endif value="2">Cardiovascular</option>
-                            </select>
-                            <label>Tipo de sesión</label>
+                        <div class="col m6 offset-m3 s12"> 
+                            <h5><strong>Tipo de sesión :</strong>        
+                                @if($arr_type[$key]==1) 
+                                Musculación 
+                                @elseif($arr_type[$key]==2) 
+                                Cardiovascular 
+                                @endif                           
+                            </h5>
                         </div>
-
-                        <div class="col m6 s12 input-field">     
-                            <i class="material-icons prefix" >query_builder</i> 
-                            <input type="number" name="descanso" value="{{$period->rest_duration}}" required="required" class="validate">
-                            <label>Descanso entre series (segundos)</label>
-                        </div>
-
-                        <!-- <div class="input-field col m6 s12">     
-<i class="material-icons prefix" >accessibility</i>                       
-<select id="musculo" name="musculo" required="required" multiple class="validate">
-<option value="" disabled selected>Seleccione</option>
-@foreach($muscles as $muscle)
-<option value="{{$muscle->id}}">{{$muscle->name}}</option>
-@endforeach
-</select>
-<label>Músculos</label>
-</div> --> 
 
                         <!-- calentamiento -->
                         <div class="row calentamiento">
@@ -196,8 +182,7 @@
 
                             <div class="col m12 s12 input-field">     
                                 <i class="material-icons prefix" >query_builder</i> 
-                                <!-- <input type="number" name="duracion_calentamiento" value="{{$phases[0]->max_duration}}" required="required" class="validate"> -->
-                                <select id="duracion_calentamiento" name="duracion_calentamiento"  required="required" class="validate">
+                                <select name="duracion_calentamiento[]"  required="required" class="validate">
                                     <option value="" disabled selected>Seleccione</option>                
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -208,13 +193,20 @@
                                 <label>Tiempo(minutos)</label>
                             </div>
 
-                            <!-- <div class="col s12 center">
-<a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
-</div> -->
-
                             <!-- tabla -->
-                            <div id="tabla_calentamiento" class="col s12">
-
+                            <div class="col s12">
+                                <table class="tabla_calentamiento {{$key}} responsive-table bordered highlight">
+                                    <thead>
+                                        <tr>            
+                                            <th data-field="name">Nombre</th>
+                                            <th class="center" data-field="phase">Tiempo(seg)</th>
+                                            <th class="center" data-field="options">Quitar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--  aqui entran las filas   -->
+                                    </tbody>
+                                </table>
                             </div>
 
                         </div>
@@ -228,13 +220,9 @@
 
                             <div class="col m12 s12 input-field">     
                                 <i class="material-icons prefix" >query_builder</i> 
-                                <input type="number" name="duracion_calentamiento" value="{{$phases[2]->max_duration}}" required="required" class="validate">
+                                <input type="number" name="duracion_estiramiento[]" value="{{$phases[2]->max_duration}}" required="required" class="validate">
                                 <label>Tiempo(minutos)</label>
                             </div>
-
-                            <!-- <div class="col s12 center">
-<a href="#modal" class="modal-trigger btn waves-effect waves-light"><i class="material-icons left">add</i>Agregar ejercicio</a>
-</div> -->
                         </div>
                         <!--fin de estiramiento-->
 
@@ -243,15 +231,20 @@
                             <div class="col s12">
                                 <h4>Principal</h4>   
                             </div>
+                            <div class="col m12 s12 input-field">     
+                                <i class="material-icons prefix" >query_builder</i> 
+                                <input type="number" name="duracion_descanso[]" value="{{$period->rest_duration}}" required="required" class="validate">
+                                <label>Descanso entre series(segundos)</label>
+                            </div>
                             <div class="target col s12">
-                                <table class="responsive-table bordered highlight" name="table-objs">
+                                <table class="tabla-principal responsive-table bordered highlight">
                                     <thead>
-                                        <tr>
-                                            <th class="center" data-field="options">Quitar</th>
+                                        <tr>                                            
                                             <th class="center" data-field="type">Tipo</th>
                                             <th class="center" data-field="muscle">Músculo</th>
                                             <th data-field="name">Nombre</th>
                                             <th class="center" data-field="name">Series</th>
+                                            <th class="center" data-field="options">Quitar</th>
 
                                         </tr>
                                     </thead>
@@ -286,38 +279,13 @@
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="1" />
+                                    <input type="checkbox" class="filled-in" id="musculo_1" />
                                     <label>Hombro</label>
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div class="col s4 m2">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/pecho.jpg')  }}">
-                            </div>
-                            <div class="card-content">
-                                <p>
-                                    <input type="checkbox" class="filled-in" id="5" />
-                                    <label>Pecho</label>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s4 m2">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/espalda.jpg')  }}">
-                            </div>
-                            <div class="card-content">
-                                <p>
-                                    <input type="checkbox" class="filled-in" id="6" />
-                                    <label>Espalda</label>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
@@ -325,7 +293,7 @@
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="2" />
+                                    <input type="checkbox" class="filled-in" id="musculo_2" />
                                     <label>Bícep</label>
                                 </p>
                             </div>
@@ -341,7 +309,7 @@
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="3" />
+                                    <input type="checkbox" class="filled-in" id="musculo_3" />
                                     <label>Trícep</label>
                                 </p>
                             </div>
@@ -354,12 +322,40 @@
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="4" />
+                                    <input type="checkbox" class="filled-in" id="musculo_4" />
                                     <label>Antebrazo</label>
                                 </p>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col s4 m2">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{ asset('storage/fotos_musculos/pecho.jpg')  }}">
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    <input type="checkbox" class="filled-in" id="musculo_5" />
+                                    <label>Pecho</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s4 m2">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{ asset('storage/fotos_musculos/espalda.jpg')  }}">
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    <input type="checkbox" class="filled-in" id="musculo_6" />
+                                    <label>Espalda</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- fila2 -->
 
@@ -370,7 +366,7 @@
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="7" />
+                                    <input type="checkbox" class="filled-in" id="musculo_7" />
                                     <label>Abdominales</label>
                                 </p>
                             </div>
@@ -379,12 +375,54 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
+                                <img src="{{ asset('storage/fotos_musculos/trasero.jpg')  }}">
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    <input type="checkbox" class="filled-in" id="musculo_8" />
+                                    <label>Glúteos</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s4 m2">
+                        <div class="card">
+                            <div class="card-image">
                                 <img src="{{ asset('storage/fotos_musculos/cuadriceps.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="9" />
+                                    <input type="checkbox" class="filled-in" id="musculo_9" />
                                     <label>Cuádricep</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s4 m2">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{ asset('storage/fotos_musculos/abductores.jpg')  }}">
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    <input type="checkbox" class="filled-in" id="musculo_10" />
+                                    <label>Abductor</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s4 m2">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{ asset('storage/fotos_musculos/aductores.jpg')  }}">
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    <input type="checkbox" class="filled-in" id="musculo_11" />
+                                    <label>Aductor</label>
                                 </p>
                             </div>
                         </div>
@@ -396,38 +434,14 @@
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="12" />
+                                    <input type="checkbox" class="filled-in" id="musculo_12" />
                                     <label>Femoral</label>
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div class="col s4 m2">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/aductores.jpg')  }}">
-                            </div>
-                            <div class="card-content">
-                                <p>
-                                    <input type="checkbox" class="filled-in" id="11" />
-                                    <label>Aductor</label>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s4 m2">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/abductores.jpg')  }}">
-                            </div>
-                            <div class="card-content">
-                                <p>
-                                    <input type="checkbox" class="filled-in" id="10" />
-                                    <label>Abductor</label>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+
+
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
@@ -435,32 +449,20 @@
                             </div>
                             <div class="card-content">
                                 <p>
-                                    <input type="checkbox" class="filled-in" id="13" />
+                                    <input type="checkbox" class="filled-in" id="musculo_13" />
                                     <label>Gemelos</label>
                                 </p>
                             </div>
                         </div>
                     </div>
                     <!-- fila3 -->
-                    <div class="col s4 m2">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/trasero.jpg')  }}">
-                            </div>
-                            <div class="card-content">
-                                <p>
-                                    <input type="checkbox" class="filled-in" id="8" />
-                                    <label>Glúteos</label>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
                 <!-- fin index musculos -->
 
                 <div class="row" style="text-align:center">
                     <div class="cos s12" >
-                        <a href="{{ route('microcycle.index') }}" title="Regresar" class="btn-large waves-effect waves-teal btn-flat ">
+                        <a href="{{'/rutinas/'.$client->id}}" title="Regresar" class="btn-large waves-effect waves-teal btn-flat ">
                             <i class="left fa fa-step-backward" aria-hidden="true"></i>Regresar
                         </a>
                         <button  title="Guardar" type="submit" class="btn-large waves-effect waves-light btn ">
@@ -570,6 +572,7 @@
     var aux_microciclo;
     var aux_periodo;
     var entrenamiento;
+    var indice_musculos = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 
     $( document ).ready(function(){
 
@@ -589,7 +592,7 @@
                 alert("Error al recuperar el microciclo.")
             }
         });
-        
+
         //pedir la piramide del periodo
         $.ajax({
             type: 'POST',
@@ -676,19 +679,27 @@
             }
         });
 
-        //ajax para imprimir los ejercicios de calentamiento
-        form = $("#pedir_ejercicios_calentamiento");
-        var data = form.serialize();
-        $.post(form.attr('action'), data, function(table) {
-            $('#tabla_calentamiento').html(table);
+        //        ajax para imprimir los ejercicios de calentamiento
+        form = $("#pedir_ejercicios_calentamiento");//solo tiene token
+        //por cada entrenamiento
+        $('.tabla_calentamiento tbody').each(function(index){
+            var data = form.serialize();
+            data = data+'&index='+index;
+            $.post(form.attr('action'), data, function(table) {
+                $('.'+index+'.tabla_calentamiento tbody').html(table);
+            });
         });
 
 
-        //ajax para pedir ejercicios segun el musculo
+
+
+        //ajax para pedir ejercicios segun el musculo --------PRINCIPAL--------
         $("#musculo1").on("change",function(){
             //pedir ejercicios
             form = $("#pedir_ejercicios");
             var data = form.serialize();
+            var index = convertirLetra(entrenamiento);
+            data = data+'&index='+index;
             $.post(form.attr('action'), data, function(table) {
                 $('#table-exercises').html(table);
             });
@@ -697,38 +708,93 @@
         // agregar los ejercicios a principal
         $("#btn-agregar").on("click", function(){
             $(".elegido").each( function( index, tr ) {
+                $(this).removeClass("elegido");
+                //el musculo del ejercicio
+                var id_musculo = parseInt($(this).find('.id_musculo').html());
+                if(!isNaN(id_musculo)){
+                    indice_musculos[id_musculo-1] ++ ;
+                    actualizar_indice();
+                }             
+
                 new_tr = tr;
                 $(this).find('input').prop('checked', false);
                 $(this).find('.opc').remove();
                 $(this).children('.hidden').each(function(){
                     $(this).css("display","table-cell");
                 });
-                
+
                 //armo la cadena
-                cad = '<td class="center">';
+                cad = '';
                 var i;
                 for(i=0; i < aux_periodo['pyramids'].length - 1; i++){
                     repeticion = aux_periodo['pyramids'][i]['percentage_rm'] ;
                     cad+=repeticion + ', ';
                 }
-                
+
                 repeticion = aux_periodo['pyramids'][aux_periodo['pyramids'].length - 1]['percentage_rm'] ;
                 cad+=repeticion +'';
-                
-                cad += '</td>';
-                $(this).append(cad);
-                $("#"+entrenamiento+" .target tbody").append(tr);
+
+
+                $(this).find('td.series').html(cad);
+                $("#"+entrenamiento+" .tabla-principal tbody").append(tr);
             });
         });
 
+
+
         $(".btn-agregar-ejercicio").on("click", function(){
             entrenamiento = $(this).parents("div.entrenamiento:first").attr("id");
+            //limpio la tabla
+            $('#table-exercises table').remove();
         });
 
+        //quitar la fila 
+        $("table").on("click", ".quitar",function(){
+            var id_musculo = parseInt($(this).parent().parent().find('.id_musculo').html());
+            if(!isNaN(id_musculo)){
+                indice_musculos[id_musculo-1] -- ;
+                actualizar_indice();
+            }            
+            $(this).parent().parent().remove();
+        });
 
 
 
     });
+    function actualizar_indice(){
+        for(var i = 0; i<13 ; i++){
+            if(indice_musculos[i] == 0){
+                $("#musculo_"+(i+1)).prop('checked', false);
+            }
+            else{
+                $("#musculo_"+(i+1)).prop('checked', true);
+            }
+        }
+    }
+    
+    function convertirLetra(e){
+        var num = 0;
+        if(e == "A"){
+            num= 1;
+        }
+        else if(e == "B"){
+            num= 2;
+        }
+        else if(e == "C"){
+            num= 3;
+        }
+        else if(e == "D"){
+            num= 4;
+        }
+        else if(e == "E"){
+            num= 5;
+        }
+        else if(e == "F"){
+            num= 6;
+        }
+        return num;
+    }
+
 
 </script>
 @endsection

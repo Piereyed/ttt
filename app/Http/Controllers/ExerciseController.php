@@ -22,24 +22,24 @@ class ExerciseController extends Controller
     {
         $exercises = Exercise::get();        
         $data = [
-        'exercises'    =>  $exercises
-        
+            'exercises'    =>  $exercises
+
         ];
         return view('exercise.index', $data);
     }
 
-    
+
 
     public function create()
     {
         $phases = TrainingPhase::all();
         $muscles = Muscle::all();
         $experiences = Experience::all();
-        
+
         $data = [
-        'phases'    =>  $phases,
-        'muscles'    =>  $muscles,
-        'experiences'    =>  $experiences        
+            'phases'    =>  $phases,
+            'muscles'    =>  $muscles,
+            'experiences'    =>  $experiences        
         ];
 
         return view('exercise.create',$data);
@@ -59,11 +59,16 @@ class ExerciseController extends Controller
         ]);
 
         // dd($request);
-        
+        $index = $request['index'];
         try {            
             $exercises = Exercise_Muscle::where('muscle_id',$request['musculo1'])->get();
+            $data = [
+                'exercises'    =>  $exercises,
+                'index'    =>  $index
+            ];
+            
             //le paso todo a la vista donde esta la tabla
-            return response()->view('exercise.obtain', compact('exercises'));        
+            return response()->view('exercise.obtain', $data);        
         } catch (Exception $e) {
             return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
         }
@@ -71,11 +76,18 @@ class ExerciseController extends Controller
 
     public function obtain_warm(Request $request)
     {
-        // dd($request);        
+        // dd($request); 
+        $index = $request['index'];
         try {            
-            $exercises = Exercise::where('training_phase_id',1)->get();
+            $exercises = Exercise::where('training_phase_id',1)->get();            
+
+            $data = [
+                'exercises'    =>  $exercises,
+                'index'    =>  $index
+            ];
+
             //le paso todo a la vista donde esta la tabla
-            return response()->view('exercise.obtain_warm', compact('exercises'));        
+            return response()->view('exercise.obtain_warm', $data);        
         } catch (Exception $e) {
             return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
         }
@@ -83,74 +95,74 @@ class ExerciseController extends Controller
 
     public function store(Request $request)
     {
-       $this->validate($request, [
-        'nombre'       => 'regex:/^[\pL\s\-]+$/u|required|max:100',
-        'tipo'         => 'required',
-        'fase'         => 'required',
-        'descripcion'  => 'required',
-        'experiencia'  => 'required',
-        'peso'         => 'nullable',
-        'musculo'      => 'nullable', //observacion
-        'zona_pecho'   => 'nullable',
-        'zona_espalda' => 'nullable',
-        'foto'         => 'required|file'  ,        
+        $this->validate($request, [
+            'nombre'       => 'regex:/^[\pL\s\-]+$/u|required|max:100',
+            'tipo'         => 'required',
+            'fase'         => 'required',
+            'descripcion'  => 'required',
+            'experiencia'  => 'required',
+            'peso'         => 'nullable',
+            'musculo'      => 'nullable', //observacion
+            'zona_pecho'   => 'nullable',
+            'zona_espalda' => 'nullable',
+            'foto'         => 'required|file'  ,        
 
         ]);
 
-     // dd($request);
+        // dd($request);
 
-       try {
-        $exercise = new Exercise;
-        $exercise->name              = $request['nombre']; 
-        $exercise->description       = $request['descripcion']; 
-        $exercise->type              = $request['tipo']; 
-        $exercise->use_weight        = isset($request['peso']) ;      // V o F 
-        $exercise->training_phase_id = $request['fase']; 
-        $exercise->experience_id     = $request['experiencia']; 
-        $exercise->photo      = $request['foto'];
+        try {
+            $exercise = new Exercise;
+            $exercise->name              = $request['nombre']; 
+            $exercise->description       = $request['descripcion']; 
+            $exercise->type              = $request['tipo']; 
+            $exercise->use_weight        = isset($request['peso']) ;      // V o F 
+            $exercise->training_phase_id = $request['fase']; 
+            $exercise->experience_id     = $request['experiencia']; 
+            $exercise->photo      = $request['foto'];
 
-        $exercise->save();
+            $exercise->save();
 
-        //se guardan las relaciones
-        if($request['tipo'] == 0){ //si es de calentamiento son todos los musculos
-            $musculos = ["1","2","3","4","5","6","7","8","9","10","11","12","13"];
-        }
-        else{
-            $musculos = $request['musculo'];
-        }
-        
-
-        for ($i=0; $i < sizeof($musculos) ; $i++) { 
-            $exer_muscle = new Exercise_Muscle;
-            $exer_muscle->muscle_id = $musculos[$i] ;
-            if( $musculos[$i] == "5" &&  isset($request['zona_pecho'])){
-                $exer_muscle->zone_id = $request['zona_pecho'];
-            }
-            else if( $musculos[$i] == "6" && isset($request['zona_espalda'])){
-                $exer_muscle->zone_id = $request['zona_espalda'];
-            }
-            $exer_muscle->exercise_id = $exercise->id;
-            $exer_muscle->save();
-        }
-        
-
-        //subo la foto
-        if ($request->hasFile('foto')){
-            if ($request->file('foto')->isValid()) {            
-                $request->foto->storeAs('public/fotos_ejercicios', $exercise->id.'.jpg');
-                $exercise->photo   = 'fotos_ejercicios/'. $exercise->id.'.jpg' ;  
-                $exercise->save();
+            //se guardan las relaciones
+            if($request['tipo'] == 0){ //si es de calentamiento son todos los musculos
+                $musculos = ["1","2","3","4","5","6","7","8","9","10","11","12","13"];
             }
             else{
-                return redirect()->route('exercise.index')->with('warning', 'Se registró el ejercicio pero ocurrió un error al subir la foto.');
-            } 
-        }
+                $musculos = $request['musculo'];
+            }
 
-        return redirect()->route('exercise.index')->with('success', 'El ejercicio se ha registrado con éxito.');
-    } catch (Exception $e) {
-        return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+
+            for ($i=0; $i < sizeof($musculos) ; $i++) { 
+                $exer_muscle = new Exercise_Muscle;
+                $exer_muscle->muscle_id = $musculos[$i] ;
+                if( $musculos[$i] == "5" &&  isset($request['zona_pecho'])){
+                    $exer_muscle->zone_id = $request['zona_pecho'];
+                }
+                else if( $musculos[$i] == "6" && isset($request['zona_espalda'])){
+                    $exer_muscle->zone_id = $request['zona_espalda'];
+                }
+                $exer_muscle->exercise_id = $exercise->id;
+                $exer_muscle->save();
+            }
+
+
+            //subo la foto
+            if ($request->hasFile('foto')){
+                if ($request->file('foto')->isValid()) {            
+                    $request->foto->storeAs('public/fotos_ejercicios', $exercise->id.'.jpg');
+                    $exercise->photo   = 'fotos_ejercicios/'. $exercise->id.'.jpg' ;  
+                    $exercise->save();
+                }
+                else{
+                    return redirect()->route('exercise.index')->with('warning', 'Se registró el ejercicio pero ocurrió un error al subir la foto.');
+                } 
+            }
+
+            return redirect()->route('exercise.index')->with('success', 'El ejercicio se ha registrado con éxito.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+        }
     }
-}
 
     /**
      * Display the specified resource.
