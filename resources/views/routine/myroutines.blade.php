@@ -36,8 +36,7 @@
             <div class="nav-wrapper">
                 <div class="col s12">                            
                     <a href="#" class="breadcrumb">Inicio</a>
-                    <a href="{{route('myathletes.index')}}" class="breadcrumb">Mis atletas</a>
-                    <a href="#" class="breadcrumb">Rutinas</a>
+                    <a href="{{route('myathletes.index')}}" class="breadcrumb">Mis rutinas</a>
                 </div>
             </div>
         </nav>
@@ -46,7 +45,7 @@
     <!--   Icon Section   -->
     <div class="row">
         <div class="col s12">
-            <span class="h1">Rutinas de {{$person->name}}</span>
+            <span class="h1">Mis Rutinas</span>
             <!-- fixed action buttons -->
             <div class="fixed-action-btn click-to-toggle">
                 <a title="Opciones" class="btn-floating btn-large grey darken-2">
@@ -66,19 +65,28 @@
 
             <div class="row">
                 <div class="col s12">
-                    @if(sizeof($programs) > 0  )
-                    @foreach($programs as $program)
+
+
                     <ul class="collection with-header">
-                        <li class="collection-header"><h4>Programa {{$program->number}}</h4></li>
-                        @foreach($program->routines as $routine)
-                        <li class="collection-item"><div>Rutina {{$routine->number}}<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div></li>
+                        <li class="collection-header"><h4>Rutina {{$routine->number}}</h4></li>
+                        @foreach($sessions as $session)
+                        <li class="collection-item">
+                            <div>
+                                Sesión {{$session->number}} - {{strtoupper( $session->training->letter)}}
+                                @if(!$session->done)
+                                <a href="{{route('routine.train',$session->training_id)}}" class="secondary-content">
+                                    <i class="material-icons">send</i>
+                                </a>
+                                @else
+                                (Terminada)
+                                @endif
+                            </div>
+                        </li>
                         @endforeach
                         
                     </ul>
-                    @endforeach
-                    @else
-                    <h5>No hay programas registrados</h5>
-                    @endif
+                    
+                    
                 </div>
             </div>
         </div>                    
@@ -86,54 +94,7 @@
 
 </div>
 
-<!-- modal -->
-@if($person->experience == null)
-<div id="modal1" class="modal">
-    <div class="modal-content">
-        <h4>Mensaje</h4>
-        <p>No se puede asignar una rutina hasta que se evalúe al atleta.</p>
-    </div>
-    <div class="modal-footer">
-      <a class="modal-action modal-close waves-effect waves-green btn-flat">Entendido</a>
-  </div>
-</div>
-@else
-<div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Nueva rutina</h4>
-      <div class="row">
-          <div class="input-field col m8 offset-m2 s12">     
-            <i class="material-icons prefix" >linear_scale</i>                       
-            <select id="periodo" name="periodo" required="required" class="validate">
-                <option value="" disabled selected>Seleccione</option>
-                @foreach($person->experience->periods as $period)
-                <option value="{{$period->id}}">{{$period->name}}</option>
-                @endforeach
-            </select>
-            <label>Periodo</label>
-        </div>
-    </div>
-    <!-- microciclos -->
-    <h5>Microciclos</h5>
-    <div class="row microciclo_container">
-        <table class="responsive-table bordered highlight">
-            <tbody>
 
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="modal-footer">
-  <a id="crear" href="#" class="waves-effect waves-green btn-flat">Crear</a>
-</div>
-</div>
-@endif
-
-<form id="formulario" method="post" novalidate="true" class="col s12">
- <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
- <input type="hidden" id="exp" name="exp" value="{{ $person->experience->id }}"> 
- <input type="hidden" id="person_id" name="pers" value="{{ $person->id }}"> 
-</form>
 
 
 @endsection

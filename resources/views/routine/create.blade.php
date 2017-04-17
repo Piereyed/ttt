@@ -116,9 +116,13 @@
                 <input type="hidden" name="person_id" value="{{ $client->id }}">    
                 <input type="hidden" name="trainer_id" value="{{ $trainer->id }}">    
                 <input type="hidden" name="period_id" value="{{ $period->id }}">    
+                <input type="hidden" name="microcycle_id" value="{{ $microcycle->id }}"> 
+
                 <input type="hidden" name="goal_id" value="{{ $client->goal->id }}">    
                 <input type="hidden" id="total_sesiones" name="total_sesiones" value="">    
+                <input type="hidden" id="total_semanas" name="total_semanas" value="">    
                 <input type="hidden" id="sesiones" value="{{ sizeof($microcycle->sessions()) }}">    
+                <input type="hidden" name="cantidad_entrenamientos" value="{{ sizeof($arrLetters) }}">    
 
 
 
@@ -126,7 +130,7 @@
                     <div class="col s12 cronograma">
                         <div class="input-field">     
                             <i class="material-icons prefix" >autorenew</i>                       
-                            <select id="duracion" name="duracion" class="validate">
+                            <select id="duracion" name="microciclos" class="validate">
                                 <option selected disabled value="">Seleccione</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -158,13 +162,14 @@
                         <ul class="tabs">
                             @foreach($arrLetters as $key => $letter)
                             <li class="tab col s3"><a href="#{{strtoupper($letter)}}">Entrenamiento {{strtoupper($letter)}}</a></li>
+                            <input type="hidden" value="{{$letter}}" name="letter[]">
                             @endforeach
                         </ul>
                     </div>
                     <!--  para cada entrenamiento-->
                     @foreach($arrLetters as $key => $letter)
                     <div id="{{strtoupper($letter)}}" class="entrenamiento col s12">
-                        <div class="col m6 offset-m3 s12"> 
+                        <div class="col s12 center"> 
                             <h5><strong>Tipo de sesión :</strong>        
                                 @if($arr_type[$key]==1) 
                                 Musculación 
@@ -172,6 +177,7 @@
                                 Cardiovascular 
                                 @endif                           
                             </h5>
+                            <input type="hidden" value="{{$arr_type[$key]}}" name="type_session[]">
                         </div>
 
                         <!-- calentamiento -->
@@ -180,21 +186,21 @@
                                 <h4>Calentamiento</h4>
                             </div>
 
-                            <div class="col m12 s12 input-field">     
+                            <div class="col offset-m4 m4 s12 input-field">     
                                 <i class="material-icons prefix" >query_builder</i> 
                                 <select name="duracion_calentamiento[]"  required="required" class="validate">
                                     <option value="" disabled selected>Seleccione</option>                
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option selected value="5">5</option>
+                                    <option @if($phases[0]->max_duration == 1)selected @endif value="1">1</option>
+                                    <option @if($phases[0]->max_duration == 2)selected @endif value="2">2</option>
+                                    <option @if($phases[0]->max_duration == 3)selected @endif value="3">3</option>
+                                    <option @if($phases[0]->max_duration == 4)selected @endif value="4">4</option>
+                                    <option @if($phases[0]->max_duration == 5)selected @endif  value="5">5</option>
                                 </select>
                                 <label>Tiempo(minutos)</label>
                             </div>
 
                             <!-- tabla -->
-                            <div class="col s12">
+                            <div class="col s12 offset-m3 m6">
                                 <table class="tabla_calentamiento {{$key}} responsive-table bordered highlight">
                                     <thead>
                                         <tr>            
@@ -213,16 +219,42 @@
 
                         <!-- estiramiento -->
                         <div class="row estiramiento">
-                            <div class="col s12">
+                            <div class="col s12 m6">
                                 <h4>Estiramiento</h4>    
                             </div>
+                            <div  class="col s12 m6 center">
+                                <a style="margin-top:16.53px" href="#!" class="btn-obtener-estiramiento btn waves-effect waves-light"><i class="material-icons left">line_style</i>Generar</a>
+                            </div>
 
-
-                            <div class="col m12 s12 input-field">     
+                            <div class="col offset-m4 m4 s12 input-field">     
                                 <i class="material-icons prefix" >query_builder</i> 
-                                <input type="number" name="duracion_estiramiento[]" value="{{$phases[2]->max_duration}}" required="required" class="validate">
+                                <select name="duracion_estiramiento[]"  required="required" class="validate">
+                                    <option value="" disabled selected>Seleccione</option>                
+                                    <option @if($phases[2]->max_duration == 1)selected @endif value="1">1</option>
+                                    <option @if($phases[2]->max_duration == 2)selected @endif value="2">2</option>
+                                    <option @if($phases[2]->max_duration == 3)selected @endif value="3">3</option>
+                                    <option @if($phases[2]->max_duration == 4)selected @endif value="4">4</option>
+                                    <option @if($phases[2]->max_duration == 5)selected @endif  value="5">5</option>
+                                </select>                                
                                 <label>Tiempo(minutos)</label>
                             </div>
+
+                            <!-- tabla -->
+                            <div class="col s12 offset-m3 m6">
+                                <table class="tabla_estiramiento {{$key}} responsive-table bordered highlight">
+                                    <thead>
+                                        <tr>            
+                                            <th data-field="name">Nombre</th>
+                                            <th class="center" data-field="phase">Tiempo(seg)</th>
+                                            <th class="center" data-field="options">Quitar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--  aqui entran las filas   -->
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                         <!--fin de estiramiento-->
 
@@ -231,7 +263,7 @@
                             <div class="col s12">
                                 <h4>Principal</h4>   
                             </div>
-                            <div class="col m12 s12 input-field">     
+                            <div class="col offset-m4 m4 s12 input-field">     
                                 <i class="material-icons prefix" >query_builder</i> 
                                 <input type="number" name="duracion_descanso[]" value="{{$period->rest_duration}}" required="required" class="validate">
                                 <label>Descanso entre series(segundos)</label>
@@ -488,6 +520,10 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 </form>
 
+<form id="pedir_ejercicios_estiramiento" method="post" action="{{ route('exercise.obtain_strech') }}">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+</form>
+
 <!-- modal -->
 <div id="modal" class="modal modal-fixed-footer">
     <div class="modal-content">
@@ -571,7 +607,7 @@
 <script>
     var aux_microciclo;
     var aux_periodo;
-    var entrenamiento;
+    var entrenamiento="";
     var indice_musculos = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 
     $( document ).ready(function(){
@@ -656,6 +692,7 @@
             }
             $(".cronograma .center").append(cad);
             $("#num_semanas").html(Math.ceil((sizetotal/7)));
+            $("#total_semanas").val(Math.ceil((sizetotal/7)));
         });
 
         // muestra el tipo de ejercicio : simple superserie etc
@@ -690,8 +727,32 @@
             });
         });
 
+        //        ajax para imprimir los ejercicios de estiramiento
+        $(".btn-obtener-estiramiento").on("click",function(){
+            if(entrenamiento!= ""){
+                var arr_muscles=[];
+                $(this).parent().parent().next().find("tbody tr").each(function(){
+                    var id = parseInt($(this).find("td.id_musculo").html())
+                    if(!isNaN(id)){
+                        arr_muscles.push(id);
+                    }
+                });
 
 
+                form = $("#pedir_ejercicios_estiramiento");//solo tiene token
+                var index = convertirLetra(entrenamiento);
+                var data = form.serialize();
+                data =data+'&index='+index+'&arr_muscles='+arr_muscles;
+
+                $.post(form.attr('action'), data, function(table) {
+                    $('.'+index+'.tabla_estiramiento tbody').html(table);
+                });
+            }
+            else{
+                alert("Agregue ejercicios primero");
+            }
+
+        });
 
         //ajax para pedir ejercicios segun el musculo --------PRINCIPAL--------
         $("#musculo1").on("change",function(){
@@ -707,6 +768,8 @@
 
         // agregar los ejercicios a principal
         $("#btn-agregar").on("click", function(){
+
+            var rows = $("#"+entrenamiento+" .tabla-principal tbody tr").length;
             $(".elegido").each( function( index, tr ) {
                 $(this).removeClass("elegido");
                 //el musculo del ejercicio
@@ -714,9 +777,9 @@
                 if(!isNaN(id_musculo)){
                     indice_musculos[id_musculo-1] ++ ;
                     actualizar_indice();
-                }             
+                }            
 
-                new_tr = tr;
+
                 $(this).find('input').prop('checked', false);
                 $(this).find('.opc').remove();
                 $(this).children('.hidden').each(function(){
@@ -725,18 +788,30 @@
 
                 //armo la cadena
                 cad = '';
+                cadVar = '';
                 var i;
+                var index = convertirLetra(entrenamiento);
                 for(i=0; i < aux_periodo['pyramids'].length - 1; i++){
                     repeticion = aux_periodo['pyramids'][i]['percentage_rm'] ;
                     cad+=repeticion + ', ';
+
+                    //variable                    
+                    cadVar+='<input name="serie['+index+']['+rows+']['+i+']" type="text" value="'+repeticion+'" >';
                 }
+
 
                 repeticion = aux_periodo['pyramids'][aux_periodo['pyramids'].length - 1]['percentage_rm'] ;
                 cad+=repeticion +'';
+                cadVar+='<input name="serie['+index+']['+rows+']['+(aux_periodo['pyramids'].length - 1)+']" type="text" value="'+repeticion+'"  >';
+                rows++;
 
 
-                $(this).find('td.series').html(cad);
+                $(this).find('td.series').html(cad);//pinto las series
+                $(this).find('td.series_input').html(cadVar);//las variables de las series 
                 $("#"+entrenamiento+" .tabla-principal tbody").append(tr);
+
+
+
             });
         });
 
@@ -761,39 +836,39 @@
 
 
     });
-    function actualizar_indice(){
-        for(var i = 0; i<13 ; i++){
-            if(indice_musculos[i] == 0){
-                $("#musculo_"+(i+1)).prop('checked', false);
-            }
-            else{
-                $("#musculo_"+(i+1)).prop('checked', true);
-            }
+function actualizar_indice(){
+    for(var i = 0; i<13 ; i++){
+        if(indice_musculos[i] == 0){
+            $("#musculo_"+(i+1)).prop('checked', false);
+        }
+        else{
+            $("#musculo_"+(i+1)).prop('checked', true);
         }
     }
-    
-    function convertirLetra(e){
-        var num = 0;
-        if(e == "A"){
-            num= 1;
-        }
-        else if(e == "B"){
-            num= 2;
-        }
-        else if(e == "C"){
-            num= 3;
-        }
-        else if(e == "D"){
-            num= 4;
-        }
-        else if(e == "E"){
-            num= 5;
-        }
-        else if(e == "F"){
-            num= 6;
-        }
-        return num;
+}
+
+function convertirLetra(e){
+    var num = 0;
+    if(e == "A"){
+        num= 0;
     }
+    else if(e == "B"){
+        num= 1;
+    }
+    else if(e == "C"){
+        num= 2;
+    }
+    else if(e == "D"){
+        num= 3;
+    }
+    else if(e == "E"){
+        num= 4;
+    }
+    else if(e == "F"){
+        num= 5;
+    }
+    return num;
+}
 
 
 </script>

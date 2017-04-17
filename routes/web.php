@@ -146,6 +146,9 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::group(['prefix' => 'rutinas'], function(){    
         
+        Route::get('/misrutinas', ['as' => 'myroutines.index', 'uses' => 'RoutineController@myroutines']);
+        Route::post('/guardar', ['as' => 'myroutine.store', 'uses' => 'RoutineController@store_myroutine']);
+        Route::get('/entrenar/{id}', ['as' => 'routine.train', 'uses' => 'RoutineController@train']);
         Route::get('/{id}', ['as' => 'routine.index', 'uses' => 'RoutineController@index']);
         Route::get('create/{id}/{period}/{microcycle}', ['as' => 'routine.create', 'uses' => 'RoutineController@create']);        
         Route::post('create/', ['as' => 'routine.store', 'uses' => 'RoutineController@store']);
@@ -169,5 +172,6 @@ Route::post('/getMicrocycles/{goal_id}/{experience_id}', ['as' => 'search.microc
 Route::post('/getMicrocycle/{id}', ['as' => 'get.microcycle','uses' => 'MicrocycleController@getMicrocycle']);//NO TOCAR!
 Route::post('/obtenerEjercicios/', ['as' => 'exercise.obtain','uses' => 'ExerciseController@obtain']);//NO TOCAR!
 Route::post('/obtenerEjerciciosCalentamiento/', ['as' => 'exercise.obtain_warm','uses' => 'ExerciseController@obtain_warm']);//NO TOCAR!
+Route::post('/obtenerEjerciciosEstiramiento/', ['as' => 'exercise.obtain_strech','uses' => 'ExerciseController@obtain_strech']);//NO TOCAR!
 Route::post('/getPeriod/{id}', ['as' => 'get.period','uses' => 'PeriodController@getPeriod']);//NO TOCAR!
 

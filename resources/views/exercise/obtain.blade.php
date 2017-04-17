@@ -22,7 +22,7 @@
             <td hidden class="center hidden">Simple</td>
             <td hidden><input type="number" value="1" name="tipo_ejer[{{$index}}][]"></td>
             
-            <td hidden class="id_musculo">@if($exercise->exercise->type != 0) {{ $exercise->exercise->muscles[0]->id }}@endif</td>
+            <td hidden class="id_musculo">@if($exercise->exercise->type != 0){{$exercise->exercise->muscles[0]->id }}@endif</td>
             <td class="center">@if($exercise->exercise->type == 0) Todos @else {{ $exercise->exercise->muscles[0]->name }}@endif</td>
             
             <td hidden><input type="number" name="id_ejer[{{$index}}][]" value="{{$exercise->exercise->id}}" ></td> 

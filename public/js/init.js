@@ -44,7 +44,8 @@ $( document ).ready(function(){
     //tabs
     $('ul.tabs').tabs();
 
-    
+    //collapsibles
+    $('.collapsible').collapsible();
 
 
 

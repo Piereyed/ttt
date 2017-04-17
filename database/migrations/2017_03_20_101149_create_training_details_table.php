@@ -17,12 +17,14 @@ class CreateTrainingDetailsTable extends Migration
             $table->increments('id');
             $table->integer('type')->unsigned();  // 1=> simple, 2=> compuesta, 3=>superserie, 4=>triserie, 5=>serie gigante
             $table->integer('training_id')->unsigned();
+            $table->integer('training_phase_id')->unsigned();
 
             $table->timestamps();
         });
 
         Schema::table('training_details', function (Blueprint $table) {
              $table->foreign('training_id')->references('id')->on('trainings');             
+             $table->foreign('training_phase_id')->references('id')->on('training_phases');             
         });
     }
 
@@ -35,6 +37,7 @@ class CreateTrainingDetailsTable extends Migration
     {
         Schema::table('training_details', function (Blueprint $table) {
             $table->dropForeign('training_details_training_id_foreign');            
+            $table->dropForeign('training_details_training_phase_id_foreign');            
         });
 
         Schema::dropIfExists('training_details');

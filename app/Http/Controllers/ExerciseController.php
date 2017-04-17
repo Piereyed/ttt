@@ -66,7 +66,7 @@ class ExerciseController extends Controller
                 'exercises'    =>  $exercises,
                 'index'    =>  $index
             ];
-            
+
             //le paso todo a la vista donde esta la tabla
             return response()->view('exercise.obtain', $data);        
         } catch (Exception $e) {
@@ -88,6 +88,32 @@ class ExerciseController extends Controller
 
             //le paso todo a la vista donde esta la tabla
             return response()->view('exercise.obtain_warm', $data);        
+        } catch (Exception $e) {
+            return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
+        }
+    }
+
+    public function obtain_strech(Request $request)
+    {
+        // dd($request); 
+        $index = $request['index'];
+        $arr_muscles = explode(",", $request['arr_muscles']);
+        $new = array();
+        for($k=0;$k<sizeof($arr_muscles);$k++){
+            array_push($new, intval($arr_muscles[$k]));
+        }
+
+
+        try {       
+            $exercises = Exercise_Muscle::whereIn('muscle_id',$new)->get();
+
+            $data = [
+                'exercises'    =>  $exercises,
+                'index'    =>  $index
+            ];
+
+            //le paso todo a la vista donde esta la tabla
+            return response()->view('exercise.obtain_strech', $data);        
         } catch (Exception $e) {
             return redirect()->back()->with('warning', 'Ocurrió un error al hacer esta acción');
         }

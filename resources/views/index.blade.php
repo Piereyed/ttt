@@ -153,6 +153,11 @@
 
                     @endif
 
+                    <!--   roles del Cliente de gimnasio    -->
+                    @if(in_array("Cliente", session('roles')))
+                    <li><a href="{{ route('myroutines.index') }}"><i class="material-icons left">directions_run</i>Entrenar</a></li>
+                    @endif
+
                     <!-- nombre -->
                     @if (!Auth::guest())
                     <li><a class="dropdown-button" href="#!" data-activates="salir">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i></a></li>

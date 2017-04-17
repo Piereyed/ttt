@@ -34,9 +34,10 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                 <!-- experiencia -->
-                @if($client->experience_id != null)
                 <div class="row">
-                    <div class="input-field col s4 offset-s2 m4 offset-m4">
+                @if($client->experience_id != null)
+                
+                    <div class="input-field col s4 offset-s2 m4 offset-m1">
                         <i class="material-icons prefix">grade</i>
                         <select id="experience" name="experiencia" required="required" class="validate">
                             <option value="" disabled >Seleccione el nivel de experiencia</option>
@@ -46,10 +47,10 @@
                         </select>
                         <label>Experiencia</label>
                     </div>
-                </div>
+                
                 @else
-                <div class="row">
-                    <div class="input-field col s4 offset-s2 m4 offset-m4">
+                
+                    <div class="input-field col s4 offset-s2 m4 offset-m1">
                         <i class="material-icons prefix">grade</i>
                         <select id="experiencia" name="experiencia" required="required" class="validate">
                             <option value="" disabled selected>Seleccione el nivel de experiencia</option>
@@ -59,12 +60,11 @@
                         </select>
                         <label>Experiencia</label>
                     </div>
-                </div>
+                
                 @endif
 
-                <!-- Objetivo -->                
-                <div class="row">
-                    <div class="input-field col s4 offset-s2 m4 offset-m4">
+                    <!-- Objetivo -->
+                    <div class="input-field col s4 offset-s2 m4 offset-m2">
                         <i class="material-icons prefix">gps_fixed</i>
                         <select id="objetivo" name="objetivo" required="required" class="validate">
                             <option value="" disabled selected>Seleccione el objetivo deseado</option>
@@ -76,17 +76,16 @@
                 
                 
                 <!-- medidas -->
-                @foreach($measures as $measure)
                 <div class="row">
-                    <div class="input-field col s4 offset-s2 m2 offset-m4">
+                @foreach($measures as $measure)
+                
+                    <div class="input-field col s6 m2">
                         <input id="{{$measure->label}}" type="text" value="{{old($measure->label)}}" name="{{$measure->label}}" placeholder="" class="measure center" @if($measure->id>=14) readonly @endif>
-                        <label class="active" for="{{$measure->label}}">{{$measure->name}}</label>
-                    </div>  
-                    <div class="input-field col s4 m2">
-                        <input type="text" class="center" disabled value="{{$measure->unity}}"> 
-                    </div>                   
-                </div>
+                        <label class="active" for="{{$measure->label}}">{{$measure->name}} @if($measure->unity != '-')({{$measure->unity}}) @endif</label>
+                    </div>     
+                
                 @endforeach
+                </div>
 
                 <div class="row"  style="text-align:center">
                     <div class="col s12">
