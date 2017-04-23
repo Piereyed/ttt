@@ -28,6 +28,7 @@
             <span class="h1">Entrenamiento {{strtoupper($training->letter)}}</span>                     
             <form method="post" action="{{ route('myroutine.store') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="session" value="{{ $session->id }}">
 
                 <div class="row">
                     <div class="col s12">
@@ -95,17 +96,18 @@
                                         <div class="col s12">
                                             <table class="bordered highlight">
                                                 <tr>
-                                                    <td class="center" colspan="3"><strong>SERIE {{$serie->number}}</strong></td>
+                                                    <td class="center" colspan="3"><strong>SERIE {{$serie->number}}</strong>
+                                                    <input type="hidden" name="serie[]" value="{{$serie->id}}"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Repeticiones</td>
                                                     <td>{{$serie->repetitions}}</td>
-                                                    <td><input type="number" placeholder="Repeticiones hechas" name="rep_ejercicio[ {{$t_exercise->id}} ][]"></td>
+                                                    <td><input type="number" placeholder="Repeticiones hechas" name="repetitions_done[]"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Peso</td>
                                                     <td>{{$serie->weight}}</td>
-                                                    <td><input type="number" placeholder="Peso levantado" name="peso_ejercicio[ {{$t_exercise->id}} ][]"></td>
+                                                    <td><input type="number" placeholder="Peso levantado" name="weight_lifted[]"></td>
                                                 </tr>
                                             </table>
 

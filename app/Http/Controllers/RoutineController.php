@@ -16,6 +16,7 @@ use App\Training_exercise;
 use App\Training;
 use App\Serie;
 use App\Training_session;
+use App\Training_session_serie;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -216,21 +217,28 @@ class RoutineController extends Controller
     }
     public function myroutines()
     {
+        $sessions = null;
         $client_id = Auth::user()->person->id;
         $routine = Routine::where('finished',0)->where('person_id',$client_id)->first();
-        $sessions = $routine->training_sessions;
+        
+        if($routine != null){
+            $sessions = $routine->training_sessions;
+        }  
 
         $data = [
             'routine'     =>  $routine,
             'sessions'    =>  $sessions            
         ];
+        
+//        dd($sessions);
         return view('routine.myroutines', $data);
     }
 
     public function train($id)
     {
 
-        $training = Training::find($id);
+        $training_session = Training_session::find($id);
+        $training = Training::find($training_session->training_id);
         $warms = Training_detail::where('training_id',$training->id)->where('training_phase_id',1)->get();
         $stretchs = Training_detail::where('training_id',$training->id)->where('training_phase_id',3)->get();
         $principals = Training_detail::where('training_id',$training->id)->where('training_phase_id',2)->get();
@@ -240,6 +248,7 @@ class RoutineController extends Controller
             'warms'        =>  $warms,
             'stretchs'      =>  $stretchs,
             'principals'    =>  $principals,
+            'session'      =>  $training_session,
             'routine'      =>  $training->routine            
         ];
         return view('routine.train', $data);
@@ -247,7 +256,34 @@ class RoutineController extends Controller
 
 
     public function store_myroutine(Request $request){
-        dd($request);
+//        dd($request);
+        foreach($request['serie'] as $key => $value){
+            $serie = Serie::find($value);
+            
+            $t_s_serie = new Training_session_serie;
+            $t_s_serie->weight_lifted = $request['weight_lifted'][$key];
+            $t_s_serie->repetitions_done = $request['repetitions_done'][$key];
+            $t_s_serie->training_session_id = $request['session'];
+            $t_s_serie->serie_id = $value;
+            $t_s_serie->training_exercise_id = $serie->training_exercise_id;
+            $t_s_serie->save();
+        }
+        //se termina la rutina
+        $session = Training_session::find($request['session']);
+        $session->done = 1 ;
+        $session->save();
+        
+        //se verifica si es la ultima sesion
+        if(sizeof(Training_session::where('routine_id',$session->routine_id)->where('done',0)->get()) == 0 ){
+            $routine =$session->routine;
+            $routine->finished = 1;
+            $routine->save();            
+        }
+        
+        
+        return redirect()->route('myroutines.index')->with('success', 'La sesión de entrenamiento se ha registrado con éxito');
+        
+        
     }
 
     public function show($id)

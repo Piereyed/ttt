@@ -36,7 +36,7 @@
             <div class="nav-wrapper">
                 <div class="col s12">                            
                     <a href="#" class="breadcrumb">Inicio</a>
-                    <a href="{{route('myathletes.index')}}" class="breadcrumb">Mis rutinas</a>
+                    <a href="{{route('myathletes.index')}}" class="breadcrumb">Mis sesiones de entrenamiento</a>
                 </div>
             </div>
         </nav>
@@ -45,7 +45,7 @@
     <!--   Icon Section   -->
     <div class="row">
         <div class="col s12">
-            <span class="h1">Mis Rutinas</span>
+            <span class="h1">Mis sesiones de entrenamiento</span>
             <!-- fixed action buttons -->
             <div class="fixed-action-btn click-to-toggle">
                 <a title="Opciones" class="btn-floating btn-large grey darken-2">
@@ -66,7 +66,7 @@
             <div class="row">
                 <div class="col s12">
 
-
+                    @if($sessions != null)
                     <ul class="collection with-header">
                         <li class="collection-header"><h4>Rutina {{$routine->number}}</h4></li>
                         @foreach($sessions as $session)
@@ -74,7 +74,7 @@
                             <div>
                                 Sesión {{$session->number}} - {{strtoupper( $session->training->letter)}}
                                 @if(!$session->done)
-                                <a href="{{route('routine.train',$session->training_id)}}" class="secondary-content">
+                                <a href="{{route('routine.train',$session->id)}}" class="secondary-content">
                                     <i class="material-icons">send</i>
                                 </a>
                                 @else
@@ -82,11 +82,11 @@
                                 @endif
                             </div>
                         </li>
-                        @endforeach
-                        
+                        @endforeach                         
                     </ul>
-                    
-                    
+                    @else
+                    <h4>No hay sesiones pendientes</h4>
+                    @endif
                 </div>
             </div>
         </div>                    
