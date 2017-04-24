@@ -23,6 +23,7 @@ class CreateRoutinesTable extends Migration
             $table->integer('weeks')->unsigned();
             $table->integer('trainings_quantity')->unsigned();
             $table->boolean('finished');
+            $table->boolean('evaluated');
             $table->integer('person_id')->unsigned();
             $table->integer('trainer_id')->unsigned();
 

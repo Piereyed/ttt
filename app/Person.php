@@ -33,5 +33,9 @@ class Person extends Model
         return $this->belongsTo('App\Goal');
     }
     
+    public function routines(){
+        return $this->hasMany('App\Routine');
+    }
+    
     
 }

@@ -9,6 +9,7 @@ use App\Measure;
 use App\Physical_evaluation;
 use App\Physical_Evaluation_Measure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB; //para usar DB
 
 class EvaluationController extends Controller
 {
@@ -39,6 +40,36 @@ class EvaluationController extends Controller
             'experiences'    =>  $experiences
         ];
         return view('evaluation.create', $data);
+    }
+    
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    
+    public function create_rm($id)
+    {
+        $client = Person::find($id);
+        $routine = $client->routines()->where('finished',0)->first();       
+        
+        $t_exercises = DB::table('training_exercises')
+            ->join('training_details', 'training_details.id', '=', 'training_exercises.training_detail_id')
+            ->join('trainings', 'trainings.id', '=', 'training_details.training_id')
+            ->join('routines', 'routines.id', '=', 'trainings.routine_id')
+            ->where('routines.id','=',$routine->id)
+            ->select('training_exercises.id', 'training_exercises.exercise_id')
+            ->distinct()
+            ->get();
+        
+        dd($t_exercises);
+        
+        $data = [
+            'client'    =>  $client,
+            'routine'    =>  $routine,
+            't_exercises'    =>  $t_exercises
+        ];
+        return view('evaluation.create_rm', $data);
     }
 
     /**

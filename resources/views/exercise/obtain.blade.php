@@ -36,16 +36,6 @@
         @endforeach                 
     </tbody>
 </table>
-
-
-
-<!-- <div class="row">
-<div class="col-md-12 col-sm-12 col-xs-12">
-<center>
-<a title="Agregar ejercicios" data-remodal-action="cancel" class="btn btn-primary" onclick="selectQuestions()" id="select-questions"><i class="fa fa-plus"></i> Agregar</a>
-</center>        
-</div>
-</div> -->
 @else
 <h5>No existen ejercicios.</h5>
 @endif

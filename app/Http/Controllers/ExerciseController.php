@@ -78,6 +78,8 @@ class ExerciseController extends Controller
     {
         // dd($request); 
         $index = $request['index'];
+        $muscles = $request['arr_muscles'];
+        
         try {            
             $exercises = Exercise::where('training_phase_id',1)->get();            
 
@@ -95,18 +97,18 @@ class ExerciseController extends Controller
 
     public function obtain_strech(Request $request)
     {
-        // dd($request); 
+//         dd($request); 
         $index = $request['index'];
         $arr_muscles = explode(",", $request['arr_muscles']);
         $new = array();
         for($k=0;$k<sizeof($arr_muscles);$k++){
             array_push($new, intval($arr_muscles[$k]));
         }
-
+        
 
         try {       
             $exercises = Exercise_Muscle::whereIn('muscle_id',$new)->get();
-
+//            dd($exercises);
             $data = [
                 'exercises'    =>  $exercises,
                 'index'    =>  $index

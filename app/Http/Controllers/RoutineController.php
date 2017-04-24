@@ -108,6 +108,7 @@ class RoutineController extends Controller
         $routine->weeks = $request['total_semanas'];
         $routine->trainings_quantity = $request['cantidad_entrenamientos'];
         $routine->finished = 0;
+        $routine->evaluated = 0;
         $routine->person_id = $request['person_id'];
         $routine->trainer_id = Auth::user()->person->id;
         $routine->save();
