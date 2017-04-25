@@ -15,4 +15,5 @@ class Training extends Model
     public function training_details(){
         return $this->hasMany('App\Training_detail');
     }
+    
 }

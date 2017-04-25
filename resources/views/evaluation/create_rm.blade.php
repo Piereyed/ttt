@@ -1,4 +1,11 @@
 @extends('index')
+@section('styles')
+<style>
+    input{
+        text-align: center;
+    }
+</style>
+@endsection
 @section('content')
 
 
@@ -22,87 +29,69 @@
                 <div class="col s12">
                     <ul class="collection">
                         <li class="collection-item avatar">
-                          <img src="{{ asset('storage/'.$client->photo)  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
-                          <span class="title">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}</span>
+                            <img src="{{ asset('storage/'.$client->photo)  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
+                            <span class="title">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}</span>
 
-                          
-                          <!-- <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a> -->
-                      </li>
-                  </ul>
-              </div>
-              <form id="evaluar" files="true"  action="{{ route('evaluation.store',$client->id) }}" method="post" novalidate="true" class="col s12">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                <!-- experiencia -->
-                <div class="row">
-                @if($client->experience_id != null)
-                
-                    <div class="input-field col s4 offset-s2 m4 offset-m1">
-                        <i class="material-icons prefix">grade</i>
-                        <select id="experience" name="experiencia" required="required" class="validate">
-                            <option value="" disabled >Seleccione el nivel de experiencia</option>
-                            @foreach($experiences as $experience)                            
-                            <option @if($experience->id==$client->experience_id) selected @endif value="{{$experience->id}}">{{$experience->name}}</option>
-                            @endforeach
-                        </select>
-                        <label>Experiencia</label>
-                    </div>
-                
-                @else
-                
-                    <div class="input-field col s4 offset-s2 m4 offset-m1">
-                        <i class="material-icons prefix">grade</i>
-                        <select id="experiencia" name="experiencia" required="required" class="validate">
-                            <option value="" disabled selected>Seleccione el nivel de experiencia</option>
-                            @foreach($experiences as $experience)
-                            <option value="{{$experience->id}}">{{$experience->name}}</option>
-                            @endforeach
-                        </select>
-                        <label>Experiencia</label>
-                    </div>
-                
-                @endif
-
-                    <!-- Objetivo -->
-                    <div class="input-field col s4 offset-s2 m4 offset-m2">
-                        <i class="material-icons prefix">gps_fixed</i>
-                        <select id="objetivo" name="objetivo" required="required" class="validate">
-                            <option value="" disabled selected>Seleccione el objetivo deseado</option>
-                            
-                        </select>
-                        <label>Objetivo</label>
-                    </div>
+                            <!-- <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a> -->
+                        </li>
+                    </ul>
                 </div>
-                
-                
-                <!-- medidas -->
-                <div class="row">
-                
-                </div>
+                <form id="evaluar" files="true"  action="{{ route('evaluation_rm.store',$client->id) }}" method="post" novalidate="true" class="col s12">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                <div class="row"  style="text-align:center">
-                    <div class="col s12">
-                        <a href="{{ route('client.index') }}" title="Cancelar" class="waves-effect waves-teal btn-flat btn-large">
-                            <i class="left fa fa-step-backward" aria-hidden="true"></i>Regresar
-                        </a>
-                        <button  title="Guardar" type="submit" class="btn-large waves-effect waves-light btn ">
-                            <i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar
-                        </button >
+
+
+
+                    <!-- ejercicios -->
+                    <div class="row">
+                        <div class="col s12 l6 offset-l3">
+                            <table class="responsive-table bordered highlight">
+                                <thead>
+                                    <tr>
+                                        <th class="center" data-field="options">Ejercicio</th>
+                                        <th class="center" data-field="muscle">Repeticiones</th>
+                                        <th class="center" data-field="muscle">Peso (Kg)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($t_exercises as $t_exercise)
+                                    <tr>
+                                        <td hidden><input name="ids[]" value="{{ $t_exercise->{'id'} }}" type="hidden"></td>
+                                        <td>{{$t_exercise->{'name'} }}</td>
+                                        <td class="center"><input name="rep[]" type="number" placeholder="Cantidad"></td>
+                                        <td class="center"><input name="peso[]" type="number" placeholder="Peso"></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
-                </div>
-            </form>
+
+                    <div class="row"  style="text-align:center">
+                        <div class="col s12">
+                            <a href="{{ route('myathletes.index') }}" title="Cancelar" class="waves-effect waves-teal btn-flat btn-large">
+                                <i class="left fa fa-step-backward" aria-hidden="true"></i>Regresar
+                            </a>
+                            <button  title="Guardar" type="submit" class="btn-large waves-effect waves-light btn ">
+                                <i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar
+                            </button >
+                        </div>
+                    </div>
+                </form>
+
+            </div>
 
         </div>
-
     </div>
-</div>
 
 
 
 </div>
 
 <form id="formulario" method="post" novalidate="true" class="col s12">
-   <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
+    <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
 </form>
 
 
@@ -110,7 +99,7 @@
 
 @section('scripts')
 <script>
-    
+
 
 </script>
 @endsection

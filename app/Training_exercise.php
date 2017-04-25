@@ -13,4 +13,8 @@ class Training_exercise extends Model
     public function series(){
         return $this->hasMany('App\Serie');
     }
+    
+    public function training_detail(){
+        return $this->belongsTo('App\Training_detail');
+    }
 }

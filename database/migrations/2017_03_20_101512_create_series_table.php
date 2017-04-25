@@ -18,6 +18,7 @@ class CreateSeriesTable extends Migration
             $table->integer('number')->unsigned();
             $table->integer('repetitions')->unsigned()->nullable();
             $table->float('weight', 8, 2)->nullable();
+            $table->float('lb_weight', 8, 2)->nullable();
             $table->float('percentage_weight', 8, 2)->nullable();
             $table->integer('training_exercise_id')->unsigned();            
         });

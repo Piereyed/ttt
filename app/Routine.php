@@ -13,4 +13,8 @@ class Routine extends Model
     public function training_sessions(){
         return $this->hasMany('App\Training_session');
     }
+    
+    public function athlete(){
+        return $this->belongsTo('App\Person','person_id');
+    }
 }

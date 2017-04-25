@@ -99,6 +99,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('create/{id}', ['as' => 'evaluation.create', 'uses' => 'EvaluationController@create']);
         Route::get('create_rm/{id}', ['as' => 'evaluation_rm.create', 'uses' => 'EvaluationController@create_rm']);
         Route::post('create/{id}', ['as' => 'evaluation.store', 'uses' => 'EvaluationController@store']);
+        Route::post('create_rm/{id}', ['as' => 'evaluation_rm.store', 'uses' => 'EvaluationController@store_rm']);
         Route::get('show/{id}', ['as' => 'evaluation.show', 'uses' => 'EvaluationController@show']);
         Route::get('edit/{id}', ['as' => 'evaluation.edit', 'uses' => 'EvaluationController@edit']);
         Route::post('edit/{id}', ['as' => 'evaluation.update', 'uses' => 'EvaluationController@update']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Person;
 use App\Experience;
+use App\Training_exercise;
 use App\Measure;
 use App\Physical_evaluation;
 use App\Physical_Evaluation_Measure;
@@ -33,7 +34,7 @@ class EvaluationController extends Controller
         $client = Person::find($id);
         $measures = Measure::all();
         $experiences = Experience::all();
-        
+
         $data = [
             'client'    =>  $client,
             'measures'    =>  $measures,
@@ -41,29 +42,31 @@ class EvaluationController extends Controller
         ];
         return view('evaluation.create', $data);
     }
-    
-     /**
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function create_rm($id)
     {
         $client = Person::find($id);
         $routine = $client->routines()->where('finished',0)->first();       
-        
+
         $t_exercises = DB::table('training_exercises')
+            ->join('exercises', 'exercises.id', '=', 'training_exercises.exercise_id')
             ->join('training_details', 'training_details.id', '=', 'training_exercises.training_detail_id')
             ->join('trainings', 'trainings.id', '=', 'training_details.training_id')
             ->join('routines', 'routines.id', '=', 'trainings.routine_id')
             ->where('routines.id','=',$routine->id)
-            ->select('training_exercises.id', 'training_exercises.exercise_id')
+            ->where('exercises.training_phase_id','=',2)
+            ->select('training_exercises.id', 'training_exercises.exercise_id','exercises.name')
             ->distinct()
             ->get();
-        
-        dd($t_exercises);
-        
+
+        //        dd($t_exercises);
+
         $data = [
             'client'    =>  $client,
             'routine'    =>  $routine,
@@ -78,32 +81,66 @@ class EvaluationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function store_rm(Request $request,$id){
+//        dd($request);
+        for ($i=0; $i < sizeof( $request['ids'] ) ; $i++) { 
+            $training_exercise = Training_exercise::find($request['ids'][$i]);
+            $rep = $request['rep'][$i];
+            $peso = $request['peso'][$i];
+            $rm = 0.033 * $peso * $rep + $peso;
+            
+            //actualizo los pesos de las series con la formula del RM
+            foreach( $training_exercise->series as $serie ){
+                $serie->weight = intdiv(  ($serie->percentage_weight * $rm / 100) , 2.26 ) * 2.26;
+                $serie->lb_weight = round($serie->weight / 0.453592);
+                $serie->save();
+            }
+
+        }
+
+        //actualizo la rutina en el campo evaluado
+        $routine = Training_exercise::find($request['ids'][0])->training_detail->training->routine;
+        $routine->evaluated = 1;
+        $routine->save();
+        
+        return redirect()->route('myathletes.index',Auth::user()->person->id)->with('success', 'La evaluación de RM se ha registrado con éxito para '.$routine->athlete->name);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
     public function store(Request $request,$id)
     {
         $this->validate($request, [
-        'experiencia'         => 'required',            
-        'objetivo'         => 'required',            
-        'cuello'         => 'required|numeric',            
-        'hombros'         => 'required|numeric'  ,          
-        'pecho'         => 'required|numeric'     ,       
-        'cintura'         => 'required|numeric'    ,        
-        'cadera'         => 'required|numeric'      ,      
-        'brazo'         => 'required|numeric'        ,    
-        'antebrazo'         => 'required|numeric'     ,       
-        'trasero'         => 'required|numeric'        ,    
-        'pierna'         => 'required|numeric'          ,  
-        'pantorrilla'         => 'required|numeric'      ,      
-        'talla'         => 'required|numeric'            ,
-        'peso'         => 'required|numeric'            ,
-        'porcentajeGrasa'         => 'required|numeric'      ,      
-        'grasa'         => 'required|numeric'            ,
-        'porcentajeMasaMagra'         => 'required|numeric'  ,          
-        'masaMagra'         => 'required|numeric'         ,   
-        'imc'         => 'required|numeric'            ,
-        'icc'         => 'required|numeric'            ,
-        'ica'         => 'required|numeric'            
-                   
-        
+            'experiencia'         => 'required',            
+            'objetivo'         => 'required',            
+            'cuello'         => 'required|numeric',            
+            'hombros'         => 'required|numeric'  ,          
+            'pecho'         => 'required|numeric'     ,       
+            'cintura'         => 'required|numeric'    ,        
+            'cadera'         => 'required|numeric'      ,      
+            'brazo'         => 'required|numeric'        ,    
+            'antebrazo'         => 'required|numeric'     ,       
+            'trasero'         => 'required|numeric'        ,    
+            'pierna'         => 'required|numeric'          ,  
+            'pantorrilla'         => 'required|numeric'      ,      
+            'talla'         => 'required|numeric'            ,
+            'peso'         => 'required|numeric'            ,
+            'porcentajeGrasa'         => 'required|numeric'      ,      
+            'grasa'         => 'required|numeric'            ,
+            'porcentajeMasaMagra'         => 'required|numeric'  ,          
+            'masaMagra'         => 'required|numeric'         ,   
+            'imc'         => 'required|numeric'            ,
+            'icc'         => 'required|numeric'            ,
+            'ica'         => 'required|numeric'            
+
+
 
         ]);
         // dd($request);
@@ -113,7 +150,7 @@ class EvaluationController extends Controller
         $person->goal_id = $request['objetivo'];
         $person->save();
 
-        
+
         $ev = new Physical_evaluation;
         $ev->person_id = $id;
         $ev->save();
@@ -254,7 +291,7 @@ class EvaluationController extends Controller
 
         return redirect()->route('myathletes.index',Auth::user()->person->id)->with('success', 'La evaluación se ha registrado con éxito para '.$person->name);
 
-        
+
 
     }
 
@@ -270,7 +307,7 @@ class EvaluationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the formrm for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
