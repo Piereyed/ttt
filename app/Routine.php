@@ -17,4 +17,8 @@ class Routine extends Model
     public function athlete(){
         return $this->belongsTo('App\Person','person_id');
     }
+    
+    public function period(){
+        return $this->belongsTo('App\Period');
+    }
 }

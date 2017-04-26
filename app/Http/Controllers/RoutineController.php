@@ -288,9 +288,32 @@ class RoutineController extends Controller
     }
 
     public function show($id)
-    {
-        //
+    {        
+        $routine = Routine::find($id);
+        $data = [
+            'routine'      =>  $routine            
+        ];
+        return view('routine.show', $data);
+        
     }
+    
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    
+    public function show_results($id)
+    {        
+        $routine = Routine::find($id);
+        $data = [
+            'routine'      =>  $routine            
+        ];
+        return view('evaluation.results', $data);
+        
+    }
+    
 
     /**
      * Show the form for editing the specified resource.

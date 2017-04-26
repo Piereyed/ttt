@@ -60,7 +60,7 @@
 
 
                     <li><a id="nuevo" href="#modal1" title="Nuevo" class="btn-floating waves-effect waves-light btn-large green"><i class="material-icons">add</i>
-                    </a></li> 
+                        </a></li> 
                 </ul>             
             </div>             
 
@@ -71,9 +71,21 @@
                     <ul class="collection with-header">
                         <li class="collection-header"><h4>Programa {{$program->number}}</h4></li>
                         @foreach($program->routines as $routine)
-                        <li class="collection-item"><div>Rutina {{$routine->number}}<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div></li>
+                        <li class="collection-item"><div>Rutina {{$routine->number}}
+                            <a title="Ver rutina" href="{{route('routine.show',$routine->id)}}" class="secondary-content"><i class="material-icons">visibility</i></a>
+                            
+                            <!--  cuando termina la rutina-->
+                            @if($routine->finished)
+                            <a title="Ver resultados" href="{{route('routine_results.show',$routine->id)}}" class="secondary-content"><i class="material-icons">assignment</i></a>
+                            <span style="float:inherit" class="green new badge" data-badge-caption="Terminada"></span>
+                            @else
+                            <span class="blue new badge" data-badge-caption="Activa"></span>
+                            @endif
+                            <!--  fin cuando termina la rutina    -->
+                            </div>
+                        </li>
                         @endforeach
-                        
+
                     </ul>
                     @endforeach
                     @else
@@ -94,45 +106,45 @@
         <p>No se puede asignar una rutina hasta que se evalúe al atleta.</p>
     </div>
     <div class="modal-footer">
-      <a class="modal-action modal-close waves-effect waves-green btn-flat">Entendido</a>
-  </div>
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">Entendido</a>
+    </div>
 </div>
 @else
 <div id="modal1" class="modal">
     <div class="modal-content">
-      <h4>Nueva rutina</h4>
-      <div class="row">
-          <div class="input-field col m8 offset-m2 s12">     
-            <i class="material-icons prefix" >linear_scale</i>                       
-            <select id="periodo" name="periodo" required="required" class="validate">
-                <option value="" disabled selected>Seleccione</option>
-                @foreach($person->experience->periods as $period)
-                <option value="{{$period->id}}">{{$period->name}}</option>
-                @endforeach
-            </select>
-            <label>Periodo</label>
+        <h4>Nueva rutina</h4>
+        <div class="row">
+            <div class="input-field col m8 offset-m2 s12">     
+                <i class="material-icons prefix" >linear_scale</i>                       
+                <select id="periodo" name="periodo" required="required" class="validate">
+                    <option value="" disabled selected>Seleccione</option>
+                    @foreach($person->experience->periods as $period)
+                    <option value="{{$period->id}}">{{$period->name}}</option>
+                    @endforeach
+                </select>
+                <label>Periodo</label>
+            </div>
+        </div>
+        <!-- microciclos -->
+        <h5>Microciclos</h5>
+        <div class="row microciclo_container">
+            <table class="responsive-table bordered highlight">
+                <tbody>
+
+                </tbody>
+            </table>
         </div>
     </div>
-    <!-- microciclos -->
-    <h5>Microciclos</h5>
-    <div class="row microciclo_container">
-        <table class="responsive-table bordered highlight">
-            <tbody>
-
-            </tbody>
-        </table>
+    <div class="modal-footer">
+        <a id="crear" href="#" class="waves-effect waves-green btn-flat">Crear</a>
     </div>
-</div>
-<div class="modal-footer">
-  <a id="crear" href="#" class="waves-effect waves-green btn-flat">Crear</a>
-</div>
 </div>
 @endif
 
 <form id="formulario" method="post" novalidate="true" class="col s12">
- <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
- <input type="hidden" id="exp" name="exp" value="{{ $person->experience->id }}"> 
- <input type="hidden" id="person_id" name="pers" value="{{ $person->id }}"> 
+    <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
+    <input type="hidden" id="exp" name="exp" value="{{ $person->experience->id }}"> 
+    <input type="hidden" id="person_id" name="pers" value="{{ $person->id }}"> 
 </form>
 
 
@@ -156,59 +168,59 @@
                 data: 'action=search&'+params,
                 dataType: 'json',            
                 success: function(microcycles) {      
-                //vacio el contenedor
-                $(".microciclo_container tr").remove();                
+                    //vacio el contenedor
+                    $(".microciclo_container tr").remove();                
 
-                aux = microcycles;                
-                
-                var size = microcycles.length;
+                    aux = microcycles;                
 
-                //el contenido de los units
-                var cad = "";
-                for(var i = 0; i < size; i++){
-                    cad+='<tr>   <td class="opcion center">  <p>   <input name="microciclo" value="'+ microcycles[i]['id'] +'" type="radio" class="filled-in" id="'+ microcycles[i]['id'] +'" />                       <label class="label" for="'+ microcycles[i]['id'] +'"></label>           </p>     </td>    <td class="center">';
+                    var size = microcycles.length;
 
-                    var unit_unit = microcycles[i]['units'].length;
-                    for (var j = 0; j < unit_unit; j++) {
-                        cad += '<div class="caja ';
-                        if(microcycles[i]['units'][j]['letter'] !='-'){
-                            cad+=microcycles[i]['units'][j]['letter'];
-                        }
-                        else{
-                            cad+=' ';
-                        }
-                        cad+='">';
-                        cad+= microcycles[i]['units'][j]['letter'].toUpperCase();
+                    //el contenido de los units
+                    var cad = "";
+                    for(var i = 0; i < size; i++){
+                        cad+='<tr>   <td class="opcion center">  <p>   <input name="microciclo" value="'+ microcycles[i]['id'] +'" type="radio" class="filled-in" id="'+ microcycles[i]['id'] +'" />                       <label class="label" for="'+ microcycles[i]['id'] +'"></label>           </p>     </td>    <td class="center">';
 
-                        if(microcycles[i]['units'][j]['level'] > 0 ){
-                            cad+=microcycles[i]['units'][j]['level'];
-                        }
-                        
-                        if(microcycles[i]['units'][j]['type_session'] == 1){
-                            cad+='<sub>M</sub>';
-                        }
-                        else if (microcycles[i]['units'][j]['type_session'] == 2) {
-                            cad+='<sub>C</sub>';   
-                        }
+                        var unit_unit = microcycles[i]['units'].length;
+                        for (var j = 0; j < unit_unit; j++) {
+                            cad += '<div class="caja ';
+                            if(microcycles[i]['units'][j]['letter'] !='-'){
+                                cad+=microcycles[i]['units'][j]['letter'];
+                            }
+                            else{
+                                cad+=' ';
+                            }
+                            cad+='">';
+                            cad+= microcycles[i]['units'][j]['letter'].toUpperCase();
 
-                        cad+='</div>';
+                            if(microcycles[i]['units'][j]['level'] > 0 ){
+                                cad+=microcycles[i]['units'][j]['level'];
+                            }
 
-                        if( ((j+1) % 7 )== 0){
-                            cad+='<br>';
+                            if(microcycles[i]['units'][j]['type_session'] == 1){
+                                cad+='<sub>M</sub>';
+                            }
+                            else if (microcycles[i]['units'][j]['type_session'] == 2) {
+                                cad+='<sub>C</sub>';   
+                            }
+
+                            cad+='</div>';
+
+                            if( ((j+1) % 7 )== 0){
+                                cad+='<br>';
+                            }
+
+
                         }
-                        
-                        
+                        cad+='</td>   </tr>';
                     }
-                    cad+='</td>   </tr>';
+
+                    $(".microciclo_container tbody").append(cad);
+
+                },
+                error: function(data) {
+                    alert("Error al recuperar los objetivos.")
                 }
-
-                $(".microciclo_container tbody").append(cad);
-
-            },
-            error: function(data) {
-                alert("Error al recuperar los objetivos.")
-            }
-        });
+            });
 
 
         });
@@ -224,7 +236,7 @@
 
     });
 
-    
+
 
 </script>
 @endsection

@@ -155,6 +155,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('create/{id}/{period}/{microcycle}', ['as' => 'routine.create', 'uses' => 'RoutineController@create']);        
         Route::post('create/', ['as' => 'routine.store', 'uses' => 'RoutineController@store']);
         Route::get('show/{id}', ['as' => 'routine.show', 'uses' => 'RoutineController@show']);
+        Route::get('show-results/{id}', ['as' => 'routine_results.show', 'uses' => 'RoutineController@show_results']);
         Route::get('edit/{id}', ['as' => 'routine.edit', 'uses' => 'RoutineController@edit']);
         Route::post('edit/{id}', ['as' => 'routine.update', 'uses' => 'RoutineController@update']);
         Route::get('delete/{id}', ['as' => 'routine.delete', 'uses' => 'RoutineController@destroy']);
