@@ -1,6 +1,27 @@
 @extends('index')
 
 @section('styles')
+<style>
+    .box{
+
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px dashed black;
+    }
+    .sesion{
+        box-shadow: 1px 1px 10px black;
+        font-size: 20px;
+        display: block;
+        padding: 0 10px;
+    }
+    .tabin{
+        padding-top: 30px !important;
+    }
+    .indicator{
+        left: 0;
+        right: 797px;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -21,7 +42,7 @@
     <!--   Icon Section  -->
     <div class="row">
         <div class="col s12">
-            <span class="h1">Resultados de las sesiones - Rutina {{$routine->number}} </span>                   
+            <span class="h1">Resultados - Rutina {{$routine->number}} </span>                   
 
             <div class="row">
                 <div class="col s12">
@@ -36,7 +57,6 @@
                             <div class="col s12 m6">
                                 <p><strong>Periodo: </strong>{{$routine->period->name}}</p>
                                 <p><strong>Objetivo del periodo: </strong>{{$routine->period->specific_goal}}</p>
-                                <p><strong>Cantidad de semanas: </strong>{{$routine->weeks}}</p>
                                 <p><strong>Cantidad de sesiones: </strong>{{$routine->total_sessions}}</p>
                             </div>                           
                         </li>
@@ -44,48 +64,77 @@
                 </div>
             </div>
 
-
-            <div class="row">                
-                <!-- para cada sesion -->
-                @foreach($routine->training_sessions as $session)
-
-                <!-- principal -->
-                <div class="row principal">                        
-                    <div class="col s12">
-                        SESIÓN {{$session->number}} ({{$session->created_at}})
-                    </div>
-                    <div class="col s12">
-                        @foreach($session->training->training_details as $detail)
-                        <strong>Músculo <span>{{$detail->training_exercises[0]->exercise->muscles[0]->name  }}</span></strong>
-                        <strong>Ejercicio <span>{{$detail->training_exercises[0]->exercise->name}}</span></strong>
-
-                        <table class="tabla-principal responsive-table bordered highlight">
-                            <thead>
-                                <tr>                                           
-                                    <th class="center" data-field="name">Serie</th>
-                                    <th class="center" data-field="name">Repeticiones objetivo</th>
-                                    <th class="center" data-field="name">Repeticiones hechas</th>
-                                    <th class="center" data-field="name">Peso objetivo</th>
-                                    <th class="center" data-field="name">Peso levantado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!--  aqui entran las filas   -->
-                                @foreach($detail->training_exercises as $t_exercise)
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        @endforeach
-                    </div>                        
+            <div class="row">
+                <div class="col s12">
+                    <ul class="tabs">
+                        <li class="tab col s3"><a href="#detallado">Detallado</a></li>
+                        <li class="tab col s3"><a href="#sesion">Por sesión</a></li>
+                        <li class="tab col s3"><a href="#general">General</a></li>
+                        <li class="tab col s3"><a href="#ejercicio">Por ejercicio</a></li>
+                    </ul>
                 </div>
-                <!-- fin de principal-->
+                <div id="detallado" class="col s12 tabin">
+                    <!-- para cada sesion -->
+                    @foreach($routine->training_sessions as $session)
 
-                @endforeach
+                    <!-- principal -->
+                    <div class="row">                        
+                        <div class="col s12 ">
+                           <span class="sesion">SESIÓN {{$session->number}} ({{  date_format($session->created_at, 'd/m')  }})</span>
+                            
+                        </div>
+
+                        <div class="col s12">
+                            @foreach($session->training->training_details as $detail)
+                            @if($detail->training_exercises->first()->exercise->training_phase_id == 2 )
+                            <div class="box">
+                                <strong>Músculo:</strong> <span>{{$detail->training_exercises->first()->exercise->muscles->first()->name  }}</span> <br>
+                                <strong>Ejercicio:</strong> <span>{{$detail->training_exercises->first()->exercise->name}}</span>
+
+                                <table class="tabla-principal responsive-table bordered highlight">
+                                    <thead>
+                                        <tr>                                           
+                                            <th class="center" data-field="name">Serie</th>
+                                            <th class="center" data-field="name">Repeticiones objetivo</th>
+                                            <th class="center" data-field="name">Repeticiones hechas</th>
+                                            <th class="center" data-field="name">Peso objetivo</th>
+                                            <th class="center" data-field="name">Peso levantado</th>
+                                            <th class="center" data-field="name">Rendimiento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--                                  aqui entran las filas   -->
+                                        @foreach($detail->training_exercises->first()->series as $serie)
+                                        <tr>
+                                            <td class="center">{{$serie->number}}</td>
+                                            <td class="center">{{$serie->repetitions}}</td>
+                                            <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->repetitions_done}}</td>
+                                            <td class="center">{{$serie->lb_weight}}</td>
+                                            <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->weight_lifted}}</td>
+                                            <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->efficiency}}%</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            @endif
+                            @endforeach
+                        </div>                        
+                    </div>
+                    <!-- fin de principal-->
+
+                    @endforeach
+                </div>
+                <div id="sesion" class="col s12 tabin">
+                    
+                </div>
+                <div id="general" class="col s12 tabin">Por ejedsada</div>
+                <div id="ejercicio" class="col s12 tabin">sdasd</div>
             </div>
-            <!-- fin rutinas en tabs -->
+
+
+
 
 
 
@@ -111,7 +160,9 @@
 
 <script>
 
+$( document ).ready(function(){
 
+});
 
 
 </script>

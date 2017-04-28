@@ -264,6 +264,8 @@ class RoutineController extends Controller
             $t_s_serie = new Training_session_serie;
             $t_s_serie->weight_lifted = $request['weight_lifted'][$key];
             $t_s_serie->repetitions_done = $request['repetitions_done'][$key];
+            $t_s_serie->work = $t_s_serie->weight_lifted * $t_s_serie->repetitions_done;
+            $t_s_serie->efficiency = round($t_s_serie->work / ($serie->repetitions * $serie->lb_weight) * 100);
             $t_s_serie->training_session_id = $request['session'];
             $t_s_serie->serie_id = $value;
             $t_s_serie->training_exercise_id = $serie->training_exercise_id;

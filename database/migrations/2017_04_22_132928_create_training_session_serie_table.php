@@ -15,8 +15,10 @@ class CreateTrainingSessionSerieTable extends Migration
     {
         Schema::create('training_session_serie', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('weight_lifted')->unsigned();
+            $table->integer('weight_lifted')->unsigned();  //en libras
             $table->integer('repetitions_done')->unsigned();
+            $table->integer('work')->unsigned();
+            $table->float('efficiency',8,2)->unsigned();
             $table->integer('serie_id')->unsigned();
             $table->integer('training_session_id')->unsigned();
             $table->integer('training_exercise_id')->unsigned();
