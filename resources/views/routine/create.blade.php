@@ -2,6 +2,11 @@
 
 @section('styles')
 <style type="text/css">
+    .indicator{
+        left: 0;
+        right: 797px;
+    }
+    
     input{
         text-align: center;;
     }
@@ -113,6 +118,7 @@
 
             <form id="crear" method="post" action="{{ route('routine.store') }}" >
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">    
+                <input type="hidden" name="nuevo" value="{{ $nuevo }}">    
                 <input type="hidden" name="person_id" value="{{ $client->id }}">    
                 <input type="hidden" name="trainer_id" value="{{ $trainer->id }}">    
                 <input type="hidden" name="period_id" value="{{ $period->id }}">    

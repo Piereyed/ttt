@@ -48,20 +48,9 @@
         <div class="col s12">
             <span class="h1">Rutinas de {{$person->name}}</span>
             <!-- fixed action buttons -->
-            <div class="fixed-action-btn click-to-toggle">
-                <a title="Opciones" class="btn-floating btn-large grey darken-2">
-                    <i class="material-icons">view_module</i>
-                </a>   
-                <ul>                                 
-                    <li hidden><a id="eliminar"  title="Eliminar" data-target="" class="btn-floating btn-large waves-effect waves-light red "><i class="material-icons">delete</i></a></li>                  
-                    <li hidden><a id="editar"  title="Editar" class="btn-floating btn-large waves-effect waves-light yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
-
-                    <li hidden ><a id="ver"  title="Ver" class="btn-floating btn-large waves-effect waves-light blue "><i class="material-icons">visibility</i></a></li>
-
-
-                    <li><a id="nuevo" href="#modal1" title="Nuevo" class="btn-floating waves-effect waves-light btn-large green"><i class="material-icons">add</i>
-                        </a></li> 
-                </ul>             
+            <div class="fixed-action-btn">
+                <a id="nuevo" href="#modal1" title="Nueva rutina" class="btn-floating waves-effect waves-light btn-large green"><i class="material-icons">add</i>
+                </a>
             </div>             
 
             <div class="row">
@@ -71,25 +60,30 @@
                     <ul class="collection with-header">
                         <li class="collection-header"><h4>Programa {{$program->number}}</h4></li>
                         @foreach($program->routines as $routine)
-                        <li class="collection-item"><div>Rutina {{$routine->number}}
-                            <a title="Ver rutina" href="{{route('routine.show',$routine->id)}}" class="secondary-content"><i class="material-icons">visibility</i></a>
-                            
-                            <!--  cuando termina la rutina-->
-                            @if($routine->finished)
-                            <a title="Ver resultados" href="{{route('routine_results.show',$routine->id)}}" class="secondary-content"><i class="material-icons">assignment</i></a>
-                            <span style="float:inherit" class="green new badge" data-badge-caption="Terminada"></span>
-                            @else
-                            <span class="blue new badge" data-badge-caption="Activa"></span>
-                            @endif
-                            <!--  fin cuando termina la rutina    -->
+                        <li class="collection-item">
+                            <div>
+                                Rutina {{$routine->number}} - {{$routine->period->name}}
+                                <a title="Ver rutina" href="{{route('routine.show',$routine->id)}}" class="secondary-content"><i class="material-icons">visibility</i></a>
+
+                                <!--  cuando termina la rutina-->
+                                @if($routine->finished)
+                                <a title="Ver resultados" href="{{route('routine_results.show',$routine->id)}}" class="secondary-content"><i class="material-icons">assignment</i></a>
+                                <span style="float:inherit" class="blue new badge" data-badge-caption="Terminada"></span>
+                                @else
+                                <span style="float:inherit" class="green new badge" data-badge-caption="Activa"></span>
+                                @endif
+                                <!--  fin cuando termina la rutina    -->
                             </div>
                         </li>
                         @endforeach
+                        <li class="collection-item" style="text-align:center">
+                            <a class="agregar_rutina waves-effect waves-light btn black" href="#modal1" title="Agregar rutina al programa"><i class="material-icons left">add</i>Agregar rutina</a>
+                        </li>
 
                     </ul>
                     @endforeach
                     @else
-                    <h5>No hay programas registrados</h5>
+                    <h5>No hay programas/rutinas registradas</h5>
                     @endif
                 </div>
             </div>
@@ -156,6 +150,7 @@
 
 <script>
     var aux;
+    var nuevo=0;
 
     $( document ).ready(function(){
 
@@ -224,14 +219,23 @@
 
 
         });
+        $('#nuevo').on("click",function(){
+            nuevo = 1;
+        });
+
+        $('.agregar_rutina').on("click",function(){
+            nuevo = 0;
+        });
+
+
 
         $('tbody').on("click",'input',function(){ 
 
             var m = $('input[name="microciclo"]:checked').val();
             var p = $("#periodo").val();
             var id = $("#person_id").val();
+            $("#crear").attr('href','/rutinas/create/'+id+'/'+p+'/'+m+'/'+nuevo);           
 
-            $("#crear").attr('href','/rutinas/create/'+id+'/'+p+'/'+m);
         });
 
     });

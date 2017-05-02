@@ -13,6 +13,7 @@ class CreateProgramsTable extends Migration
             $table->increments('id');
             $table->integer('number')->unsigned();
             $table->integer('person_id')->unsigned();
+            $table->boolean('finished');
             $table->softDeletes();
             $table->timestamps();
         });

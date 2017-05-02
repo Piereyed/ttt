@@ -17,8 +17,13 @@ class CreateTrainingSessionsTable extends Migration
             $table->increments('id');
             $table->integer('number')->unsigned();
             $table->boolean('done');
+            $table->integer('work_objetive')->unsigned();
+            $table->integer('work_done')->unsigned();
+            $table->float('efficiency',8,2)->unsigned();
+            
             $table->integer('training_id')->unsigned();
-            $table->integer('routine_id')->unsigned();
+            $table->integer('routine_id')->unsigned();           
+            
             $table->timestamps();
         });
 

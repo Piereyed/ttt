@@ -2,6 +2,10 @@
 
 @section('styles')
 <style type="text/css">
+    .indicator{
+        left: 0;
+        right: 797px;
+    }
     .serie , .coma{
         display: inline-block;
     }

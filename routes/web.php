@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/',['as'=>'inicio',function () {
+Route::get('/home',['as'=>'inicio',function () {
     return view('index');
 }] )->middleware('auth');
 
@@ -28,7 +28,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
 
-    Route::get('/inicio_sedes','HomeController@locals')->name('inicio_sedes');;
+    Route::get('/','HomeController@locals')->name('inicio_sedes');;
     Route::post('/entrar_sede', 'HomeController@entrar');
     
     Route::group(['prefix' => 'administradores'], function(){    
@@ -95,7 +95,7 @@ Route::group(['middleware' => 'auth'], function(){
     });
 
     Route::group(['prefix' => 'evaluaciones'], function(){    
-        Route::get('/', ['as' => 'evaluation.index', 'uses' => 'EvaluationController@index']);
+        Route::get('/{id}', ['as' => 'evaluation.index', 'uses' => 'EvaluationController@index']);
         Route::get('create/{id}', ['as' => 'evaluation.create', 'uses' => 'EvaluationController@create']);
         Route::get('create_rm/{id}', ['as' => 'evaluation_rm.create', 'uses' => 'EvaluationController@create_rm']);
         Route::post('create/{id}', ['as' => 'evaluation.store', 'uses' => 'EvaluationController@store']);
@@ -152,7 +152,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/guardar', ['as' => 'myroutine.store', 'uses' => 'RoutineController@store_myroutine']);
         Route::get('/entrenar/{id}', ['as' => 'routine.train', 'uses' => 'RoutineController@train']);
         Route::get('/{id}', ['as' => 'routine.index', 'uses' => 'RoutineController@index']);
-        Route::get('create/{id}/{period}/{microcycle}', ['as' => 'routine.create', 'uses' => 'RoutineController@create']);        
+        Route::get('create/{id}/{period}/{microcycle}/{new}', ['as' => 'routine.create', 'uses' => 'RoutineController@create']);        
         Route::post('create/', ['as' => 'routine.store', 'uses' => 'RoutineController@store']);
         Route::get('show/{id}', ['as' => 'routine.show', 'uses' => 'RoutineController@show']);
         Route::get('show-results/{id}', ['as' => 'routine_results.show', 'uses' => 'RoutineController@show_results']);

@@ -106,7 +106,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Peso</td>
-                                                    <td>{{$serie->weight}}kg / {{$serie->lb_weight}}lb</td>
+                                                    <td>{{$serie->lb_weight}}lb</td>
                                                     <td><input type="number" placeholder="Peso levantado" name="weight_lifted[]"></td>
                                                 </tr>
                                             </table>

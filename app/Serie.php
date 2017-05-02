@@ -11,4 +11,8 @@ class Serie extends Model
     public function training_session_series(){
         return $this->hasMany('App\Training_session_serie','serie_id');
     }
+    
+    public function training_exercise(){
+        return $this->belongsTo('App\Training_exercise');
+    }
 }

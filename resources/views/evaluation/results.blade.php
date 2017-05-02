@@ -19,7 +19,10 @@
     }
     .indicator{
         left: 0;
-        right: 797px;
+        right: 885px;
+    }
+    .tabla-por-ejercicios{
+        margin-bottom: 30px;
     }
 </style>
 @endsection
@@ -67,12 +70,13 @@
             <div class="row">
                 <div class="col s12">
                     <ul class="tabs">
-                        <li class="tab col s3"><a href="#detallado">Detallado</a></li>
-                        <li class="tab col s3"><a href="#sesion">Por sesión</a></li>
-                        <li class="tab col s3"><a href="#general">General</a></li>
-                        <li class="tab col s3"><a href="#ejercicio">Por ejercicio</a></li>
+                        <li class="tab col s2"><a href="#detallado">Detallado</a></li>
+                        <li class="tab col s2"><a href="#sesion">Por sesión</a></li>
+                        <li class="tab col s2"><a href="#general">General</a></li>
+                        <li class="tab col s2"><a href="#ejercicio">Por ejercicio</a></li>
                     </ul>
                 </div>
+                <!--  tab detallado-->
                 <div id="detallado" class="col s12 tabin">
                     <!-- para cada sesion -->
                     @foreach($routine->training_sessions as $session)
@@ -80,8 +84,8 @@
                     <!-- principal -->
                     <div class="row">                        
                         <div class="col s12 ">
-                           <span class="sesion">SESIÓN {{$session->number}} ({{  date_format($session->created_at, 'd/m')  }})</span>
-                            
+                            <span class="sesion">SESIÓN {{$session->number}} ({{  date_format($session->updated_at, 'd/m')  }})</span>
+
                         </div>
 
                         <div class="col s12">
@@ -109,9 +113,9 @@
                                             <td class="center">{{$serie->number}}</td>
                                             <td class="center">{{$serie->repetitions}}</td>
                                             <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->repetitions_done}}</td>
-                                            <td class="center">{{$serie->lb_weight}}</td>
-                                            <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->weight_lifted}}</td>
-                                            <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->efficiency}}%</td>
+                                            <td class="center">{{$serie->lb_weight}} lb</td>
+                                            <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->weight_lifted}} lb</td>
+                                            <td class="center">{{$serie->training_session_series->where('training_session_id',  $session->id)->first()->efficiency}} %</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -126,11 +130,101 @@
 
                     @endforeach
                 </div>
+                <!--  tab por sesion-->
                 <div id="sesion" class="col s12 tabin">
-                    
+                    <table class="responsive-table bordered highlight">
+                        <thead>
+                            <tr>                                           
+                                <th class="center" data-field="name">Sesión</th>
+                                <th class="center" data-field="name">Tipo sesión</th>
+                                <th class="center" data-field="name">Fecha</th>
+                                <th class="center" data-field="name">Entrenamiento</th>
+                                <th class="center" data-field="name">Trabajo a realizar</th>
+                                <th class="center" data-field="name">Trabajo realizado</th>
+                                <th class="center" data-field="name">Eficiencia</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- para cada sesion resumen-->
+                            @foreach($routine->training_sessions as $session)
+                            <tr>
+                                <td class="center">{{$session->number}}</td>
+                                <td class="center">@if($session->training->type_session == 1)Musculación @else Cardiovascular @endif</td>
+                                <td class="center">{{date_format($session->updated_at, 'd/m')}}</td>
+                                <td class="center">{{ strtoupper($session->training->letter) }}</td>
+                                <td class="center">{{$session->work_objetive}} LbRep</td>
+                                <td class="center">{{$session->work_done}} LbRep</td>
+                                <td class="center">{{$session->efficiency}} %</td>
+
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
                 </div>
-                <div id="general" class="col s12 tabin">Por ejedsada</div>
-                <div id="ejercicio" class="col s12 tabin">sdasd</div>
+                <!--  tab general-->
+                <div id="general" class="col s12 tabin">
+                    <table class="tabla-por-ejercicios responsive-table bordered highlight">
+                        <thead>
+                            <tr>                                           
+                                <th class="center" data-field="name">Ejercicio</th>
+                                <th class="center" data-field="name">RM inicial</th>
+                                <th class="center" data-field="name">RM logrado</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach( $routine_exercises as $routine_exercise )
+                            <tr>
+                                <td class="center">{{ $routine_exercise->exercise->name }}</td>
+                                <td class="center">{{ $routine_exercise->rm_inicial }} lb</td>
+                                <td class="center">{{ $routine_exercise->rm_final }} lb</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--  tab por ejercicio-->
+                <div id="ejercicio" class="col s12 tabin">
+
+                    <!-- para cada ejercicio de la rutina-->
+                    @foreach($exercises as $exercise)
+                    <span class="sesion">Ejercicio: {{ $exercise->name }}</span>
+                    <table class="tabla-por-ejercicios responsive-table bordered highlight">
+                        <thead>
+                            <tr>                                           
+                                <th class="center" data-field="name">Sesión</th>
+                                <th class="center" data-field="name">Trabajo a realizar</th>
+                                <th class="center" data-field="name">Trabajo realizado</th>
+                                <th class="center" data-field="name">Eficiencia</th>
+                                <th class="center" data-field="name">RM alcanzado</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach($t_s_exercises as $key => $t_s_exercise)
+
+                            @if( $exercise->id == $t_s_exercise->exercise_id )
+                            <tr>
+                                <td class="center">{{ $t_s_exercise->training_session->number }}</td>
+                                <td class="center">{{ $t_s_exercise->work_objetive }} lbRep</td>
+                                <td class="center">{{ $t_s_exercise->work_done }} lbRep</td>
+                                <td class="center">{{ $t_s_exercise->efficiency }} %</td>
+                                <td class="center">{{ $t_s_exercise->rm }} lb</td>
+                            </tr>
+
+
+                            @endif
+                            @endforeach
+
+                        </tbody>
+                    </table>
+                    @endforeach
+
+                </div>
             </div>
 
 
@@ -160,9 +254,9 @@
 
 <script>
 
-$( document ).ready(function(){
+    $( document ).ready(function(){
 
-});
+    });
 
 
 </script>

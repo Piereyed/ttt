@@ -7,6 +7,7 @@ use App\Person;
 use App\Experience;
 use App\Training_exercise;
 use App\Measure;
+use App\Routine_exercise;
 use App\Physical_evaluation;
 use App\Physical_Evaluation_Measure;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +20,16 @@ class EvaluationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $client = Person::find($id);
+        $evaluations = Physical_evaluation::where('person_id',$id)->orderBy('created_at','desc')->get(); 
+        
+        $data = [
+            'client'    =>  $client,
+            'evaluations'    =>  $evaluations
+        ];
+        return view('evaluation.index', $data);
     }
 
     /**
@@ -65,12 +73,19 @@ class EvaluationController extends Controller
             ->distinct()
             ->get();
 
-        //        dd($t_exercises);
+        //se obtienen los ejercicios que aun no tiene RM para esa rutina
+        $routine_exercises = Routine_exercise::where('routine_id',$routine->id)->where('person_id',$id)->where('rm_inicial',0)->get();
+        $arr_exercises=[];
+        foreach($routine_exercises as $routine_exercise){
+            array_push($arr_exercises , $routine_exercise->exercise_id);
+        }
+//        dd($arr_exercises);
 
         $data = [
-            'client'    =>  $client,
-            'routine'    =>  $routine,
-            't_exercises'    =>  $t_exercises
+            'client'            =>  $client,
+            'routine'           =>  $routine,
+            'arr_exercises'     =>  $arr_exercises,
+            't_exercises'       =>  $t_exercises
         ];
         return view('evaluation.create_rm', $data);
     }
@@ -83,13 +98,14 @@ class EvaluationController extends Controller
      */
 
     public function store_rm(Request $request,$id){
-//        dd($request);
+        //        dd($request);
+        $routine = Training_exercise::find($request['ids'][0])->training_detail->training->routine;
         for ($i=0; $i < sizeof( $request['ids'] ) ; $i++) { 
             $training_exercise = Training_exercise::find($request['ids'][$i]);
             $rep = $request['rep'][$i];
-            $peso = $request['peso'][$i];
-            $rm = 0.033 * $peso * $rep + $peso;
-            
+            $peso = $request['peso'][$i] / 2.20462;   //peso en kilos
+            $rm = 0.033 * $peso * $rep + $peso;  //rm en kg
+
             //actualizo los pesos de las series con la formula del RM
             foreach( $training_exercise->series as $serie ){
                 $serie->weight = intdiv(  ($serie->percentage_weight * $rm / 100) , 2.26 ) * 2.26;
@@ -97,13 +113,20 @@ class EvaluationController extends Controller
                 $serie->save();
             }
 
+            //actualizo el rm en la tabla routine x exercise
+            $routine_ex = Routine_exercise::where('routine_id',$routine->id)->where('exercise_id',$training_exercise->exercise_id)->where('person_id',$routine->person_id)->first();
+            $routine_ex->rm_inicial = round($rm * 2.20462); //solo se guarda el RM inicial
+            $routine_ex->person_id = $routine->person_id;
+            $routine_ex->routine_id = $routine->id;
+            $routine_ex->exercise_id = $training_exercise->exercise_id;
+            $routine_ex->save();
+
         }
 
-        //actualizo la rutina en el campo evaluado
-        $routine = Training_exercise::find($request['ids'][0])->training_detail->training->routine;
+        //actualizo la rutina en el campo evaluado        
         $routine->evaluated = 1;
         $routine->save();
-        
+
         return redirect()->route('myathletes.index',Auth::user()->person->id)->with('success', 'La evaluación de RM se ha registrado con éxito para '.$routine->athlete->name);
 
     }
@@ -289,7 +312,7 @@ class EvaluationController extends Controller
         $measure->save();
 
 
-        return redirect()->route('myathletes.index',Auth::user()->person->id)->with('success', 'La evaluación se ha registrado con éxito para '.$person->name);
+        return redirect()->route('evaluation.index',$person->id)->with('success', 'La evaluación se ha registrado con éxito para '.$person->name);
 
 
 
@@ -303,7 +326,13 @@ class EvaluationController extends Controller
      */
     public function show($id)
     {
-        //
+        $evaluation = Physical_Evaluation::find($id);
+        
+        $data = [
+            'evaluation'       =>  $evaluation
+        ];
+        return view('evaluation.show', $data);
+        
     }
 
     /**

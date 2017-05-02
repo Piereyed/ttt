@@ -23,5 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MeasuresTableSeeder::class);
         $this->call(MusclesTableSeeder::class);        
         $this->call(StrengthTypesTableSeeder::class);        
+        $this->call(MicrocyclesTableSeeder::class);        
+        $this->call(PyramidsTableSeeder::class);        
     }
 }

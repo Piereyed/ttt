@@ -166,7 +166,7 @@
 
                         <li><a href=""><i class="material-icons left">perm_identity</i>Mi cuenta</a></li>
                         <li class="divider"></li>
-                        <li><a href="/inicio_sedes"><i class="material-icons left">business</i>Sedes</a></li>
+                        <li><a href="/"><i class="material-icons left">business</i>Sedes</a></li>
                         <li>
                             <a href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();" ><i class="left material-icons">power_settings_new</i> Salir</a>

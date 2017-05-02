@@ -21,4 +21,8 @@ class Routine extends Model
     public function period(){
         return $this->belongsTo('App\Period');
     }
+    
+    public function exercises(){
+        return $this->hasMany('App\Exercise');
+    }
 }

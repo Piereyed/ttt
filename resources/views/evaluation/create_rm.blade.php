@@ -25,6 +25,7 @@
     <div class="row">
         <div class="col m12">
             <span class="h1">Nueva evaluación de RM</span>
+            @if(sizeof($arr_exercises) > 0 )
             <div class="row">
                 <div class="col s12">
                     <ul class="collection">
@@ -51,17 +52,19 @@
                                     <tr>
                                         <th class="center" data-field="options">Ejercicio</th>
                                         <th class="center" data-field="muscle">Repeticiones</th>
-                                        <th class="center" data-field="muscle">Peso (Kg)</th>
+                                        <th class="center" data-field="muscle">Peso (Lb)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($t_exercises as $t_exercise)
+                                    @if(in_array($t_exercise->{'exercise_id'}, $arr_exercises))
                                     <tr>
                                         <td hidden><input name="ids[]" value="{{ $t_exercise->{'id'} }}" type="hidden"></td>
                                         <td>{{$t_exercise->{'name'} }}</td>
                                         <td class="center"><input name="rep[]" type="number" placeholder="Cantidad"></td>
                                         <td class="center"><input name="peso[]" type="number" placeholder="Peso"></td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -82,7 +85,9 @@
                 </form>
 
             </div>
-
+            @else
+            <h4>No hay ejercicios por evaluar</h4>
+            @endif
         </div>
     </div>
 
