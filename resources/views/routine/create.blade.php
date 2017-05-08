@@ -536,6 +536,7 @@
         <h4>Agregar Ejercicio</h4>
         <form id="pedir_ejercicios" method="POST" action="{{ route('exercise.obtain') }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"> 
+            <input type="hidden" name="person" value="{{ $client->id }}"> 
 
             <div class="row ejer_box">
                 <div class="input-field col m4 offset-m4 s12">            
@@ -788,6 +789,7 @@
 
                 $(this).find('input').prop('checked', false);
                 $(this).find('.opc').remove();
+                $(this).find('.calif').remove();
                 $(this).children('.hidden').each(function(){
                     $(this).css("display","table-cell");
                 });

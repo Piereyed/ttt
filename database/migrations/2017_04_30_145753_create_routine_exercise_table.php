@@ -15,8 +15,8 @@ class CreateRoutineExerciseTable extends Migration
     {
         Schema::create('routine_exercise', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('rm_inicial')->unsigned();  //en libras
-            $table->integer('rm_final')->unsigned()->nullable();  //en libras
+            $table->integer('rm_inicial');  //en libras
+            $table->integer('rm_final')->nullable();  //en libras
             $table->integer('person_id')->unsigned();
             $table->integer('routine_id')->unsigned();
             $table->integer('exercise_id')->unsigned();

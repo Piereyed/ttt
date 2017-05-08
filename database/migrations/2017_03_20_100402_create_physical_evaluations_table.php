@@ -16,11 +16,13 @@ class CreatePhysicalEvaluationsTable extends Migration
         Schema::create('physical_evaluations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('person_id')->unsigned();
+            $table->integer('routine_id')->unsigned()->nullable();
             $table->timestamps(); //createt at , updated at
         });
 
         Schema::table('physical_evaluations', function (Blueprint $table) {
              $table->foreign('person_id')->references('id')->on('people');             
+             $table->foreign('routine_id')->references('id')->on('routines');             
         });
     }
 
@@ -33,6 +35,7 @@ class CreatePhysicalEvaluationsTable extends Migration
     {
         Schema::table('physical_evaluations', function (Blueprint $table) {
             $table->dropForeign('physical_evaluations_person_id_foreign');            
+            $table->dropForeign('physical_evaluations_routine_id_foreign');            
         });
         
         Schema::dropIfExists('physical_evaluations');

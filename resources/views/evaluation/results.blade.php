@@ -24,6 +24,14 @@
     .tabla-por-ejercicios{
         margin-bottom: 30px;
     }
+    .verde{
+        color: green;
+        font-weight: bolder;
+    }
+    .rojo{
+        color: red;
+        font-weight: bolder;
+    }
 </style>
 @endsection
 
@@ -35,7 +43,8 @@
             <div class="nav-wrapper">
                 <div class="col s12">                            
                     <a href="#" class="breadcrumb">Inicio</a>
-                    <a href="#!" class="breadcrumb">Rutinas</a>
+                    <a href="{{route('myathletes.index')}}" class="breadcrumb">Mis atletas</a>
+                    <a href="{{route('routine.index',$routine->athlete->id)}}" class="breadcrumb">Rutinas</a>
                     <a href="#!" class="breadcrumb">Ver resultados</a>
                 </div>
             </div>
@@ -171,6 +180,7 @@
                                 <th class="center" data-field="name">Ejercicio</th>
                                 <th class="center" data-field="name">RM inicial</th>
                                 <th class="center" data-field="name">RM logrado</th>
+                                <th class="center" data-field="name">Resultado</th>
 
                             </tr>
                         </thead>
@@ -180,6 +190,11 @@
                                 <td class="center">{{ $routine_exercise->exercise->name }}</td>
                                 <td class="center">{{ $routine_exercise->rm_inicial }} lb</td>
                                 <td class="center">{{ $routine_exercise->rm_final }} lb</td>
+                                @if( $routine_exercise->rm_final - $routine_exercise->rm_inicial > 0 )
+                                <td class="center verde">+ {{ $routine_exercise->rm_final - $routine_exercise->rm_inicial }}</td>
+                                @else
+                                <td class="center rojo">- {{ $routine_exercise->rm_final - $routine_exercise->rm_inicial }}</td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

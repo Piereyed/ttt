@@ -104,9 +104,11 @@ class RoutineController extends Controller
         if( $request['nuevo'] == 1 ){
             //terminar el programa anterior
             $program_old = Program::where('person_id',$request['person_id'])->where('finished',0)->first();
-            $program_old->finished = 1;
-            $program_old->save();
-            
+            if($program_old != null){
+                $program_old->finished = 1;
+                $program_old->save();
+            }
+
             //creo uno nuevo
             $program = new Program;
             $program->number = sizeof(Program::where('person_id',$request['person_id'])->get()) + 1;
@@ -256,7 +258,7 @@ class RoutineController extends Controller
             }
 
         }
-        
+
         //verifico si todos los ejercicios ya tienen RM
         if(sizeof(Routine_exercise::where('routine_id',$routine->id)->where('person_id',$routine->person_id)->where('rm_inicial',0)->get()) == 0 ){
             $routine->evaluated = 1;
@@ -298,16 +300,19 @@ class RoutineController extends Controller
     public function myroutines()
     {
         $sessions = null;
+        $todo = null;
         $client_id = Auth::user()->person->id;
         $routine = Routine::where('finished',0)->where('person_id',$client_id)->first();
 
         if($routine != null){
             $sessions = $routine->training_sessions;
+            $todo = Training_session::where('routine_id',$routine->id)->where('done',0)->orderBy('number','asc')->first()->id;
         }  
-
+        //        dd($todo);
         $data = [
             'routine'     =>  $routine,
-            'sessions'    =>  $sessions            
+            'sessions'    =>  $sessions,
+            'todo'        => $todo //la que toca hacer
         ];
 
         //        dd($sessions);

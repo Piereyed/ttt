@@ -25,5 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StrengthTypesTableSeeder::class);        
         $this->call(MicrocyclesTableSeeder::class);        
         $this->call(PyramidsTableSeeder::class);        
+        $this->call(PeriodMeasureTableSeeder::class);        
     }
 }

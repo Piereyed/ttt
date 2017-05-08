@@ -45,23 +45,7 @@
     <!--   Icon Section   -->
     <div class="row">
         <div class="col s12">
-            <span class="h1">Mis sesiones de entrenamiento</span>
-            <!-- fixed action buttons -->
-            <div class="fixed-action-btn click-to-toggle">
-                <a title="Opciones" class="btn-floating btn-large grey darken-2">
-                    <i class="material-icons">view_module</i>
-                </a>   
-                <ul>                                 
-                    <li hidden><a id="eliminar"  title="Eliminar" data-target="" class="btn-floating btn-large waves-effect waves-light red "><i class="material-icons">delete</i></a></li>                  
-                    <li hidden><a id="editar"  title="Editar" class="btn-floating btn-large waves-effect waves-light yellow darken-1"><i class="material-icons">mode_edit</i></a></li>
-
-                    <li hidden ><a id="ver"  title="Ver" class="btn-floating btn-large waves-effect waves-light blue "><i class="material-icons">visibility</i></a></li>
-
-
-                    <li><a id="nuevo" href="#modal1" title="Nuevo" class="btn-floating waves-effect waves-light btn-large green"><i class="material-icons">add</i>
-                    </a></li> 
-                </ul>             
-            </div>             
+            <span class="h1">Mis sesiones de entrenamiento</span>                      
 
             <div class="row">
                 <div class="col s12">
@@ -75,7 +59,9 @@
                                 Sesión {{$session->number}} - {{strtoupper( $session->training->letter)}}
                                 @if(!$session->done)
                                 <a href="{{route('routine.train',$session->id)}}" class="secondary-content">
+                                   @if( $session->id == $todo )
                                     <i class="material-icons">send</i>
+                                    @endif
                                 </a>
                                 @else
                                 (Terminada)

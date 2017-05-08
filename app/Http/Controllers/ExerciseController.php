@@ -57,12 +57,31 @@ class ExerciseController extends Controller
         $this->validate($request, [
             'musculo1'         => 'required'
         ]);
+        
+        $query = "select exercises.id as id, name ,AVG( rm_final - rm_inicial)  as dif 
+                    from exercises 
+                    INNER JOIN exercise_muscle ON exercises.id =exercise_muscle.exercise_id
+                    LEFT JOIN routine_exercise ON exercises.id =routine_exercise.exercise_id
+                    where muscle_id=" . $request['musculo1']." and
+                     type=1 and
+                     training_phase_id=2
+                    GROUP BY id , name 
+                    ORDER BY dif desc";
+        //        $routine_exercises = DB::table('exercises')
+        //            ->leftJoin('routine_exercise', 'exercises.id', '=', 'routine_exercise.exercise_id')
+        //            ->select(DB::raw('exercises.id as id ,exercises.name as name, AVG(rm_final - rm_inicial) as diff'))
+        //            ->where('routine_exercise.person_id',$request['person'])
+        //            ->groupBy('id','name')
+        //            ->orderBy('diff','desc')
+        //            ->get();
+        $exercises = DB::select(DB::raw($query));
 
-        // dd($request);
+//                dd($exercises[0]->id);
         $index = $request['index'];
         try {            
-            $exercises = Exercise_Muscle::where('muscle_id',$request['musculo1'])->get();
             $data = [
+                'muscle_id'    =>  $request['musculo1'],
+                'muscle_name'    =>  Muscle::find($request['musculo1'])->name,
                 'exercises'    =>  $exercises,
                 'index'    =>  $index
             ];
@@ -79,7 +98,7 @@ class ExerciseController extends Controller
         // dd($request); 
         $index = $request['index'];
         $muscles = $request['arr_muscles'];
-        
+
         try {            
             $exercises = Exercise::where('training_phase_id',1)->get();            
 
@@ -97,18 +116,18 @@ class ExerciseController extends Controller
 
     public function obtain_strech(Request $request)
     {
-//         dd($request); 
+        //         dd($request); 
         $index = $request['index'];
         $arr_muscles = explode(",", $request['arr_muscles']);
         $new = array();
         for($k=0;$k<sizeof($arr_muscles);$k++){
             array_push($new, intval($arr_muscles[$k]));
         }
-        
+
 
         try {       
             $exercises = Exercise_Muscle::whereIn('muscle_id',$new)->get();
-//            dd($exercises);
+            //            dd($exercises);
             $data = [
                 'exercises'    =>  $exercises,
                 'index'    =>  $index

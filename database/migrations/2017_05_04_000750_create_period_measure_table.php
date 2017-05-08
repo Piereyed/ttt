@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGoalMeasureTable extends Migration
+class CreatePeriodMeasureTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateGoalMeasureTable extends Migration
      */
     public function up()
     {
-        Schema::create('goal_measure', function (Blueprint $table) {
+        Schema::create('period_measure', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('period_id')->unsigned();
-            $table->integer('goal_id')->unsigned();            
+            $table->integer('measure_id')->unsigned();            
             $table->integer('success')->unsigned(); //0=> disminuir ,1=> aumentar
-            $table->timestamps();
         });
-         Schema::table('goal_measure', function (Blueprint $table) {
+        
+        Schema::table('period_measure', function (Blueprint $table) {
              $table->foreign('period_id')->references('id')->on('periods');             
-             $table->foreign('goal_id')->references('id')->on('goals');             
+             $table->foreign('measure_id')->references('id')->on('measures');             
         });
-
     }
 
     /**
@@ -34,11 +33,11 @@ class CreateGoalMeasureTable extends Migration
      */
     public function down()
     {
-        Schema::table('goal_measure', function (Blueprint $table) {
-            $table->dropForeign('goal_measure_period_id_foreign');            
-            $table->dropForeign('goal_measure_goal_id_foreign');            
+         Schema::table('period_measure', function (Blueprint $table) {
+            $table->dropForeign('period_measure_period_id_foreign');            
+            $table->dropForeign('period_measure_measure_id_foreign');            
         });
-
-        Schema::dropIfExists('goal_measure');
+        
+        Schema::dropIfExists('period_measure');
     }
 }
