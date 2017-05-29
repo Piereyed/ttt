@@ -2,9 +2,9 @@
 
 @foreach($exercises as $exercise)        
 <tr>            
-    <td hidden><input type="number" name="ejercicio_calentamiento[{{$index}}][]" value="{{$exercise->id}}"></td>                  
+    <td class="oculto" hidden><input type="number" name="ejercicio_calentamiento[{{$index}}][]" value="{{$exercise->id}}"></td>                  
     <td>{{ $exercise->name }}</td>                  
-    <td class="center"><input type="number" name="t_calentamiento[{{$index}}][]"></td>
+    <td class="center"><input type="number" class="t_calentamiento" name="t_calentamiento[{{$index}}][]"></td>
     <td class="center"><a title="Quitar"  class="quitar btn-floating waves-effect waves-light red"><i class="material-icons">clear</i></a></td>
 </tr>        
 @endforeach                 

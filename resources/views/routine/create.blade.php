@@ -6,7 +6,7 @@
         left: 0;
         right: 797px;
     }
-    
+
     input{
         text-align: center;;
     }
@@ -47,6 +47,9 @@
     }
     .target{
         margin-bottom: 20px;
+    }
+    .oculto{
+        display: none !important;
     }
 
 </style>
@@ -734,6 +737,8 @@
             });
         });
 
+
+
         //        ajax para imprimir los ejercicios de estiramiento
         $(".btn-obtener-estiramiento").on("click",function(){
             if(entrenamiento!= ""){
@@ -744,16 +749,17 @@
                         arr_muscles.push(id);
                     }
                 });
-
+                var t_estiramiento = parseInt($(this).parent().parent().find("select").val() ) * 60;
 
                 form = $("#pedir_ejercicios_estiramiento");//solo tiene token
                 var index = convertirLetra(entrenamiento);
                 var data = form.serialize();
-                data =data+'&index='+index+'&arr_muscles='+arr_muscles;
+                data =data+'&index='+index+'&arr_muscles='+arr_muscles+'&time='+t_estiramiento;
 
                 $.post(form.attr('action'), data, function(table) {
                     $('.'+index+'.tabla_estiramiento tbody').html(table);
                 });
+                
             }
             else{
                 alert("Agregue ejercicios primero");
@@ -844,39 +850,50 @@
 
 
     });
-function actualizar_indice(){
-    for(var i = 0; i<13 ; i++){
-        if(indice_musculos[i] == 0){
-            $("#musculo_"+(i+1)).prop('checked', false);
-        }
-        else{
-            $("#musculo_"+(i+1)).prop('checked', true);
-        }
-    }
-}
 
-function convertirLetra(e){
-    var num = 0;
-    if(e == "A"){
-        num= 0;
+    //cuando carga toda la pagina
+    $(window).load(function(){
+        //ahora imprime los tiempos
+        var dur_calentamiento = parseInt($("select[name='duracion_calentamiento[]']").val());
+        $(".tabla_calentamiento input.t_calentamiento").val(dur_calentamiento*60/5);
+    });
+    
+    
+    
+    
+    function actualizar_indice(){
+        for(var i = 0; i<13 ; i++){
+            if(indice_musculos[i] == 0){
+                $("#musculo_"+(i+1)).prop('checked', false);
+            }
+            else{
+                $("#musculo_"+(i+1)).prop('checked', true);
+            }
+        }
     }
-    else if(e == "B"){
-        num= 1;
+
+    function convertirLetra(e){
+        var num = 0;
+        if(e == "A"){
+            num= 0;
+        }
+        else if(e == "B"){
+            num= 1;
+        }
+        else if(e == "C"){
+            num= 2;
+        }
+        else if(e == "D"){
+            num= 3;
+        }
+        else if(e == "E"){
+            num= 4;
+        }
+        else if(e == "F"){
+            num= 5;
+        }
+        return num;
     }
-    else if(e == "C"){
-        num= 2;
-    }
-    else if(e == "D"){
-        num= 3;
-    }
-    else if(e == "E"){
-        num= 4;
-    }
-    else if(e == "F"){
-        num= 5;
-    }
-    return num;
-}
 
 
 </script>

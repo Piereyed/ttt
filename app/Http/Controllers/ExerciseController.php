@@ -118,6 +118,7 @@ class ExerciseController extends Controller
     {
         //         dd($request); 
         $index = $request['index'];
+        $time = $request['time'];
         $arr_muscles = explode(",", $request['arr_muscles']);
         $new = array();
         for($k=0;$k<sizeof($arr_muscles);$k++){
@@ -130,7 +131,8 @@ class ExerciseController extends Controller
             //            dd($exercises);
             $data = [
                 'exercises'    =>  $exercises,
-                'index'    =>  $index
+                'index'    =>  $index,
+                'time'    =>  $time
             ];
 
             //le paso todo a la vista donde esta la tabla

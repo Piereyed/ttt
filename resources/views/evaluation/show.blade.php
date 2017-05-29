@@ -24,7 +24,8 @@
                     <ul class="collection">
                         <li class="collection-item avatar">
                             <img src="{{ asset('storage/'.$evaluation->person->photo)  }}" alt="{{$evaluation->person->name.' '.$evaluation->person->lastname1.' '.$evaluation->person->lastname2}}" class="circle">
-                            <span class="title">{{$evaluation->person->name.' '.$evaluation->person->lastname1.' '.$evaluation->person->lastname2}}</span>
+                            <span class="title">{{$evaluation->person->name.' '.$evaluation->person->lastname1.' '.$evaluation->person->lastname2}}</span> <br>
+                            <span>Evaluación tomada el: {{  date_format($evaluation->created_at, 'd/m/Y') }}</span>
 
 
                             <!-- <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a> -->
@@ -47,7 +48,7 @@
                             @foreach($evaluation->measures as $measure)
                             <tr>
                                 <td class="center">{{$measure->name}}</td>
-                                <td class="center">{{$measure->pivot->value}}</td>
+                                <td class="center">{{$measure->pivot->value}} {{$measure->unity != '-' ? $measure->unity : '' }}</td>
                             </tr>
                             @endforeach
                         </tbody>

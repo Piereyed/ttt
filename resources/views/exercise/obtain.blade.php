@@ -20,16 +20,16 @@
             </td>
             
             <td hidden class="center hidden">Simple</td>
-            <td hidden><input type="number" value="1" name="tipo_ejer[{{$index}}][]"></td>
+            <td hidden class="oculto"><input type="number" value="1" name="tipo_ejer[{{$index}}][]"></td>
             
-            <td hidden class="id_musculo">{{$muscle_id }}</td>
+            <td hidden class="id_musculo oculto">{{$muscle_id }}</td>
             <td class="center">{{ $muscle_name }}</td>
             
-            <td hidden><input type="number" name="id_ejer[{{$index}}][]" value="{{$exercise->id}}" ></td> 
+            <td hidden class="oculto"><input type="number" name="id_ejer[{{$index}}][]" value="{{$exercise->id}}" ></td> 
             <td>{{ $exercise->name }}</td> 
             <td class="center calif">{{ $exercise->dif != null ? number_format((float)$exercise->dif, 2, '.', '') : '-' }}</td> 
             <td hidden class="center hidden series"></td>
-            <td hidden class="        series_input"></td>
+            <td hidden class="        series_input oculto"></td>
             <td hidden class="center hidden"><a title="Quitar" class="quitar btn-floating waves-effect waves-light red"><i class="material-icons">clear</i></a></td>                        
 
         </tr>  

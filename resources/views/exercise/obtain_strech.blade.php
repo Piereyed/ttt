@@ -3,9 +3,9 @@
 @foreach($exercises as $exercise)
 @if($exercise->exercise->training_phase_id == 3)      
 <tr>            
-    <td hidden><input type="number" name="ejercicio_estiramiento[{{$index}}][]" value="{{$exercise->exercise->id}}"></td>                  
+    <td class="oculto" hidden><input type="number" name="ejercicio_estiramiento[{{$index}}][]" value="{{$exercise->exercise->id}}"></td>                  
     <td>{{ $exercise->exercise->name }}</td>                  
-    <td class="center"><input type="number" name="t_estiramiento[{{$index}}][]"></td>
+    <td class="center"><input type="number" class="t_estiramiento" value="" name="t_estiramiento[{{$index}}][]"></td>
     <td class="center"><a title="Quitar"  class="quitar btn-floating waves-effect waves-light red"><i class="material-icons">clear</i></a></td>
 </tr>  
 @endif       
@@ -14,7 +14,15 @@
 @else
 <tr>No existen ejercicios de estiramiento</tr>
 @endif
-
+<script>
+$(document).ready(function(){
+    var each_time = parseInt({{$time}}) / $('.'+{{$index}}+'.tabla_estiramiento tbody .t_estiramiento').length;
+    $('.'+{{$index}}+'.tabla_estiramiento tbody .t_estiramiento').each(function(){
+        $(this).val(each_time);
+    });
+    
+});
+</script>
 <!--
 <script type="text/javascript">
 $( ".opcion" ).click(function() {

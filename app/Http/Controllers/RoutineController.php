@@ -297,6 +297,28 @@ class RoutineController extends Controller
 
 
     }
+    public function hisroutines($id)
+    {
+        $sessions = null;
+        $todo = null;
+        $client_id = $id;
+        $routine = Routine::where('finished',0)->where('person_id',$client_id)->first();
+
+        if($routine != null){
+            $sessions = $routine->training_sessions;
+            $todo = Training_session::where('routine_id',$routine->id)->where('done',0)->orderBy('number','asc')->first()->id;
+        }  
+        //        dd($todo);
+        $data = [
+            'routine'     =>  $routine,
+            'sessions'    =>  $sessions,
+            'todo'        => $todo //la que toca hacer
+        ];
+
+        //        dd($sessions);
+        return view('routine.hisroutines', $data);
+    }
+    
     public function myroutines()
     {
         $sessions = null;
@@ -338,6 +360,28 @@ class RoutineController extends Controller
         ];
         return view('routine.train', $data);
     }
+    
+    public function trainhim($id)
+    {
+
+        $training_session = Training_session::find($id);
+        $training = Training::find($training_session->training_id);
+        $warms = Training_detail::where('training_id',$training->id)->where('training_phase_id',1)->get();
+        $stretchs = Training_detail::where('training_id',$training->id)->where('training_phase_id',3)->get();
+        $principals = Training_detail::where('training_id',$training->id)->where('training_phase_id',2)->get();
+
+        $data = [
+            'training'     =>  $training,
+            'warms'        =>  $warms,
+            'stretchs'      =>  $stretchs,
+            'principals'    =>  $principals,
+            'session'      =>  $training_session,
+            'routine'      =>  $training->routine            
+        ];
+        return view('routine.trainhim', $data);
+    }
+    
+    
     function rm($rep, $peso){
         return round((0.033 * ($peso / 2.20462) * $rep + ($peso / 2.20462)) * 2.20462);
     }
@@ -445,6 +489,109 @@ class RoutineController extends Controller
 
     }
 
+    public function store_hisroutine(Request $request){
+        //        dd($request);
+        $arr_exercises = [];
+        $arr_work=[];
+        $arr_work_done=[];
+        $arr_rm=[];
+
+        foreach($request['serie'] as $key => $value){
+            $serie = Serie::find($value);
+            $id_exercise = $serie->training_exercise->exercise_id;
+
+
+
+
+            $t_s_serie = new Training_session_serie;
+            $t_s_serie->weight = $serie->lb_weight;
+            $t_s_serie->weight_lifted = $request['weight_lifted'][$key];
+            $t_s_serie->repetitions = $serie->repetitions;
+            $t_s_serie->repetitions_done = $request['repetitions_done'][$key];
+            $t_s_serie->work = $t_s_serie->weight * $t_s_serie->repetitions;
+            $t_s_serie->work_done = $t_s_serie->weight_lifted * $t_s_serie->repetitions_done;
+            $t_s_serie->efficiency = round($t_s_serie->work_done / $t_s_serie->work * 100);
+            $t_s_serie->serie_id = $value;
+            $t_s_serie->training_session_id = $request['session'];
+            $t_s_serie->training_exercise_id = $serie->training_exercise_id;
+            $t_s_serie->save();
+
+            $the_rm = round((0.033 * ($t_s_serie->weight_lifted / 2.20462) * $t_s_serie->repetitions_done + ($t_s_serie->weight_lifted / 2.20462)) * 2.20462);
+
+            //si no esta el ejercicio , se mete al arreglo
+            if(!in_array($id_exercise, $arr_exercises) ){
+                array_push($arr_exercises, $id_exercise) - 1;
+                array_push($arr_work, $t_s_serie->work);
+                array_push($arr_work_done, $t_s_serie->work_done);
+                array_push($arr_rm, $the_rm);
+            }
+            else{
+                //si esta, se calcula
+                $key = array_search($id_exercise, $arr_exercises);
+                $arr_work[$key] += $t_s_serie->work;
+                $arr_work_done[$key] += $t_s_serie->work_done;
+
+                if($the_rm > $arr_rm[$key] ){
+                    $arr_rm[$key] = $the_rm;
+                }
+            }
+
+        }
+        //se termina la rutina
+        $session = Training_session::find($request['session']);
+        $session->done = 1 ;        
+        $session->work_objetive = array_sum($arr_work);
+        $session->work_done     = array_sum($arr_work_done);
+        $session->efficiency    = $session->work_done/$session->work_objetive * 100;
+        $session->save();
+
+
+
+        //se calculan los resultados por ejercicio de ESA SESION
+        foreach( $arr_exercises as $key => $value){
+            $t_s_exercise = new Training_session_exercise;
+            $t_s_exercise->work_objetive        = $arr_work[$key];
+            $t_s_exercise->work_done            = $arr_work_done[$key];
+            $t_s_exercise->efficiency           = round($t_s_exercise->work_done / $t_s_exercise->work_objetive * 100); 
+            $t_s_exercise->rm                   = $arr_rm[$key];
+            $t_s_exercise->training_session_id  = intval($request['session']);
+            $t_s_exercise->exercise_id          = $value;
+            $t_s_exercise->save();
+        }
+
+
+        //se verifica si es la ultima sesion
+        if(sizeof(Training_session::where('routine_id',$session->routine_id)->where('done',0)->get()) == 0 ){
+            //se da por terminada la rutina
+            $routine =$session->routine;
+            $routine->finished = 1;
+            $routine->save();
+
+
+            //se calculan los rm por ejercicio
+            $arr = [];            
+            foreach($routine->training_sessions as $session){
+                array_push($arr,$session->id);
+            }
+            $t_s_exercises = Training_session_exercise::select('exercise_id', DB::raw('MAX(rm) as rm_max'))->whereIn('training_session_id', $arr)->groupBy('exercise_id')->get();
+
+            foreach( $t_s_exercises as $t_s_exercise ){
+                $routine_ex = Routine_exercise::where('routine_id',$routine->id)->where('exercise_id',$t_s_exercise->exercise_id)->first();
+                $routine_ex->rm_final = $t_s_exercise->rm_max;//se actualiza el rm maximo que alcanzo en ese ejercicio
+                $routine_ex->save();
+            }
+
+
+        }
+
+
+
+
+        return redirect()->route('hisroutines.index',$session->routine->person_id)->with('success', 'La sesión de entrenamiento se ha registrado con éxito');
+
+
+    }
+    
     public function show($id)
     {        
         $routine = Routine::find($id);

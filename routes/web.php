@@ -149,8 +149,11 @@ Route::group(['middleware' => 'auth'], function(){
     Route::group(['prefix' => 'rutinas'], function(){    
         
         Route::get('/misrutinas', ['as' => 'myroutines.index', 'uses' => 'RoutineController@myroutines']);
+        Route::get('/susrutinas/{id}', ['as' => 'hisroutines.index', 'uses' => 'RoutineController@hisroutines']);
         Route::post('/guardar', ['as' => 'myroutine.store', 'uses' => 'RoutineController@store_myroutine']);
+        Route::post('/guardarlo', ['as' => 'hisroutine.store', 'uses' => 'RoutineController@store_hisroutine']);
         Route::get('/entrenar/{id}', ['as' => 'routine.train', 'uses' => 'RoutineController@train']);
+        Route::get('/entrenarlo/{id}', ['as' => 'routine.trainhim', 'uses' => 'RoutineController@trainhim']);
         Route::get('/{id}', ['as' => 'routine.index', 'uses' => 'RoutineController@index']);
         Route::get('create/{id}/{period}/{microcycle}/{new}', ['as' => 'routine.create', 'uses' => 'RoutineController@create']);        
         Route::post('create/', ['as' => 'routine.store', 'uses' => 'RoutineController@store']);
