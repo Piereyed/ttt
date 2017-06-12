@@ -69,6 +69,7 @@ class EvaluationController extends Controller
             ->join('routines', 'routines.id', '=', 'trainings.routine_id')
             ->where('routines.id','=',$routine->id)
             ->where('exercises.training_phase_id','=',2)
+            ->where('exercises.use_weight','=',1)
             ->select('training_exercises.id', 'training_exercises.exercise_id','exercises.name')
             ->distinct()
             ->get();

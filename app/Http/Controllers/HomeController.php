@@ -28,19 +28,21 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+
         return view('home');
     }
-    
+
     public function locals()
     {
         $user = Auth::user();
-        
+
         $data = [
-        'locals'   =>  $user->person->locals->unique()
+            'locals'   =>  $user->person->locals->unique()
         ];
         return view('local.home', $data);
     }
-    
+
     public function entrar(Request $request)
     {        
         $user = Auth::user();
@@ -52,8 +54,8 @@ class HomeController extends Controller
             session(['photo' => $filename]);
         }        
         // dd(session()->all());
-           
-        
+
+
         //guardo el nombre en el session
         session(['name' => trim($person->name.' '.$person->lastname1) ]);        
 
@@ -74,9 +76,12 @@ class HomeController extends Controller
 
         //guardo en el session la sede a la que se entro
         session(['sede' => $request['sede'] ]); 
-        session(['sede_nombre' => Local::find($request['sede'])->name ]);         
+        session(['sede_nombre' => Local::find($request['sede'])->name ]);  
         
-        
+        //guardo los dias que le quedan
+        $now = strtotime(date('Y-m-d'));
+        session(['days' =>  floor( ( strtotime($user->person->expiration_date) - $now) / (60 * 60 * 24))]);
+
         return redirect()->route('inicio');
     }
 }

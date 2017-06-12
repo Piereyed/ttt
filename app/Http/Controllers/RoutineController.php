@@ -318,7 +318,7 @@ class RoutineController extends Controller
         //        dd($sessions);
         return view('routine.hisroutines', $data);
     }
-    
+
     public function myroutines()
     {
         $sessions = null;
@@ -360,7 +360,7 @@ class RoutineController extends Controller
         ];
         return view('routine.train', $data);
     }
-    
+
     public function trainhim($id)
     {
 
@@ -380,14 +380,15 @@ class RoutineController extends Controller
         ];
         return view('routine.trainhim', $data);
     }
-    
-    
+
+
     function rm($rep, $peso){
         return round((0.033 * ($peso / 2.20462) * $rep + ($peso / 2.20462)) * 2.20462);
     }
 
     public function store_myroutine(Request $request){
-        //        dd($request);
+        //                dd($request);    
+
         $arr_exercises = [];
         $arr_work=[];
         $arr_work_done=[];
@@ -439,6 +440,7 @@ class RoutineController extends Controller
         $session->done = 1 ;        
         $session->work_objetive = array_sum($arr_work);
         $session->work_done     = array_sum($arr_work_done);
+        $session->duration      = round( (time() - strtotime($request['start']) )/60);
         $session->efficiency    = $session->work_done/$session->work_objetive * 100;
         $session->save();
 
@@ -542,6 +544,7 @@ class RoutineController extends Controller
         $session->done = 1 ;        
         $session->work_objetive = array_sum($arr_work);
         $session->work_done     = array_sum($arr_work_done);
+        $session->duration      = round( (time() - strtotime($request['start']) )/60);
         $session->efficiency    = $session->work_done/$session->work_objetive * 100;
         $session->save();
 
@@ -591,7 +594,7 @@ class RoutineController extends Controller
 
 
     }
-    
+
     public function show($id)
     {        
         $routine = Routine::find($id);
@@ -602,6 +605,56 @@ class RoutineController extends Controller
 
     }
 
+    public function showsession($id)
+    {        
+        $t_s_exercises = Training_session_exercise::where('training_session_id', $id)->get();
+
+        //ahora para obtener los records
+        $arr = [];
+        $routine = Training_session::find($id)->routine;
+        foreach($routine->training_sessions as $t_session){
+            if($t_session->done){
+                array_push($arr,$t_session->id);    
+            }
+        }
+        $rows = Training_session_exercise::whereIn('training_session_id', $arr)->groupBy('exercise_id')->select(DB::raw('max(rm) as rm, exercise_id'))->get();
+        
+//        dd($rows);
+
+        $data = [
+            'rows'       =>  $rows,
+            'session'       =>  Training_session::find($id),
+            't_s_exercises' =>  $t_s_exercises,
+        ];
+        return view('routine.showsession', $data);
+
+    }
+
+    public function showhissession($id)
+    {        
+        $t_s_exercises = Training_session_exercise::where('training_session_id', $id)->get();
+
+        //ahora para obtener los records
+        $arr = [];
+        $routine = Training_session::find($id)->routine;
+        foreach($routine->training_sessions as $t_session){
+            if($t_session->done){
+                array_push($arr,$t_session->id);    
+            }
+        }
+        $rows = Training_session_exercise::whereIn('training_session_id', $arr)->groupBy('exercise_id')->select(DB::raw('max(rm) as rm, exercise_id'))->get();
+        
+//        dd($rows);
+
+        $data = [
+            'rows'       =>  $rows,
+            'session'       =>  Training_session::find($id),
+            't_s_exercises' =>  $t_s_exercises,
+        ];
+        return view('routine.showhissession', $data);
+
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *

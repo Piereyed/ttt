@@ -32,6 +32,8 @@ class CreatePeopleTable extends Migration
             $table->integer('goal_id')->unsigned()->nullable(); 
 
             $table->integer('trainer_id')->unsigned()->nullable();           
+            $table->timestamp('expiration_date')->nullable();           
+            $table->integer('freeze_days')->unsigned()->nullable();           
             
             $table->softDeletes();
             $table->timestamps();

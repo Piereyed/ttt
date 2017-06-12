@@ -65,7 +65,9 @@
                                     @endif
                                 </a>
                                 @else
-                                (Terminada)
+                                <a title="Ver resumen de sesión" href="{{route('routine.showhissession',$session->id)}}" class="secondary-content">                                   
+                                    <i class="material-icons">visibility</i>                                    
+                                </a>
                                 @endif
                             </div>
                         </li>

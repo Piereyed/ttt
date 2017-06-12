@@ -7,6 +7,8 @@ use App\Person;
 use App\Person_Role_Local;
 use App\Local;
 use App\Physical_evaluation;
+use App\Routine_Exercise;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\DB; //para usar DB
 
@@ -23,14 +25,14 @@ class ClientController extends Controller
         $clients=Person_Role_Local::where('local_id',session('sede'))->where('role_id',4)->get();
 
         $trainers = DB::table('person_role_local')
-        ->join('people', 'people.id', '=', 'person_role_local.person_id')
-        ->select('people.*')
-        ->where('local_id',session('sede'))
-        ->where('role_id',3)->get();
+            ->join('people', 'people.id', '=', 'person_role_local.person_id')
+            ->select('people.*')
+            ->where('local_id',session('sede'))
+            ->where('role_id',3)->get();
 
         $data = [
-        'clients'    =>  $clients,
-        'trainers'    =>  $trainers
+            'clients'    =>  $clients,
+            'trainers'    =>  $trainers
         ];
         return view('client.index', $data);
     }
@@ -58,11 +60,25 @@ class ClientController extends Controller
     {
 
         $evs = Physical_evaluation::where('person_id',$id)->get();
-         $arr = [];
-         foreach ($evs as $ev) {
-             array_push($arr, [$ev,$ev->measures]);
-         }
+        $arr = [];
+        foreach ($evs as $ev) {
+            array_push($arr, [$ev,$ev->measures]);
+        }
 
+        echo json_encode($arr);
+    }
+
+    public function getRMs($id)
+    {
+
+        $routine_exs = Routine_Exercise::where('person_id',$id)->where('exercise_id',51)->get();
+
+        $arr = [];
+        foreach ($routine_exs as $routine_ex) {
+            $routine_ex->exercise;
+            array_push($arr, $routine_ex);
+        }
+        //        dd($arr);
         echo json_encode($arr);
     }
 
@@ -71,13 +87,13 @@ class ClientController extends Controller
     {
 
         $trainers = DB::table('person_role_local')
-        ->join('people', 'people.id', '=', 'person_role_local.person_id')
-        ->select('people.*')
-        ->where('local_id',session('sede'))
-        ->where('role_id',3)->get();
+            ->join('people', 'people.id', '=', 'person_role_local.person_id')
+            ->select('people.*')
+            ->where('local_id',session('sede'))
+            ->where('role_id',3)->get();
 
         $data = [
-        'trainers'    =>  $trainers
+            'trainers'    =>  $trainers
         ];
 
         return view('client.create',$data);
@@ -85,11 +101,11 @@ class ClientController extends Controller
 
     public function storerole(Request $request){
 
-    // dd($request);
+        // dd($request);
         $this->validate($request, [
             'nombre'         => 'required',
             'entrenador'     => 'required'
-            ]);
+        ]);
 
         try{
             //borro los roles del cliente en otra sede si hubiera
@@ -101,6 +117,10 @@ class ClientController extends Controller
             $person_role_local->person_id = $request['nombre'];//codigo
             $person_role_local->local_id = session('sede');
             $person_role_local->save();
+            
+            //actualizo su fecha de expiracion
+            $person_role_local->person->expiration_date =date('Y-m-d',strtotime(date('Y-m-d', time()).' + '.$request['dias_de_entrenamiento'].' days'));
+            $person_role_local->person->freeze_days   = $request['dias_de_congelamiento'];
 
             //actualizo su entrenador
             $person_role_local->person->trainer_id=$request['entrenador'];
@@ -112,7 +132,7 @@ class ClientController extends Controller
                 array_push($roles,'Cliente');
                 session(['roles' => $roles]); 
             } 
-            
+
             return redirect()->route('client.index')->with('success', 'El cliente se ha asignado con éxito para la sede '.Local::find(session('sede'))->name);
 
         } catch (Exception $e) {
@@ -124,6 +144,7 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
+        
         $this->validate($request, [
             'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_paterno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
@@ -134,27 +155,29 @@ class ClientController extends Controller
             'documento'     => 'unique:people,num_doc|digits_between:6,15|required|max:15',            
             'direccion'      => 'regex:/^[A-Za-zá-úä-üÁ-Ú0-9\-.,!¡¿?; ]+$/u|required|max:500',        
             'foto'        => 'nullable|file'  ,
-            'entrenador' =>'required' 
-            
-            ]);
-        // dd($request);
+            'entrenador' =>'required' ,
+            'dias_de_entrenamiento' =>'required|digits_between:1,3' ,
+            'dias_de_congelamiento' =>'required|digits_between:1,3' 
 
+        ]);
+        // dd($request);
+        
         if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
             return redirect()->back()->with('error', 'Número de DNI inválido');
         } 
 
         try {
-             //creo el usuario
+            //creo el usuario
             $reg = new RegisterController;            
             $reg->create([
                 'name'=>$request['nombre'].' '.$request['apellido_paterno'],
                 'email'=>$request['email'],
                 'password'=>'123'
-                ]);
+            ]);
 
             $user =  DB::table('users')
-            ->where('email', $request['email'] )                    
-            ->first();
+                ->where('email', $request['email'] )                    
+                ->first();
 
             $client = new Person;
 
@@ -170,16 +193,18 @@ class ClientController extends Controller
             $client->birthday   = $request['fecha_nacimiento'];
             $client->user_id   = $user->id; //usuario creado antes
             $client->trainer_id   = $request['entrenador']; //su entrenador
+            $client->expiration_date =date('Y-m-d',strtotime(date('Y-m-d', time()).' + '.$request['dias_de_entrenamiento'].' days'));
+            $client->freeze_days   = $request['dias_de_congelamiento'];
             $client->save();
 
 
             //creo el rol y local            
             DB::table('person_role_local')->insert(
                 ['role_id' => 4, //rol cliente
-                'person_id' => $client->id,
-                'local_id' => session('sede')
+                 'person_id' => $client->id,
+                 'local_id' => session('sede')
                 ]
-                );
+            );
 
             //subo la foto
             if ($request->hasFile('foto')){
@@ -207,13 +232,13 @@ class ClientController extends Controller
     {
         $client = Person::find($id);
 
-     // dd($client->birthday);
+        // dd($client->birthday);
         $birthDate = explode("-", $client->birthday);
         $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], $birthDate[0]))) > date("md") ? ((date("Y") - $birthDate[0]) - 1): (date("Y") - $birthDate[0]));
 
         $data = [
-        'client'    =>  $client,
-        'age'        => $age
+            'client'    =>  $client,
+            'age'        => $age
         ];
         return view('client.show', $data);
     }
@@ -228,8 +253,8 @@ class ClientController extends Controller
     {
         $client = Person::find($id);
         $data = [
-        'client'       => $client,
-        'title'        => "Editar cliente",
+            'client'       => $client,
+            'title'        => "Editar cliente",
         ];
 
         return view('client.edit',$data);

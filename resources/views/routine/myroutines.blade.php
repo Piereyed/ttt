@@ -36,7 +36,7 @@
             <div class="nav-wrapper">
                 <div class="col s12">                            
                     <a href="#" class="breadcrumb">Inicio</a>
-                    <a href="{{route('myathletes.index')}}" class="breadcrumb">Mis sesiones de entrenamiento</a>
+                    <a href="#!" class="breadcrumb">Mis sesiones</a>
                 </div>
             </div>
         </nav>
@@ -64,7 +64,9 @@
                                     @endif
                                 </a>
                                 @else
-                                (Terminada)
+                                <a title="Ver resumen de sesión" href="{{route('routine.showsession',$session->id)}}" class="secondary-content">                                   
+                                    <i class="material-icons">visibility</i>                                    
+                                </a>                                
                                 @endif
                             </div>
                         </li>

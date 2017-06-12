@@ -36,10 +36,10 @@
                     <li hidden ><a id="ver"  title="Ver" class="btn-floating btn-large waves-effect waves-light blue "><i class="material-icons">visibility</i></a></li>
 
                     <li><a href="#asignar" title="Asignar" class="btn-floating waves-effect waves-light btn-large green darken-2"><i class="material-icons">person</i>
-                    </a></li> 
+                        </a></li> 
 
                     <li><a id="nuevo" href="{{ route('client.create') }}" title="Nuevo" class="btn-floating waves-effect waves-light btn-large green"><i class="material-icons">person_add</i>
-                    </a></li> 
+                        </a></li> 
                 </ul>             
             </div> 
 
@@ -104,44 +104,57 @@
                     <div class="col s12">
                         <div class="row">
                             <div class="input-field col s12">
-                              <i class="material-icons prefix">textsms</i>
-                              <input type="text" id="name" class="autocomplete">
+                                <i class="material-icons prefix">textsms</i>
+                                <input type="text" id="name" class="autocomplete">
 
-                              <label for="name">Nombre/Apellidos</label>
-                          </div>
-                      </div>
-                      <input type="text" id="nombre" name="nombre" hidden >
-                  </div>
-              </div>
-              <input hidden type="text" id="entrenador" name="entrenador">
-              <h5>Entrenador</h5>
-              <div class="row">
-                @foreach($trainers as $trainer)
-                <div class="col s12 m4 l3">
-                    <div class="card">
-                        <div class="card-image waves-effect waves-block waves-light">
-                          <img class="activator" src="{{ asset('storage/'.$trainer->photo)  }}">
-                      </div>
-                      <div class="card-content">
-                          <span class="card-title activator grey-text text-darken-4">{{$trainer->name.' '.$trainer->lastname1}}</span>
-                          <p>Asignados: 3</p>
-                          <input class="trainerid" type="tex" hidden value="{{$trainer->id}}">
-                      </div>
+                                <label for="name">Nombre/Apellidos</label>
+                            </div>
+                        </div>
+                        <input type="text" id="nombre" name="nombre" hidden >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <i class="prefix fa fa-calendar" aria-hidden="true"></i>
+                        <input id="dias_de_entrenamiento" type="number" value="{{ old('dias_de_entrenamiento') }}" name="dias_de_entrenamiento">
+                        <label class="active" for="dias_de_entrenamiento">Días de entrenamiento</label>
+                    </div>
 
-                  </div>
-              </div>
-              @endforeach
-          </div>
+                    <div class="input-field col s6">
+                        <i class="prefix fa fa-codepen" aria-hidden="true"></i>
+                        <input  id="dias_de_congelamiento" type="number" value="{{ old('dias_de_congelamiento') }}" name="dias_de_congelamiento">
+                        <label class="active" for="dias_de_congelamiento">Días de congelamiento</label>
+                    </div>
+                </div>
+                <input hidden type="text" id="entrenador" name="entrenador">
+                <h5>Entrenador</h5>
+                <div class="row">
+                    @foreach($trainers as $trainer)
+                    <div class="col s12 m4 l3">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <img class="activator" src="{{ asset('storage/'.$trainer->photo)  }}">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">{{$trainer->name.' '.$trainer->lastname1}}</span>
+                                <p>Asignados: 3</p>
+                                <input class="trainerid" type="tex" hidden value="{{$trainer->id}}">
+                            </div>
+
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
 
 
-      </form>
-  </div>
+            </form>
+        </div>
 
-</div>
-<div class="modal-footer">
-  <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left">clear</i>Cancelar</a>
-  <button type="submit" form="asignar_cliente" class="waves-effect waves-light btn "><i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar</button>
-</div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons left">clear</i>Cancelar</a>
+        <button type="submit" form="asignar_cliente" class="waves-effect waves-light btn "><i class="left fa fa-floppy-o" aria-hidden="true"></i>Guardar</button>
+    </div>
 </div>
 
 
@@ -152,52 +165,52 @@
 @section('scripts')
 
 <script>
-   var people = {};
-   var codigos = {};
+    var people = {};
+    var codigos = {};
 
-   $( ".opcion" ).click(function() {
+    $( ".opcion" ).click(function() {
 
-    var me = $( this ).find('input') ;
-    if(me.is(':checked')){
-        me.prop('checked', false); 
-        $('.fixed-action-btn').closeFAB();
-        $("#ver").parent().hide();
-        $("#editar").parent().hide();
-        $("#eliminar").parent().hide();
-        
-    }        
-    else{
-        me.prop('checked', true);            
-        $("#eliminar").attr("data-target","modal_"+me.attr("id"));
-        $("#eliminar").parent().show();
-        $("#editar").attr("href","clientes/edit/"+me.attr("id"));
-        $("#editar").parent().show();
-        $("#ver").attr("href","clientes/show/"+me.attr("id"));
-        $("#ver").parent().show();
-        $('.fixed-action-btn').openFAB();
-    }    
-           //descheqea los demas
-           $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
+        var me = $( this ).find('input') ;
+        if(me.is(':checked')){
+            me.prop('checked', false); 
+            $('.fixed-action-btn').closeFAB();
+            $("#ver").parent().hide();
+            $("#editar").parent().hide();
+            $("#eliminar").parent().hide();
 
-       });
+        }        
+        else{
+            me.prop('checked', true);            
+            $("#eliminar").attr("data-target","modal_"+me.attr("id"));
+            $("#eliminar").parent().show();
+            $("#editar").attr("href","clientes/edit/"+me.attr("id"));
+            $("#editar").parent().show();
+            $("#ver").attr("href","clientes/show/"+me.attr("id"));
+            $("#ver").parent().show();
+            $('.fixed-action-btn').openFAB();
+        }    
+        //descheqea los demas
+        $( "input" ).not( "#"+ me.attr("id") ).prop('checked', false);
 
-   $( document ).ready(function(){        
+    });
+
+    $( document ).ready(function(){        
 
         //    $("select").val('10');
         $('select').addClass("browser-default");
         $('select').material_select();
 
-          //ajax
-          var params = $('#asignar_cliente').serialize();
+        //ajax
+        var params = $('#asignar_cliente').serialize();
 
-          $.ajax({
+        $.ajax({
             type: 'POST',
             url: '/searchClient',
             data: 'action=search&'+params,
             dataType: 'json',            
             success: function(personas) {                
                 var size = personas.length;
-                
+
                 for(var i = 0; i < size; i++){
                     people[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = 'storage/' + personas[i]['photo']; //ruta de imagen
                     codigos[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = personas[i]['id']; //codigo

@@ -75,6 +75,16 @@
                 padding-right: 15px;
                 color: #dcdcdc;
             }
+            .dias{
+                background-color: green;
+                color: white;
+                margin-right: 35px;
+                padding: 0 10px;
+            }
+            .dias i{
+                margin-right: 2px;
+            }
+
         </style>
 
 
@@ -118,6 +128,11 @@
 
 
                         <ul class="right hide-on-med-and-down">
+
+                            @if(in_array("Cliente", session('roles')))
+                            <li class="dias"><i class="material-icons left">slow_motion_video</i>{{ session('days') }} días</li>
+                            @endif
+
                             <li class="nav_sede"><i class="fa fa-building-o fa-2x" aria-hidden="true"></i> {{session('sede_nombre')}}</li>
 
                             <!--   roles del superusuario-->
@@ -198,8 +213,15 @@
                         <a href="#!user"><img class="circle" title="Foto perfil" src="{{ asset('storage/'.session('photo'))  }}"></a>
                         <a href="#!name"><span class="white-text name">{{session('name')}}</span></a>                
                         <a href="#!email"><span class="white-text email">{{session('rol_nombre')}} - {{session('sede_nombre')}}</span></a>
+
+                        @if(in_array("Cliente", session('roles')))
+                        <a class="center" href="#!day"><span class="green-text name">Quedan {{ session('days') }} días</span></a>
+                        @endif
+
                     </div>
                 </li>
+
+
 
                 <!--   roles del superusuario-->
                 @if(in_array("Super", session('roles')))

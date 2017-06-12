@@ -125,6 +125,20 @@
                     <label class="active" for="fecha_nacimiento" class="">Fecha de nacimiento</label>
                 </div>
             </div>
+            
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="prefix fa fa-calendar" aria-hidden="true"></i>
+                    <input id="dias_de_entrenamiento" type="number" value="{{ old('dias_de_entrenamiento') }}" name="dias_de_entrenamiento">
+                    <label class="active" for="dias_de_entrenamiento">Días de entrenamiento</label>
+                </div>
+                
+                <div class="input-field col s6">
+                    <i class="prefix fa fa-codepen" aria-hidden="true"></i>
+                    <input  id="dias_de_congelamiento" type="number" value="{{ old('dias_de_congelamiento') }}" name="dias_de_congelamiento">
+                    <label class="active" for="dias_de_congelamiento">Días de congelamiento</label>
+                </div>
+            </div>
 
             <h5>Entrenador</h5>
 

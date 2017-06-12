@@ -150,7 +150,7 @@
                                 <th class="center" data-field="name">Entrenamiento</th>
                                 <th class="center" data-field="name">Trabajo a realizar</th>
                                 <th class="center" data-field="name">Trabajo realizado</th>
-                                <th class="center" data-field="name">Eficiencia</th>
+                                <th class="center" data-field="name">Eficacia</th>
 
                             </tr>
                         </thead>
@@ -213,7 +213,7 @@
                                 <th class="center" data-field="name">Sesión</th>
                                 <th class="center" data-field="name">Trabajo a realizar</th>
                                 <th class="center" data-field="name">Trabajo realizado</th>
-                                <th class="center" data-field="name">Eficiencia</th>
+                                <th class="center" data-field="name">Eficacia</th>
                                 <th class="center" data-field="name">RM alcanzado</th>
 
                             </tr>

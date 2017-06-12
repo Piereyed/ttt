@@ -29,6 +29,7 @@
             <form method="post" action="{{ route('hisroutine.store') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="session" value="{{ $session->id }}">
+                <input type="hidden" name="start" value="{{ date('Y-m-d H:i:s') }}">
 
                 <div class="row">
                     <div class="col s12">
