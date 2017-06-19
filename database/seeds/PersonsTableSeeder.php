@@ -108,6 +108,8 @@ class PersonsTableSeeder extends Seeder
             'birthday' => '1991-06-22',          
             'user_id' => 4      ,                  
             'photo' => 'fotos_perfil/4.jpg',
+            'expiration_date' => '2017-07-20',
+            'freeze_days' => 15,
             'trainer_id' => 2
         ]);
         

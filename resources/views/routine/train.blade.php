@@ -91,7 +91,7 @@
                                     @foreach($principal->training_exercises as $t_exercise)
                                     <span>Músculo: {{$t_exercise->exercise->muscles[0]->name}}</span><br>
                                     <span>Ejercicio: {{$t_exercise->exercise->name}}</span><br>
-                                    <img class="responsive-img" src="{{ asset('storage/'.$t_exercise->exercise->photo)  }}">
+                                    <img class="responsive-img" src="{{ asset('storagee/'.$t_exercise->exercise->photo)  }}">
                                     <div class="row">
                                         @foreach($t_exercise->series as $serie)
                                         <div class="col s12">

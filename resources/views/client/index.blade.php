@@ -133,7 +133,7 @@
                     <div class="col s12 m4 l3">
                         <div class="card">
                             <div class="card-image waves-effect waves-block waves-light">
-                                <img class="activator" src="{{ asset('storage/'.$trainer->photo)  }}">
+                                <img class="activator" src="{{ asset('storagee/'.$trainer->photo)  }}">
                             </div>
                             <div class="card-content">
                                 <span class="card-title activator grey-text text-darken-4">{{$trainer->name.' '.$trainer->lastname1}}</span>

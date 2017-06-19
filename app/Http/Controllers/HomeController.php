@@ -81,6 +81,16 @@ class HomeController extends Controller
         //guardo los dias que le quedan
         $now = strtotime(date('Y-m-d'));
         session(['days' =>  floor( ( strtotime($user->person->expiration_date) - $now) / (60 * 60 * 24))]);
+        
+        //verifico si ya vencio su membresia del cliente
+        if(in_array('Cliente',$roles)){
+            if($person->expiration_date < date('Y-m-d')){
+                session(['activo' => false]); 
+            }
+            else{
+                session(['activo' => true]); 
+            }
+        }
 
         return redirect()->route('inicio');
     }

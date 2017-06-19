@@ -30,7 +30,7 @@
                 <div class="col s12">
                     <ul class="collection">
                         <li class="collection-item avatar">
-                            <img src="{{ asset('storage/'.$client->photo)  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
+                            <img src="{{ asset('storagee/'.$client->photo)  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
                             <span class="title">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}</span>
 
 

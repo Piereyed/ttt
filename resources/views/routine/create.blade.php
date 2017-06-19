@@ -79,7 +79,7 @@
                 <div class="col s12">
                     <ul class="collection">
                         <li class="collection-item avatar">
-                            <img src="{{ asset('storage/'.$client->photo)  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
+                            <img src="{{ asset('storagee/'.$client->photo)  }}" alt="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="circle">
                             <div class="col s12 m6">
                                 <span class="title">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}</span>
                                 <p><strong>Experiencia: </strong>{{$client->experience->name}}</p>
@@ -316,7 +316,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/hombros.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/hombros.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -330,7 +330,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/biceps.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/biceps.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -346,7 +346,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/triceps.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/triceps.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -359,7 +359,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/antebrazo.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/antebrazo.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -373,7 +373,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/pecho.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/pecho.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -386,7 +386,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/espalda.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/espalda.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -403,7 +403,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/abdominales.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/abdominales.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -416,7 +416,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/trasero.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/trasero.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -430,7 +430,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/cuadriceps.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/cuadriceps.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -444,7 +444,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/abductores.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/abductores.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -458,7 +458,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/aductores.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/aductores.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -471,7 +471,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/femoral.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/femoral.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>
@@ -486,7 +486,7 @@
                     <div class="col s4 m2">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ asset('storage/fotos_musculos/gemelos.jpg')  }}">
+                                <img src="{{ asset('storagee/fotos_musculos/gemelos.jpg')  }}">
                             </div>
                             <div class="card-content">
                                 <p>

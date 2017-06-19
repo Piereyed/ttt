@@ -23,7 +23,7 @@
         <div class="col l4 s12">
           <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-              <img class="activator" src="{{ asset('storage/'.$client->photo)  }}">
+              <img class="activator" src="{{ asset('storagee/'.$client->photo)  }}">
             </div>
             <div class="card-content">
               <span class="card-title activator grey-text text-darken-4">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}<i class="material-icons right">more_vert</i></span>

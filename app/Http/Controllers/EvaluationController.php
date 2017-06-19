@@ -162,7 +162,7 @@ class EvaluationController extends Controller
             'masaMagra'         => 'required|numeric'         ,   
             'imc'         => 'required|numeric'            ,
             'icc'         => 'required|numeric'            ,
-            'ica'         => 'required|numeric'            
+//            'ica'         => 'required|numeric'            
 
 
 
@@ -306,11 +306,11 @@ class EvaluationController extends Controller
         $measure->save();
 
         //ica
-        $measure = new Physical_Evaluation_Measure; 
-        $measure->physical_evaluation_id = $ev->id;
-        $measure->measure_id=19;
-        $measure->value= $request['ica'];
-        $measure->save();
+//        $measure = new Physical_Evaluation_Measure; 
+//        $measure->physical_evaluation_id = $ev->id;
+//        $measure->measure_id=19;
+//        $measure->value= $request['ica'];
+//        $measure->save();
 
 
         return redirect()->route('evaluation.index',$person->id)->with('success', 'La evaluación se ha registrado con éxito para '.$person->name);

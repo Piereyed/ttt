@@ -120,7 +120,7 @@ Olvidé mi contraseña
             <div class="row">          
                 <div class="input-field col s12 m12 l12  login-text">
                     <input type="checkbox" id="remember-me" {{ old('remember') ? 'checked' : '' }} >
-                    <label for="remember-me">Recuérdame</label>
+<!--                    <label for="remember-me">Recuérdame</label>-->
                 </div>
             </div>
             <div class="row">

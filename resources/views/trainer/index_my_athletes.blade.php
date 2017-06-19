@@ -29,10 +29,10 @@ function age($date){
 
             <div class="row">
                 @foreach($athletes as $client)
-                <div class="col s12 m4 l3">
+                <div class="col s6 m4 l3">
                     <div class="card" >
                         <div title="Ver" class="card-image waves-effect waves-block waves-light">
-                            <img class="activator" src="{{ asset('storage/'.$client->photo)  }}">
+                            <img class="activator" src="{{ asset('storagee/'.$client->photo)  }}">
                         </div>
                         <div class="card-content">
                             <span style="text-overflow:ellipsis" title="{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}" class="card-title activator grey-text text-darken-4">{{$client->name.' '.$client->lastname1.' '.$client->lastname2}}<i class="material-icons right">more_vert</i></span>

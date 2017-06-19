@@ -90,6 +90,15 @@
         </div>                    
     </div>
 
+    <div class="row" style="text-align:center">
+        <div class="cos s12" >
+            <a href="{{route('myathletes.index')}}" title="Regresar" class="btn-large waves-effect waves-teal btn-flat ">
+                <i class="left fa fa-step-backward" aria-hidden="true"></i>Regresar
+            </a>
+
+        </div>
+    </div>
+
 </div>
 
 <!-- modal -->

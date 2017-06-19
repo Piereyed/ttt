@@ -81,8 +81,14 @@
                 margin-right: 35px;
                 padding: 0 10px;
             }
+            .red-day{
+                background-color: red;
+            }
             .dias i{
                 margin-right: 2px;
+            }
+            a span.white-text{
+                text-shadow: 2px 2px 3px black;
             }
 
         </style>
@@ -130,7 +136,7 @@
                         <ul class="right hide-on-med-and-down">
 
                             @if(in_array("Cliente", session('roles')))
-                            <li class="dias"><i class="material-icons left">slow_motion_video</i>{{ session('days') }} días</li>
+                            <li class="dias {{session('days')< 7 ? 'red-day' : '' }}"><i class="material-icons left">slow_motion_video</i>{{ session('days')>0 ? session('days') : 0 }} días</li>
                             @endif
 
                             <li class="nav_sede"><i class="fa fa-building-o fa-2x" aria-hidden="true"></i> {{session('sede_nombre')}}</li>
@@ -170,8 +176,14 @@
 
                             <!--   roles del Cliente de gimnasio    -->
                             @if(in_array("Cliente", session('roles')))
+                            @if( session('activo')   )
                             <li><a href="{{ route('myroutines.index') }}"><i class="material-icons left">directions_run</i>Entrenar</a></li>
+                            @else
+                            <li><a href="#" data-target="inactivo"><i class="material-icons left">directions_run</i>Entrenar</a></li>
                             @endif
+                            @endif
+
+
 
                             <!-- nombre -->
                             @if (!Auth::guest())
@@ -210,12 +222,12 @@
                         <div class="background">
                             <img src="{{ asset('images/logo.png')}}">
                         </div>
-                        <a href="#!user"><img class="circle" title="Foto perfil" src="{{ asset('storage/'.session('photo'))  }}"></a>
+                        <a href="#!user"><img class="circle" title="Foto perfil" src="{{ asset('storagee/'.session('photo'))  }}"></a>
                         <a href="#!name"><span class="white-text name">{{session('name')}}</span></a>                
                         <a href="#!email"><span class="white-text email">{{session('rol_nombre')}} - {{session('sede_nombre')}}</span></a>
 
                         @if(in_array("Cliente", session('roles')))
-                        <a class="center" href="#!day"><span class="green-text name">Quedan {{ session('days') }} días</span></a>
+                        <a class="center" href="#!day"><span class="{{session('days')< 7 ? 'red-text' : 'green-text' }} name">Quedan {{ session('days')>0 ? session('days') : 0  }} días</span></a>
                         @endif
 
                     </div>
@@ -303,6 +315,18 @@
                 </div>
             </div>
         </footer>
+
+        <!--     modal si es que el cliente esta inactivo-->
+        <div id="inactivo" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h4><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ATENCIÓN</h4>
+                <p>Renueve su membresía para poder seguir entrenando.</p>
+            </div>
+            <div class="modal-footer">
+
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">ACEPTAR</a>
+            </div>
+        </div>
 
         <script src="{{ URL::asset('js/jquery.min.js')}}"></script>
         <script src="{{ URL::asset('js/materialize.js')}}"></script>        

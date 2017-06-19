@@ -60,7 +60,7 @@
                 <div class="col s12">
                     <ul class="collection">
                         <li class="collection-item avatar">
-                            <img src="{{ asset('storage/'.$routine->athlete->photo)  }}" alt="{{$routine->athlete->name.' '.$routine->athlete->lastname1.' '.$routine->athlete->lastname2}}" class="circle">
+                            <img src="{{ asset('storagee/'.$routine->athlete->photo)  }}" alt="{{$routine->athlete->name.' '.$routine->athlete->lastname1.' '.$routine->athlete->lastname2}}" class="circle">
                             <div class="col s12 m6">
                                 <span class="title">{{$routine->athlete->name.' '.$routine->athlete->lastname1.' '.$routine->athlete->lastname2}}</span>
                                 <p><strong>Experiencia: </strong>{{$routine->athlete->experience->name}}</p>

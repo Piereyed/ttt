@@ -54,7 +54,7 @@
                             <div>
                                 Evaluación del {{  date_format($ev->created_at, 'd/m/Y') }}
                                 <a href="{{route('evaluation.show',$ev->id)}}" class="secondary-content">
-                                    <i class="material-icons">send</i>
+                                    <i title="Ver" class="material-icons">visibility</i>
                                 </a>
                             </div>
                         </li>
