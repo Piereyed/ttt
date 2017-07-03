@@ -68,10 +68,11 @@ class ClientController extends Controller
         echo json_encode($arr);
     }
 
-    public function getRMs($id)
+    public function getRMs(Request $request, $id)
     {
-
-        $routine_exs = Routine_Exercise::where('person_id',$id)->where('exercise_id',51)->get();
+        $exercise_id = $request['ejercicio'];
+        
+        $routine_exs = Routine_Exercise::where('person_id',$id)->where('exercise_id',$exercise_id)->get();
 
         $arr = [];
         foreach ($routine_exs as $routine_ex) {
@@ -117,7 +118,7 @@ class ClientController extends Controller
             $person_role_local->person_id = $request['nombre'];//codigo
             $person_role_local->local_id = session('sede');
             $person_role_local->save();
-            
+
             //actualizo su fecha de expiracion
             $person_role_local->person->expiration_date =date('Y-m-d',strtotime(date('Y-m-d', time()).' + '.$request['dias_de_entrenamiento'].' days'));
             $person_role_local->person->freeze_days   = $request['dias_de_congelamiento'];
@@ -144,7 +145,7 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $this->validate($request, [
             'nombre'         => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
             'apellido_paterno'    => 'regex:/^[\pL\s\-]+$/u|required|max:100',            
@@ -161,7 +162,7 @@ class ClientController extends Controller
 
         ]);
         // dd($request);
-        
+
         if($request['tipo_documento']==0 and strlen($request['documento'])!=8  ){            
             return redirect()->back()->with('error', 'Número de DNI inválido');
         } 

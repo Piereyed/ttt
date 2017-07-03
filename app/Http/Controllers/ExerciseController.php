@@ -52,12 +52,28 @@ class ExerciseController extends Controller
         // echo "ok";
     }
 
+    public function getExercisesForRm(Request $request, $id_muscle)
+    {
+        $id_client = $request['idClient'];
+        $muscles = Muscle::find($id_muscle)->exercises->where('type',1)->where('training_phase_id',2);
+        $arr_muscles= [];
+
+        foreach($muscles as $muscle){
+            array_push($arr_muscles , $muscle['id']);
+        }
+
+        $exercises = DB::table('routine_exercise')->join('exercises', 'exercises.id', '=', 'routine_exercise.exercise_id')->whereIn('routine_exercise.exercise_id',$arr_muscles)->where('routine_exercise.person_id',$id_client)->select('exercises.*')->distinct()->get();
+
+        echo json_encode($exercises);
+        // echo "ok";
+    }
+
     public function obtain(Request $request)
     {
         $this->validate($request, [
             'musculo1'         => 'required'
         ]);
-        
+
         $query = "select exercises.id as id, name ,AVG( rm_final - rm_inicial)  as dif 
                     from exercises 
                     INNER JOIN exercise_muscle ON exercises.id =exercise_muscle.exercise_id
@@ -76,7 +92,7 @@ class ExerciseController extends Controller
         //            ->get();
         $exercises = DB::select(DB::raw($query));
 
-//                dd($exercises[0]->id);
+        //                dd($exercises[0]->id);
         $index = $request['index'];
         try {            
             $data = [

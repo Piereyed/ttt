@@ -20,7 +20,7 @@ class CreateTrainingSessionsTable extends Migration
             $table->integer('work_objetive')->unsigned();
             $table->integer('work_done')->unsigned();
             $table->float('efficiency',8,2)->unsigned();
-            $table->integer('duration')->unsigned();
+            $table->integer('duration')->unsigned()->nullable();
 
             $table->integer('training_id')->unsigned();
             $table->integer('routine_id')->unsigned();           

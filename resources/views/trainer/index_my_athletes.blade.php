@@ -41,8 +41,10 @@ function age($date){
                             @if($client->routines()->where('finished',0)->first()->evaluated == 0 )
                             <p style="color:red"><a href="{{route('evaluation_rm.create',$client->id)}}">Medir RM</a></p>
                             @endif                            
-                            @endif                            
+                            @endif  
+                            @if(  sizeof($client->routines()->where('finished', 0)->get() )> 0  )
                             <p><a href="{{route('hisroutines.index',$client->id)}}">Entrenar</a></p>
+                            @endif  
                             @if($client->experience != null )
                             <p><a href="{{route('routine.index',$client->id)}}">Rutinas</a></p>
                             @endif

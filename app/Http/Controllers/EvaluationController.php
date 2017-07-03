@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Person;
 use App\Experience;
 use App\Training_exercise;
+use App\Muscle;
 use App\Measure;
 use App\Routine_exercise;
 use App\Physical_evaluation;
@@ -24,10 +25,11 @@ class EvaluationController extends Controller
     {
         $client = Person::find($id);
         $evaluations = Physical_evaluation::where('person_id',$id)->orderBy('created_at','desc')->get(); 
-        
+        $muscles = Muscle::all();
         $data = [
             'client'    =>  $client,
-            'evaluations'    =>  $evaluations
+            'evaluations'    =>  $evaluations,
+            'muscles'    =>  $muscles
         ];
         return view('evaluation.index', $data);
     }

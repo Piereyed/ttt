@@ -34,7 +34,7 @@
         <strong>Duración:</strong> <span>{{$session->duration}} minutos</span><br>
         <strong>Trabajo a realizar:</strong> <span>{{$session->work_objetive}}</span><br>
         <strong>Trabajo realizado:</strong> <span>{{$session->work_done}}</span><br>
-        <strong>Eficiencia:</strong> <span>{{$session->efficiency}}%</span><br>
+        <strong>Completado:</strong> <span>{{$session->efficiency}}%</span><br>
     </div>
 
     <div class="row">
@@ -43,7 +43,7 @@
                 <thead>
                     <tr>                                           
                         <th class="center" data-field="name">Ejercicio</th>
-                        <th class="center" data-field="name">Eficacia</th>
+                        <th class="center" data-field="name">Completado</th>
                         <th class="center" data-field="name">RM alcanzado</th>
                         <th class="center" data-field="name">RM récord</th>
 

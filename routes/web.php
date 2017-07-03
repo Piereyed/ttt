@@ -176,6 +176,7 @@ Route::post('/searchAdmin', ['as' => 'search.admin','uses' => 'AdminController@s
 Route::post('/getZones/{id}', ['as' => 'search.zones','uses' => 'ExerciseController@getZones']);//NO TOCAR!
 Route::post('/getGoals/{id}', ['as' => 'search.goals','uses' => 'GoalController@getGoals']);//NO TOCAR!
 Route::post('/getMeasures/{id}', ['as' => 'client.measure','uses' => 'ClientController@getMeasures']);//NO TOCAR!
+Route::post('/getExercisesOfMuscle/{id}', ['as' => 'exercise.get','uses' => 'ExerciseController@getExercisesForRm']);//NO TOCAR!
 Route::post('/getRMs/{id}', ['as' => 'client.rm','uses' => 'ClientController@getRMs']);//NO TOCAR!
 Route::post('/getMicrocycles/{goal_id}/{experience_id}', ['as' => 'search.microcycles','uses' => 'MicrocycleController@getMicrocycles']);//NO TOCAR!
 Route::post('/getMicrocycle/{id}', ['as' => 'get.microcycle','uses' => 'MicrocycleController@getMicrocycle']);//NO TOCAR!

@@ -57,7 +57,7 @@
             <span class="h1">Resultados - Rutina {{$routine->number}} </span>                   
 
             <div class="row">
-                <div class="col s12">
+                <div class="col s12 l8">
                     <ul class="collection">
                         <li class="collection-item avatar">
                             <img src="{{ asset('storagee/'.$routine->athlete->photo)  }}" alt="{{$routine->athlete->name.' '.$routine->athlete->lastname1.' '.$routine->athlete->lastname2}}" class="circle">
@@ -73,6 +73,11 @@
                             </div>                           
                         </li>
                     </ul>
+                </div>
+                <div class="col x12 m12 l4 center" style="padding-top:30px">
+                     <a href="{{route('evaluation.index',$routine->athlete->id)}} " title="Ver progreso general" class="btn-large waves-effect waves-teal btn ">
+                        <i class="left material-icons">description</i> Ver progreso
+                    </a>
                 </div>
             </div>
 
@@ -150,7 +155,7 @@
                                 <th class="center" data-field="name">Entrenamiento</th>
                                 <th class="center" data-field="name">Trabajo a realizar</th>
                                 <th class="center" data-field="name">Trabajo realizado</th>
-                                <th class="center" data-field="name">Eficacia</th>
+                                <th class="center" data-field="name">Completado</th>
 
                             </tr>
                         </thead>
@@ -213,7 +218,7 @@
                                 <th class="center" data-field="name">Sesión</th>
                                 <th class="center" data-field="name">Trabajo a realizar</th>
                                 <th class="center" data-field="name">Trabajo realizado</th>
-                                <th class="center" data-field="name">Eficacia</th>
+                                <th class="center" data-field="name">Completado</th>
                                 <th class="center" data-field="name">RM alcanzado</th>
 
                             </tr>

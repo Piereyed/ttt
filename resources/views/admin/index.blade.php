@@ -183,7 +183,7 @@
             success: function(personas) {                
                 var size = personas.length;                
                 for(var i = 0; i < size; i++){
-                    people[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = 'storage/' + personas[i]['photo']; //ruta de imagen
+                    people[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = 'storagee/' + personas[i]['photo']; //ruta de imagen
                     codigos[personas[i]['name'] + ' ' +  personas[i]['lastname1'] + ' ' + personas[i]['lastname2']] = personas[i]['id']; //codigo
                 }
 

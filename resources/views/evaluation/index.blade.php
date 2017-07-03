@@ -5,6 +5,10 @@
         left: 0;
         right: 797px;
     }
+    #grafico_rm{
+        background-color: rgba(0,0,0,0.1);
+        padding: 20px;
+    }
 </style>
 @endsection
 
@@ -77,9 +81,36 @@
         </div>
 
         <div id="graficorm" class="col s12">
+            <div class="row" style="margin-top:30px">
+                <div class="col s12">
+                    <!-- musculos -->
+                    <div class="ej input-field col m6 offset-m3 s12">     
+                        <i class="material-icons prefix" >accessibility</i>                       
+                        <select id="musculo">
+                            <option value="" disabled selected>Seleccione</option>
+                            @foreach($muscles as $muscle)
+                            <option value="{{$muscle->id}}">{{$muscle->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Músculo</label>
+                    </div> 
+                </div>
+            </div>
             <div class="row">
-                <div class="col s12 m10 offset-m1 l8 offset-l2">
-                    <canvas id="rm_chart" width="400" height="400"></canvas>
+                <div class="col l5">
+                    <h5>Ejercicios</h5>
+                    <div class="ejercicios">
+
+                    </div>
+
+
+
+                </div>
+                <div class="col s12 m10 offset-m1 l7">
+
+                    <div id="grafico_rm">
+                        <canvas id="rm_chart" width="400" height="400"></canvas> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,7 +156,7 @@
             url: '/getMeasures/' + $("#idClient").val(),
             data: 'action=search&'+params,
             dataType: 'json',            
-            success: function(arr) {   
+            success: function(arr) {
                 var size = arr.length;  
                 arrr=arr;
                 arrlabels=[];    //size n
@@ -250,139 +281,122 @@
             }
         });
 
-        //para el grafico de RM
-        $.ajax({
-            type: 'POST',
-            url: '/getRMs/' + $("#idClient").val(),
-            data: 'action=search&'+params,
-            dataType: 'json',            
-            success: function(arr) {   
-                var size = arr.length;  
-                arr_rm=arr;
-                arrlabels=[];//size n
-                arr_rms=[]; 
 
-                for(var i = 0; i < size; i++){
-                    arrlabels.push(  formatDate(new Date(arr[i]['updated_at']))  );
+
+
+
+
+        //pedir los ejercicios del musculo elegido
+
+        $("#musculo").change(function(){
+            var musculo = $("#musculo").val();//codigo del musculo
+            //            alert(musculo);
+            $.ajax({
+                type: 'POST',
+                url: '/getExercisesOfMuscle/' + musculo,
+                data: 'action=search&'+params,
+                dataType: 'json',            
+                success: function(exercises) {
+                    var size = exercises.length; 
+                    if(size == 0){
+                        $(".ejercicios p").remove();
+                        $(".ejercicios").append('<p>No ha realizado ejercicios para este músculo aun.</p>');
+                    }
+                    else{
+                        $(".ejercicios p").remove();
+
+                        for(var i = 0; i < size; i++){
+                            $(".ejercicios").append('<p><input name="ejercicio" value="'+exercises[i]['id']+'" type="radio" id="ej'+exercises[i]['id']+'" />     <label for="ej'+exercises[i]['id']+'">'+exercises[i]['name']+'</label> </p>');
+                            exercises
+                        } 
+                    }
+
                 }
+            });
+        });
 
-                //primer grafico
-                
-                for (var j = 0; j < 1 ; j++) {
+        $('.ejercicios').on('change', 'input[name=ejercicio]:checked', function() {
+            var ejercicio_id = $(this).val();
+
+
+            //para el grafico de RM
+            $.ajax({
+                type: 'POST',
+                url: '/getRMs/' + $("#idClient").val(),
+                data: 'action=search&ejercicio='+ejercicio_id+'&'+params,
+                dataType: 'json',            
+                success: function(arr) {   
+                    var size = arr.length;  
+                    arr_rm=arr;
+                    arrlabels=[];//size n
+                    arr_rms=[]; 
+                    
+                    arrlabels.push(  formatDate(new Date(arr[0]['created_at']))  );
+                    for(var i = 0; i < size; i++){
+                        arrlabels.push(  formatDate(new Date(arr[i]['updated_at']))  );
+                    }
+
+                    //grafico
+
+
                     var values = [];
-
+                    values.push(arr[0]['rm_inicial']); 
                     for (var i = 0; i < size ; i++) {
                         values.push(arr[i]['rm_final']); 
                     }
 
                     var obj = {
                         label: arr[0]['exercise']['name'],        
-                        borderColor: "red",
-                        backgroundColor: "red",
+                        borderColor: "green",
+                        backgroundColor: "green",
                         data: values,  
                     }
 
                     arr_rms.push(obj);
-                }
-                
-                
-                
-
-                //segundo grafico
-                //                for (var j = 11; j < 16 ; j++) {
-                //                    var values = [];
-                //
-                //                    for(var i = 0; i < size; i++){
-                //                        values.push(arr[i][1][j]['pivot']['value']); 
-                //                    }
-                //
-                //                    var obj = {
-                //                        label: arr[0][1][j]['name'],        
-                //                        borderColor: colors[j-11],
-                //                        backgroundColor: colors[j-11],
-                //                        data: values,  
-                //                    }
-                //
-                //                    arrmeasures2.push(obj);
-                //                }
 
 
 
-                var myChart = new Chart(ctx_rm, {
-                    type: 'line',
-                    data: {
-                        labels: arrlabels,
-                        datasets: arr_rms
-                    },
-                    options: {
-
-                        title: {
-                            display: true,
-                            text: 'Progreso RM',
-                            fontSize:30
+                    var myChart = new Chart(ctx_rm, {
+                        type: 'line',
+                        data: {
+                            labels: arrlabels,
+                            datasets: arr_rms
                         },
+                        options: {
 
-                        hover: {            
-                            mode: 'nearest'
-                        },
+                            title: {
+                                display: true,
+                                text: 'Progreso RM',
+                                fontSize:30
+                            },
 
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero:true
+                            hover: {            
+                                mode: 'nearest'
+                            },
+
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero:true
+                                    }
+                                }]
+                            },
+
+                            legend: {
+                                display: true,
+                                labels: {
+                                    fontColor: '#616161'
                                 }
-                            }]
-                        },
-
-                        legend: {
-                            display: true,
-                            labels: {
-                                fontColor: '#616161'
                             }
                         }
-                    }
-                });
+                    });
 
-                //segundo chart
-                //                var myChart2 = new Chart(ctx2, {
-                //                    type: 'line',
-                //                    data: {
-                //                        labels: arrlabels,
-                //                        datasets: arrmeasures2
-                //                    },
-                //                    options: {
-                //
-                //                        title: {
-                //                            display: true,
-                //                            text: 'Progreso General',
-                //                            fontSize:30
-                //                        },
-                //
-                //                        hover: {            
-                //                            mode: 'nearest'
-                //                        },
-                //
-                //                        scales: {
-                //                            yAxes: [{
-                //                                ticks: {
-                //                                    beginAtZero:true
-                //                                }
-                //                            }]
-                //                        },
-                //
-                //                        legend: {
-                //                            display: true,
-                //                            labels: {
-                //                                fontColor: '#616161'
-                //                            }
-                //                        }
-                //                    }
-                //                });
+                },
+                error: function(data) {
+                    alert("Error al graficar la evolución de RM.")
+                }
+            });
 
-            },
-            error: function(data) {
-                alert("Error al graficar.")
-            }
         });
 
     });
@@ -390,10 +404,10 @@
 
     function formatDate(date) {
         var monthNames = [
-            "Enero", "Febrero", "March",
-            "Abril", "Mayo", "June", "July",
-            "August", "September", "October",
-            "November", "December"
+            "Enero", "Febrero", "Marzo",
+            "Abril", "Mayo", "Junio", "Julio",
+            "Agosto", "Setiembre", "Octubre",
+            "Noviembre", "Diciembre"
         ];
 
         var day = date.getDate();

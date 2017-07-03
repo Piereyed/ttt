@@ -743,7 +743,7 @@ CREATE TABLE `people` (
 INSERT INTO `people` VALUES ('1', null, null, null, 'Admin', null, null, null, 'admin', null, null, 'fotos_perfil/default.jpg', '1', null, null, null, null, null, null, null, null);
 INSERT INTO `people` VALUES ('2', 'H', '0', '32329087', 'Alex', 'Aranibar', 'Mendoza', 'Surco viejo 2332', 'piereyed@gmail.com', '1990-04-20', null, 'fotos_perfil/2.jpg', '2', null, null, null, null, null, null, null, null);
 INSERT INTO `people` VALUES ('3', 'H', '0', '32329017', 'Carlos', 'Zagastegui', 'Rosales', 'Surco 2332', 'pier.rojas@pucp.pe', '1990-01-22', null, 'fotos_perfil/3.jpg', '3', null, null, null, null, null, null, null, null);
-INSERT INTO `people` VALUES ('4', 'H', '0', '91234543', 'Sharvel', 'Irigoyen', 'Matos', 'Surco 2323232', 'elmaster@hotmail.com', '1991-06-22', null, 'fotos_perfil/4.jpg', '4', '1', '1', '2', '2017-08-20 00:00:00', '15', null, null, '2017-06-19 00:44:22');
+INSERT INTO `people` VALUES ('4', 'H', '0', '91234543', 'Sharvel', 'Irigoyen', 'Matos', 'Surco 2323232', 'elmaster@hotmail.com', '1991-06-22', null, 'fotos_perfil/4.jpg', '4', '2', '2', '2', '2017-08-20 00:00:00', '15', null, null, '2017-06-19 00:44:22');
 
 -- ----------------------------
 -- Table structure for periods
@@ -1136,7 +1136,7 @@ CREATE TABLE `training_sessions` (
   `work_objetive` int(10) unsigned NOT NULL,
   `work_done` int(10) unsigned NOT NULL,
   `efficiency` double(8,2) unsigned NOT NULL,
-  `duration` int(10) unsigned NOT NULL,
+  `duration` int(10) unsigned NULL,
   `training_id` int(10) unsigned NOT NULL,
   `routine_id` int(10) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
